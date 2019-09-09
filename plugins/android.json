@@ -34,7 +34,13 @@
     "cordova-plugin-network-information": {
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
     },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.phonegap.cosmosfo"
+    },
     "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "com.phonegap.cosmosfo"
+    },
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
     }
   },

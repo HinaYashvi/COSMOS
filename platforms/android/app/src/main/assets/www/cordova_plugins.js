@@ -362,6 +362,14 @@ module.exports = [
     ]
   },
   {
+    "id": "cordova-plugin-statusbar.statusbar",
+    "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+    "pluginId": "cordova-plugin-statusbar",
+    "clobbers": [
+      "window.StatusBar"
+    ]
+  },
+  {
     "id": "cordova-plugin-vibration.notification",
     "file": "plugins/cordova-plugin-vibration/www/vibration.js",
     "pluginId": "cordova-plugin-vibration",
@@ -384,7 +392,9 @@ module.exports.metadata =
   "cordova-plugin-inappbrowser": "1.7.2",
   "cordova-plugin-media-capture": "1.4.3",
   "cordova-plugin-network-information": "1.3.4",
-  "cordova-plugin-vibration": "2.1.6"
+  "cordova-plugin-statusbar": "2.4.3",
+  "cordova-plugin-vibration": "2.1.6",
+  "cordova-plugin-whitelist": "1.3.4"
 };
 // BOTTOM OF METADATA
 });
