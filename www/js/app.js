@@ -76,6 +76,16 @@ var app = new Framework7({
           return '<div class="toolbar no-shadow"><div class="toolbar-inner"><div class="calendar-month-selector"><a href="#" class="link icon-only calendar-prev-month-button"><i class="f7-icons ">chevron_left</i></a><span class="current-month-value"></span><a href="#" class="link icon-only calendar-next-month-button"><i class="f7-icons ">chevron_right</i></a></div><div class="calendar-year-selector"><a href="#" class="link icon-only calendar-prev-year-button"><i class="f7-icons ">chevron_left</i></a><span class="current-year-value"></span><a href="#" class="link icon-only calendar-next-year-button"><i class="f7-icons ">chevron_right</i></a></div></div></div>'; 
         },
       });
+      var calendarRange2 = app.calendar.create({
+        inputEl: '#date_int',
+        dateFormat: 'dd-mm-yyyy',
+        header: true,
+        footer: true,
+        openIn: 'customModal',
+        renderToolbar: function () {   
+          return '<div class="toolbar no-shadow"><div class="toolbar-inner"><div class="calendar-month-selector"><a href="#" class="link icon-only calendar-prev-month-button"><i class="f7-icons ">chevron_left</i></a><span class="current-month-value"></span><a href="#" class="link icon-only calendar-next-month-button"><i class="f7-icons ">chevron_right</i></a></div><div class="calendar-year-selector"><a href="#" class="link icon-only calendar-prev-year-button"><i class="f7-icons ">chevron_left</i></a><span class="current-year-value"></span><a href="#" class="link icon-only calendar-next-year-button"><i class="f7-icons ">chevron_right</i></a></div></div></div>'; 
+        },
+      });
       var pickerInline = app.picker.create({
         //containerEl: '#demo-picker-date-container',
        // inputEl: '#demo-picker-date',
@@ -371,12 +381,13 @@ function checklogin(){
     //}else{ 
     //   alert("hello");
       var form = $(".loginForm").serialize();
+      //alert(form);
       var url=base_url+'liveappcontroller/checkLogin'; //console.log(form);     
       var unm=$('input[name="username"]').val(); //console.log(unm); 
       $.ajax({
         'type':'POST',
         'url': url, 
-        'data':form, 
+        'data':form,  
         success:function(data){
           var json = $.parseJSON(data);
           var json_res = json.loggedin_user[0];
@@ -689,7 +700,7 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
         }else{
           var cont = '<span class="text-muted">No Contact Found.</span>';
         }
-        dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-capitalize font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
+        dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-500 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
         
         var verticles = json_vertlist[i];
         var tot = tot_vert[i];
@@ -787,7 +798,7 @@ function viewDPO(cs_id){
           }else{
             var cls = ''; 
           }
-          list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-14"><span class="text-muted-light"></span>'+csd_verticle+'<br/><span class="grey-txt font-12">Dt: '+final_csd_date+'</span></div><div class="item-cell orange-txt text-center"><span class="mr-10"><i class="fa fa-user icon-orange"></i></span><span class="font-12">'+headcount+'</span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-9" onclick="dpoDetail('+csd_id+')">view full dpo</button></div></div></div></a></li>'; 
+          list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-14"><span class="text-muted-light"></span>'+csd_verticle+'<br/><span class="grey-txt font-12">Dt: '+final_csd_date+'</span></div><div class="item-cell orange-txt text-center"><span class="mr-10"><i class="fa fa-user icon-orange"></i></span><span class="font-12">'+headcount+'</span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-9 fw-500" onclick="dpoDetail('+csd_id+')">view full dpo</button></div></div></div></a></li>'; 
         }         
       }
 
@@ -804,7 +815,7 @@ function viewDPO(cs_id){
           var splited_month = split_date_csd[1];
           var splited_day = split_date_csd[2]; 
           var final_csd_date = splited_day + "-" + splited_month + "-" + splited_year;
-          list+='<li class="light-orange"><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-14"><span class="text-muted-light"></span>'+csd_verticle+'<br/><span class="grey-txt font-12">Dt: '+final_csd_date+'</span></div><div class="item-cell orange-txt text-center"><span class="mr-10"><i class="fa fa-user icon-orange"></i></span><span class="font-12">'+headcount+'</span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-9" onclick="dpoDetail('+csd_id+')">view full dpo</button></div></div></div></a></li>';
+          list+='<li class="light-orange"><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-14"><span class="text-muted-light"></span>'+csd_verticle+'<br/><span class="grey-txt font-12">Dt: '+final_csd_date+'</span></div><div class="item-cell orange-txt text-center"><span class="mr-10"><i class="fa fa-user icon-orange"></i></span><span class="font-12">'+headcount+'</span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-9 fw-500" onclick="dpoDetail('+csd_id+')">view full dpo</button></div></div></div></a></li>';
         }
       }
 
@@ -821,10 +832,10 @@ function viewDPO(cs_id){
           var splited_month = split_date_csd[1];
           var splited_day = split_date_csd[2]; 
           var final_csd_date = splited_day + "-" + splited_month + "-" + splited_year;
-          list+='<li class="light-orange"><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-14"><span class="text-muted-light"></span>'+csd_verticle+'<br/><span class="grey-txt font-12">Dt: '+final_csd_date+'</span></div><div class="item-cell orange-txt text-center"><span class="mr-10"><i class="fa fa-user icon-orange"></i></span><span class="font-12">'+headcount+'</span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-9" onclick="dpoDetail('+csd_id+')">view full dpo</button></div></div></div></a></li>';
+          list+='<li class="light-orange"><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-14"><span class="text-muted-light"></span>'+csd_verticle+'<br/><span class="grey-txt font-12">Dt: '+final_csd_date+'</span></div><div class="item-cell orange-txt text-center"><span class="mr-10"><i class="fa fa-user icon-orange"></i></span><span class="font-12">'+headcount+'</span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-9 fw-500" onclick="dpoDetail('+csd_id+')">view full dpo</button></div></div></div></a></li>';
         }
       }
-      list+='</ul></div><div class="block"><button class="col button button color-orange button-outline" type="button" onclick="goback()">Back</button></div>';
+      list+='</ul></div><div class="block"><button class="col button button form-btn button-outline text-white" type="button" onclick="goback()">Back</button></div>';
       $("#dpo_dets").html(list);
       app.preloader.hide();
     }    
@@ -1069,7 +1080,7 @@ function dpoDetail(csd_id){
               $("#deput_info").html(deput_info);
               //// ============================ execution information ================================= ////
               // execution info //
-              console.log(json_preinfo+" #####");
+             // console.log(json_preinfo+" #####");
               for(var h=0;h<json_preinfo.length;h++){
                 var design = json_preinfo[h].pr_designation;
                 var split_design = design.split("|");
@@ -1140,7 +1151,7 @@ function dpoDetail(csd_id){
                     var lc_design = '';
                   }
 
-                  console.log(spec_arr_json_np+"!!!");
+                 // console.log(spec_arr_json_np+"!!!");
                   if(split_educat!=null && split_educat!=''){
 
                     var educate = '<div class="item-row pl-4 pb-3"><div class="item-cell grey-txt font-14 fw-600">Qualification</div><div class="item-cell text-grey font-12 ml-0">'+spec_arr_json_np[i]+'</div></div>';
@@ -1335,7 +1346,7 @@ function dpoDetail(csd_id){
 
             }else if(json_qutn_type=='placement'){
                 var resultjson = $.parseJSON(result);
-                console.log(resultjson);
+                //console.log(resultjson);
                 var json_verticle1 = resultjson.dpo_placement;
                 var json_mrfdetail = resultjson.mrfdetail;
                 var json_verti = resultjson.verticle; 
@@ -1345,9 +1356,9 @@ function dpoDetail(csd_id){
                 var spec_arr_json = resultjson.spec_arr;
                 var spec_arr_json1 = resultjson.spec_arr1;
 
-                console.log("@@@@@@@@@"+josn_qualification);  
+                //console.log("@@@@@@@@@"+josn_qualification);  
 
-                console.log(spec_arr_json+"#################-----#################"); 
+                //console.log(spec_arr_json+"#################-----#################"); 
                 //app.dialog.alert("placement");
                 $("#qunt_other").removeClass("display-block");
                 $("#qunt_other").addClass("display-none");
@@ -1758,7 +1769,7 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
     success:function(pro_res){
       var json = $.parseJSON(pro_res);
       var json_list = json.proList;
-      //console.log(json_list);
+      //console.log(json_list); 
       var prolist='';
       var st_int='';
       var j=1; 
@@ -1778,28 +1789,8 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
         }else{
           var email = '';
         }
-       
-        /*$.ajax({ 
-          type:'POST', 
-          url:base_url+'liveappcontroller/statusorinterview',
-          data:{'cand_id':cand_id},
-          success:function(res){
-            console.log(res);
-            //var jsonst_int = $.parseJSON(res);
-            //var json_stint = jsonst_int.st_or_int;
-            //for(var j=0;j<json_stint.length;j++){
-              //console.log(json_stint.length+" ::LENGTH");
-              if(res==0){
-                st_int='<button class="col button color-orange button-small button-outline">Add Interview</button>';
-              }else{
-                st_int='<button class="col button color-gray button-small button-outline">View Status</button>';
-              }
-              //console.log(st_int+"****");
-            //}
-          }
-        });*/ 
-         
-        prolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-capitalize font-12"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td>BUTTON</td></tr>';
+        prolist+='<tr class="tr-border"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+i+'"></td></tr>';
+        int_statusBtn(cand_id,i);
         $("#provisional_list").html(prolist); 
         j++;
       }
@@ -1808,6 +1799,139 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
   });  
   
 });
+function int_statusBtn(cand_id,rowid){
+  app.preloader.show();
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/statusorinterview',
+    data:{'cand_id':cand_id},
+    success:function(res){
+        if(res==0){
+          st_int='<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">add</i>Interview</button>';
+        }else{
+          st_int='<button class="col button color-gray button-small button-outline font-8" onclick="viewStatus('+cand_id+')"><i class="fa fa-eye font-12 mr-5"></i> Status</button>';
+        }
+        $("#btn_"+rowid).html(st_int);
+        app.preloader.hide();
+    }
+  });
+}
+function add_interview(cand_id){
+  mainView.router.navigate("/add_interview/");
+  app.preloader.show();
+  $.ajax({ 
+    type:'POST', 
+    data:{'cand_id':cand_id},
+    url:base_url+'liveappcontroller/getCompany',
+    success:function(compres){    
+      var resjson = $.parseJSON(compres);
+      var comps_list = resjson.companies;
+      var blue_post = resjson.positionsBlueNew;
+      var white_post = resjson.positionsWhiteNew;
+      var cand = resjson.canddet;
+      var intstatus = resjson.interview;
+      var comp=''; 
+      var positblue='';
+      var positwhite='';
+      var stsint='';
+      comp+='<option value="">---SELECT---</option>';
+      for(var i=0;i<comps_list.length;i++){
+        var compid = comps_list[i].cs_id;
+        var compnm = comps_list[i].cs_invoice_name;        
+        comp+='<option value='+compid+'>'+compnm+'</option>';
+      }           
+      $("#company").html(comp);
+      var cand_fname = cand[0].cand_fname;
+      var type = cand[0].cand_collor_type;
+      var cand_id = cand[0].cand_id;  
+      $("#cand_id").val(cand_id);   
+      if(type=="BLUE"){
+        positblue+='<option value="">---SELECT---</option>';
+        for(var j=0;j<blue_post.length;j++){
+          var vd_id_blue = blue_post[j].vd_id;
+          var vd_designation_blue = blue_post[j].designation;
+          positblue+='<option value='+vd_id_blue+'>'+vd_designation_blue+'</option>';
+        }
+        $("#position").html(positblue);
+      }else if(type=="WHITE"){
+        positwhite+='<option value="">---SELECT---</option>';
+        for(var k=0;k<white_post.length;k++){
+          var vd_id_white = white_post[k].vd_id;
+          var vd_designation_white = white_post[k].designation;
+          positwhite+='<option value='+vd_id_white+'>'+vd_designation_white+'</option>';
+        }
+        $("#position").html(positwhite);
+      }
+      stsint+='<option value="">---SELECT---</option>';
+      for(var m=0;m<intstatus.length;m++){
+        var i_id = intstatus[m].i_id;
+        var i_status = intstatus[m].i_status;
+        var status_hindi = intstatus[m].status_hindi;
+        stsint+='<option value='+i_id+'>'+i_status+ " - "+status_hindi+'</option>';
+      }
+      $("#int_status").html(stsint);
+      app.preloader.hide();
+      }
+  });
+}
+function addInterview(){
+  app.preloader.show();
+  var add_int = $(".add_int").serialize();
+  var session_uid = window.localStorage.getItem("session_uid");
+  //console.log(add_int);
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/addinterview',
+    data:add_int+"&session_uid="+session_uid,
+    success:function(int_result){
+      var toastIcon = app.toast.create({
+        icon: app.theme === 'ios' ? '<i class="f7-icons">check_round</i>' : '<i class="f7-icons">check_round</i>',
+        text: 'Interview added successfully.',
+        position: 'center',
+        closeTimeout: 2000,
+      });
+      app.preloader.hide();
+      toastIcon.open();
+      mainView.router.navigate("/pro_registrations/");
+    }
+  });
+}
+function viewStatus(cand_id){  
+  app.preloader.show();
+  mainView.router.navigate("/view_status/");
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/candListFind', 
+    data:{'cand_id':cand_id},
+    success:function(resdata){
+      var jsondata = $.parseJSON(resdata);
+      var cnt_emp = jsondata.employee; 
+      var cnt_int_data = jsondata.int_data;
+      var cnt_selection = jsondata.selection;
+      //console.log("jsondata "+jsondata);
+      console.log(cnt_emp);
+      console.log(cnt_int_data);
+      console.log(cnt_selection);
+      if(cnt_int_data.length==0){
+        if(cnt_selection.length==0){
+          if(cnt_emp.length!=0){
+           // var 
+          }
+        }
+      }
+      /*if(cnt_emp.length > 0){
+        mainView.router.navigate("/employee_list/");
+      }else if(cnt_selection > 0){
+        mainView.router.navigate("/selected_candi/");
+      }else{
+        mainView.router.navigate("/interview_list/");
+      }*/
+    }
+  }); 
+  app.preloader.hide();
+}
 function getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);
@@ -1868,7 +1992,7 @@ $$(document).on('page:init', '.page[data-name="newbusiness_dev"]', function (e) 
           var imp_triangle = '<div id="triangle-topleft-comp"><span class="impfont fw-700 r-1">Comp</span></div>';
         }
         
-        list+='<tr class="tr-border"><td class="text-capitalize font-12"><a class="" href="#" onclick="showBusinessdet('+bd_id+')">'+bd_company+'</a><br/>'+ind+'</td><td onclick="editBusinessData('+bd_id+','+"'"+bd_type+"'"+')"><i class="fa fa-pencil-square-o font-16 text-muted edit-icon"></i>'+imp_triangle+'</td><!--td><i class="fa fa-eye font-16 text-muted orange-txt"></i></td--></tr>';
+        list+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#" onclick="showBusinessdet('+bd_id+')">'+bd_company+'</a><br/>'+ind+'</td><td onclick="editBusinessData('+bd_id+','+"'"+bd_type+"'"+')"><i class="fa fa-pencil-square-o font-16 text-muted edit-icon"></i>'+imp_triangle+'</td><!--td><i class="fa fa-eye font-16 text-muted orange-txt"></i></td--></tr>';
         
         $("#business_list").html(list); 
         app.preloader.hide();
@@ -2139,7 +2263,7 @@ $$(document).on('page:init', '.page[data-name="feedback"]', function (e) {
         var cs_invoice_name = feed_list[i].cs_invoice_name;
         var fb_date = feed_list[i].fb_date;
         var fb_contact_person = feed_list[i].fb_contact_person;
-        feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="text-muted"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="text-muted font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
+        feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="text-muted"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="text-muted font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
         $("#feedback_list").html(feedDiv);
       }
       app.preloader.hide();             
@@ -2256,7 +2380,7 @@ $$(document).on('page:init', '.page[data-name="add_feedback"]', function (e) {
   showIcons();  
   $.ajax({
     type:'POST', 
-    url:base_url+'liveappcontroller/getCompanies',
+    url:base_url+'liveappcontroller/getMasterdata',
     success:function(comp_data){
       var json_comp = $.parseJSON(comp_data);
       var json_com_list = json_comp.f_comp;
@@ -2323,20 +2447,95 @@ $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) {
       for(i=0;i<field_list.length;i++){
         var cs_id = field_list[i].cs_id;
         var l_id = field_list[i].l_id;
-        var cs_invoice_name = field_list[i].cs_invoice_name;
+        var cs_invoice_name = field_list[i].cs_invoice_name;        
         var contact = field_list[i].csd_contact_mobile;
         if(contact!=''){
           var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+contact+'</span>';
         }else{
           var cont = '<span class="text-muted">No Contact Found.</span>';
         }
-        fieldDiv+='<tr class="tr-border"><td class="text-capitalize font-12"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+cont+'</span></td><td><i class="fa fa-eye font-16 text-muted"></i></td></tr>';
-        $("#fieldvisit_list").html(fieldDiv);
+        fieldDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+cont+'</span><td id="watch_'+i+'"></td></tr>';
+        viewDetails(cs_id,l_id,i,cs_invoice_name);
+        $("#fieldvisit_list").html(fieldDiv); 
       }
       app.preloader.hide();             
     }
   });  
 }); 
+function viewDetails(cs_id,l_id,rowid,cs_invoice_name){
+  app.preloader.show();
+  var eyeicon='';
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/getdcr',
+    data:{'l_id':l_id}, 
+    success:function(dcrres){
+      var json_dcr = $.parseJSON(dcrres);
+      //alert(json_dcr);
+      if(json_dcr>0){          
+        eyeicon='<span onclick="viewFieldVisit('+cs_id+','+"'"+cs_invoice_name+"'"+')"><i class="fa fa-eye font-16 color-grey fw-600"></i><span class="font-10 fw-600"> - ('+json_dcr+')</span></span>';
+      }else{  
+        eyeicon='<span onclick="viewFieldVisit('+cs_id+','+"'"+cs_invoice_name+"'"+')"><i class="fa fa-eye font-16 text-muted fw-600"></i><span class="font-10 fw-600"> - ('+json_dcr+')</span></span>';
+      }
+      $("#watch_"+rowid).html(eyeicon);
+      app.preloader.hide();      
+    }
+  });
+}
+function viewFieldVisit(cs_id,comp_name){
+  mainView.router.navigate("/show_fieldVisit/"); 
+  app.preloader.show(); 
+  var int_cnt='';
+  var list = '';
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/showFieldVisit',
+    data:{'cs_id':cs_id}, 
+    success:function(datares){
+      var json_datares = $.parseJSON(datares);
+      var list = json_datares.c_order;
+      console.log(list);
+      var tot_ints = list.length;
+      var block = '<div class="block"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+' ('+tot_ints+')</h3></div></div></div>';
+      $("#compint_details").html(block);
+      var reslist='';
+      reslist+='<div class="list"><ul>';
+      if(tot_ints==0){
+         reslist+='<li class="light-orange"><div class="item-inner item-cell"><div class="item-row ml-10 mt-5"><div class="item-cell orange-txt font-14 fw-600">No interviews.</div></div></li>';
+      }else{
+        for(var i=0;i<tot_ints;i++){
+          var cn_verti = list[i].csd_verticle;
+          var csd_create_date = list[i].csd_create_date;
+          var csd_head_cnt = list[i].csd_head_cnt;  
+          var csd_head_position = list[i].csd_head_position;  
+          var csd_id = list[i].csd_id;
+          //alert(cand_cmp_id);
+          if(i%2==0){
+            var cls = 'light-orange';
+          }else{
+            var cls = ''; 
+          }           
+          reslist+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="grey-txt fw-600">'+cn_verti+' ('+csd_head_cnt+')</span><br/><i class="f7-icons font-10 text-muted">calendar_fill</i> <span class="grey-txt font-10">'+csd_create_date+'</span></div><div class="item-cell orange-txt text-center font-8 fw-500">';
+          var position = [];           
+          var split_pos = csd_head_position.split("|");
+          for(var k=0;k<split_pos.length;k++){
+            var pers_nw = split_pos[k];                
+            position = pers_nw + "<br/>";            
+            reslist+=position;
+          }
+          reslist+='</div><div class="item-cell"><button class="col button button-small btn-goutline text-uppercase font-9 w-auto mt-5 float-left" onclick="Add_FieldVisit('+csd_id+')"><i class="f7-icons font-12">add</i></button><button class="col button button-fill button button-small color-blue text-uppercase font-9 w-auto mt-5 float-right" ><i class="fa fa-eye font-12"></i></button></div></div></div></a></li>';
+            //onclick="openStatusAlert('+cs_id+')"            
+          }         
+        }      
+      reslist+='</ul></div>';
+      $("#visit_dets").html(reslist);
+      app.preloader.hide(); 
+    }
+  });
+}
+function Add_FieldVisit(csd_id){
+  //actlist+='</div><div class="item-cell "><button class="col button button-fill button button-small color-orange text-uppercase font-9 w-auto mt-5 float-left" onclick="addActivity('+csd_id+','+"'"+csd_verticle+"'"+','+"'"+company_name+"'"+','+l_id+','+cs_id+')"><i class="f7-icons font-12 color-orange">add</i></button><button class="ml-5 col button button-fill button button-small color-blue text-uppercase font-9 w-auto mt-5 float-right display-none" id="view_'+k+'" onclick="viewActivity('+csd_id+','+"'"+csd_verticle+"'"+','+"'"+company_name+"'"+','+l_id+','+cs_id+')"><i class="fa fa-eye font-12"></i></button></div></div></div></a></li>'; 
+}
 $$(document).on('page:init', '.page[data-name="interview_list"]', function (e) { 
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
@@ -2359,7 +2558,7 @@ $$(document).on('page:init', '.page[data-name="interview_list"]', function (e) {
         }else{
           var cls = '';
         } 
-        intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge color-orange" id="cnt_'+k+'"></span></td></tr>';        
+        intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cnt_'+k+'"></span></td></tr>';        
         getintCounts(cs_id,k);       
         $("#intervw_info").html(intrvw_info);
         app.preloader.hide();         
@@ -2384,7 +2583,7 @@ function getintCounts(cs_id,rowid){
       }else{
         $("#cnt_"+rowid).html(tot_ints);
       }
-     // int_cnt+='<span class="badge color-orange">'+tot_ints+'</span>';
+     // int_cnt+='<span class="badge">'+tot_ints+'</span>';
       //$("#cnt_"+rowid).html(tot_ints);
       app.preloader.hide(); 
     }
@@ -2424,7 +2623,7 @@ function getInterview(cs_id,comp_name){
               var cls = ''; 
             }
             //list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: '+cn_intdt_tm+'<br><span class="badge color-blue font-10">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-8 popup-open" data-popup=".popup-status" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
-            list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: '+cn_intdt_tm+'<br><span class="badge color-blue font-9">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-8" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
+            list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: '+cn_intdt_tm+'<br><span class="badge color-blue font-9">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-8" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
             //onclick="openStatusAlert('+cs_id+')"
             
           }         
@@ -2527,7 +2726,7 @@ $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) {
     success:function(candi_res){
       var json_field = $.parseJSON(candi_res);
       var candi_list = json_field.candidates_sel;
-      console.log(candi_list);
+      //console.log(candi_list);
       var selcan_info='';
       var int_cnt = '';
       for(var k=0;k<candi_list.length;k++){
@@ -2538,7 +2737,7 @@ $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) {
         }else{
           var cls = '';
         } 
-        selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge color-orange" id="cntcandi_'+k+'"></span></td></tr>';        
+        selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntcandi_'+k+'"></span></td></tr>';        
         getCandiintCounts(cs_id,k);       
         $("#selected_info").html(selcan_info);
         app.preloader.hide();         
@@ -2595,6 +2794,7 @@ function getCandisel(cs_id,comp_name){
           var cn_intdt_tm = candi_list[i].int_date_time;  
           var cn_int_status = candi_list[i].i_status;  
           var cand_cmp_id = candi_list[i].cand_cmp_id;
+          var reg_num = candi_list[i].reg_num;
 
           //alert(cand_cmp_id);
             if(i%2==1){
@@ -2602,7 +2802,9 @@ function getCandisel(cs_id,comp_name){
             }else{
               var cls = ''; 
             }
-            sel_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></td><td class="text-center"><button class="col button button color-orange button-outline text-uppercase font-8 popup-open" data-popup=".popup-joindt" onclick="getdatePopup('+cand_cmp_id+')">Enter Date</button></td></tr>';    
+          //  sel_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></td><td class="text-center"><button class="col button button color-orange button-outline text-uppercase font-8 popup-open" data-popup=".popup-joindt" onclick="getdatePopup('+cand_cmp_id+')">Enter Date</button></td></tr>';    
+
+          sel_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">Reg No: '+reg_num+'</span></td><td class="text-center"><button class="col button button btn-goutline button-outline text-uppercase font-8 popup-open" data-popup=".popup-joindt" onclick="getdatePopup('+cand_cmp_id+')">Enter Date</button></td></tr>';    
           }         
         }      
       sel_dets+='</ul></div>';
@@ -2654,7 +2856,7 @@ $$(document).on('page:init', '.page[data-name="employee_list"]', function (e) {
         }else{
           var cls = '';
         } 
-        emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge color-orange" id="cntemp_'+k+'"></span></td></tr>';              
+        emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntemp_'+k+'"></span></td></tr>';              
         getempcnts(cs_id,k);
         $("#emp_info").html(emp_info);
         app.preloader.hide();         
@@ -2710,6 +2912,7 @@ function getEmps(cs_id,comp_name){
           var cn_intdt_tm = elist[i].int_date_time;  
           var cn_int_status = elist[i].i_status;  
           var cand_cmp_id = elist[i].cand_cmp_id;
+          var reg_num = elist[i].reg_num;
           var int_joineedate = elist[i].int_joineedate;
           //alert(cand_cmp_id);
             if(i%2==1){
@@ -2717,7 +2920,8 @@ function getEmps(cs_id,comp_name){
             }else{
               var cls = ''; 
             }
-            emp_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></td><td class="text-center grey-txt font-12 font-500">'+int_joineedate+'</td></tr>';    
+           // emp_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></td><td class="text-center grey-txt font-12 font-500">'+int_joineedate+'</td></tr>';
+            emp_dets+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">Reg No: '+reg_num+'</span><br/></td><td class="text-center grey-txt font-12 font-500">'+int_joineedate+'</td></tr>';    
           }         
         }      
       emp_dets+='</ul></div>';
@@ -2740,8 +2944,8 @@ $$(document).on('page:init', '.page[data-name="daily_activity_list"]', function 
         var comp = act_list[i].cs_invoice_name;
         var cs_id = act_list[i].cs_id;
         var cn_mob = 
-        activityList+='<tr class="tr-border" onclick="dailyActDetails('+cs_id+')"><td class="text-capitalize font-12"><a class="" href="#">'+comp+'</a><br/><span id="mob_'+i+'"></span></td><td class="text-center"><i class="fa fa-eye font-16 text-muted"></i></td></tr>';
-        getDailyActPhone(cs_id,i);
+        activityList+='<tr class="tr-border" onclick="dailyActDetails('+cs_id+')"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+comp+'</a><br/><span id="mob_'+i+'"></span></td><td class="text-center"><i class="fa fa-eye font-16 text-muted"></i></td></tr>';
+        getDailyActPhone(cs_id,i); 
         $("#activity_list").html(activityList);
         app.preloader.hide(); 
       }

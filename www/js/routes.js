@@ -109,6 +109,18 @@ var routes = [
   {
     path: '/view_activity/',
     url: './view_activity.html',
+  },
+  {
+    path: '/add_interview/',
+    url: './add_interview.html',
+  }, 
+  {
+    path: '/view_status/',
+    url: './view_status.html',
+  },
+  {
+    path: '/show_fieldVisit/',
+    url: './show_fieldVisit.html',
   },  
   {
     path: '(.*)',
