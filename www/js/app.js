@@ -3063,7 +3063,7 @@ function getEmps(cs_id,comp_name){
       $("#compint_details").html(block);
       emp_dets+='<div class="list"><ul>';
       if(tot_eints==0){
-         emp_dets+='<li class="light-orange"><div class="item-inner item-cell"><div class="item-row ml-10 mt-5"><div class="item-cell orange-txt font-14 fw-600">No Employees.</div></div></li>';
+         emp_dets+='<li class=""><div class="item-inner item-cell"><div class="item-row ml-10 mt-5"><div class="item-cell orange-txt font-14 fw-600">No Employees.</div></div></li>';
       }else{
         for(var i=0;i<tot_eints;i++){
           var cn_nm = elist[i].cand_fname+" "+elist[i].cand_lname;
