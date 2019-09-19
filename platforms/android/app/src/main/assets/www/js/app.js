@@ -16,7 +16,7 @@ var app = new Framework7({
   clicks: { 
     externalLinks: '.external',
   },
-  navbar: {
+  navbar: { 
     hideOnPageScroll: false,
     iosCenterTitle: false,
     closeByBackdropClick: true,
@@ -232,6 +232,53 @@ function checkStorage(){
     //app.views.main.router.navigate("/dashboard/");
   }
 }
+function chkStatusAndPwd(){
+  checkConnection();  
+  var sess_u_id = window.localStorage.getItem("session_uid");  //alert(sess_u_id); 
+  if(sess_u_id!=null){ 
+    var url = base_url+"liveappcontroller/chkLogedinUserStatusPwd";
+    $.ajax({
+      'type':'POST',
+      'url': url, 
+      'data':{'session_u_id':sess_u_id}, 
+      success:function(data){ 
+        var json = $.parseJSON(data);
+         var json_res = json.chkStPwd[0];
+         var u_pass = json.chkStPwd[0].u_pass; 
+         var u_status = json.chkStPwd[0].is_delete;
+         var session_u_status = window.localStorage.getItem("session_u_status");
+         var session_u_pwd = window.localStorage.getItem("session_u_pwd");
+         //
+         //alert(u_status+"="+session_u_status +"***"+u_pass+"="+session_u_pwd);
+         if(session_u_status!=u_status){           
+          //app.dialog.alert("You are deactivated!");
+          /*var notificationFull = app.notification.create({
+                icon: '<i class="icon demo-icon">7</i>',
+                title: 'User Deactivation',
+                titleRightText: 'now',
+                subtitle: 'You are deactivated!',
+                text: 'Please contact administrator to activate you.',
+                closeTimeout: 3000,
+              });
+              notificationFull.open();*/
+          logOut();
+          //app.router.navigate("/");           
+          //app.views.main.router.navigate("/");
+          //logOut(); //app.router.navigate('/');           
+         }else if(session_u_pwd!=u_pass){          
+          app.dialog.alert("Your password should be changed recently.");
+          //app.router.navigate("/"); 
+          logOut(); 
+          //app.views.main.router.navigate("/"); 
+          //logOut(); //app.router.navigate('/');           
+         }
+      }
+    }); 
+
+  }else{
+    mainView.router.navigate('/dashboard/');               
+  }
+}
 // ------------------------------------ BROWSE/CAPTURE IMAGE ---------------------------------------------- //
 function capturePhoto() { 
   navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
@@ -304,6 +351,19 @@ function successCallback(uri){
 function failureCallback(message){
   app.dialog.alert('Failed because: ' + message);
 }*/
+function openPanel(){
+  $(".panel-cover").addClass("display-block");
+  var sess_user_img = window.localStorage.getItem("session_dp"); 
+  if(sess_user_img==''){
+    //var path=base_url+"uploads/user_images/";
+    var path="img/nouser.png";    
+    $("#user_pic").attr("src",path);
+  }else{
+    var path=base_url+"uploads/user_images/";
+    var user_pic = path+sess_user_img;
+    $("#user_pic").attr("src",user_pic);
+  }
+}
 function onPhotoDataSuccess(imageURI){
   var cameraImage = document.getElementById('image');
   cameraImage.style.display = 'block';
@@ -363,7 +423,6 @@ function win(r) { alert(r);
     }
 }
 function fail(error) {
-
   app.dialog.alert("An error has occurred: Code = " + error.code);
   app.dialog.alert("upload error source " + error.source);
   app.dialog.alert("upload error target " + error.target);
@@ -389,34 +448,64 @@ function checklogin(){
         'url': url, 
         'data':form,  
         success:function(data){
+          //alert(data);
           var json = $.parseJSON(data);
+          //console.log("json "+json);
           var json_res = json.loggedin_user[0];
-          //console.log("!!!!!!!!"+json_res);alert(json_res+" success");
-          if(json){  
-          if(json_res!=undefined){  
-            window.localStorage.setItem("session_uid",json.loggedin_user[0].u_id);
-            window.localStorage.setItem("session_fname",json.loggedin_user[0].fname);
-            window.localStorage.setItem("session_lname",json.loggedin_user[0].lname);
-            window.localStorage.setItem("session_uname",json.loggedin_user[0].u_name);
-            window.localStorage.setItem("session_ulevel",json.loggedin_user[0].u_level);
-            window.localStorage.setItem("session_department",json.loggedin_user[0].u_department);
-            window.localStorage.setItem("session_mobile",json.loggedin_user[0].mobile);
-            window.localStorage.setItem("session_email",json.loggedin_user[0].u_email);
-            window.localStorage.setItem("session_loc",json.loggedin_user[0].location);
-            window.localStorage.setItem("session_dp",json.loggedin_user[0].image);
-            mainView.router.navigate("/dashboard/");
+          console.log("!!!!!!!!"+json_res);//alert(json_res+" success"); 
+          //if(json!=0){  
+          if(json_res!=undefined){ 
+            if(json.loggedin_user[0].is_delete==0){
+              app.dialog.alert("You are deactivated!"); 
+              /*var notificationFull = app.notification.create({
+                icon: '<i class="icon demo-icon">7</i>',
+                title: 'User Deactivation',
+                titleRightText: 'now',
+                subtitle: 'You are deactivated!',
+                text: 'Please contact administrator to activate you.',
+                closeTimeout: 3000,
+              });
+              notificationFull.open();*/
+            }else{ 
+              window.localStorage.setItem("session_uid",json.loggedin_user[0].u_id);
+              window.localStorage.setItem("session_fname",json.loggedin_user[0].fname);
+              window.localStorage.setItem("session_lname",json.loggedin_user[0].lname);
+              window.localStorage.setItem("session_uname",json.loggedin_user[0].u_name);
+              window.localStorage.setItem("session_ulevel",json.loggedin_user[0].u_level);
+              window.localStorage.setItem("session_department",json.loggedin_user[0].u_department);
+              window.localStorage.setItem("session_mobile",json.loggedin_user[0].mobile);
+              window.localStorage.setItem("session_email",json.loggedin_user[0].u_email);
+              window.localStorage.setItem("session_loc",json.loggedin_user[0].location);
+              window.localStorage.setItem("session_dp",json.loggedin_user[0].image);
+              window.localStorage.setItem("session_u_pwd",json.loggedin_user[0].u_pass);
+              window.localStorage.setItem("session_u_status",json.loggedin_user[0].is_delete);
+              mainView.router.navigate("/dashboard/");
+            }
             //app.views.main.router.navigate("/dashboard/");
-          }}else{
-            $("#username").val("");
-            $("#password").val("");
-            app.dialog.alert("Authentication Failed!");   
+          //}
+          }else{
+              $("#username").val("");
+              $("#password").val("");
+              app.dialog.alert("Authentication Failed!"); 
           }
         }
       });
     //}
 } 
+$$(document).on('page:init', '.page[data-name="dashboard"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  $("#userName").html("<span class='text-white'>Name : "+session_fname+"</span>");
+  $("#userMo").html("<span class='text-white'>Mobile : "+session_mobile+"</span>"); 
+  $("#userDept").html("<span class='text-white'>Department : "+session_department+"</span>");
+});
 // --------------------------- P R O V I S I O N A L  R E G I S T R A T I O N ----------------------------- //
-$$(document).on('page:init', '.page[data-name="provisional_registration"]', function (e) { 
+$$(document).on('page:init', '.page[data-name="provisional_registration"]', function (e) {
+    checkConnection();
+    chkStatusAndPwd(); 
     var loop_years = '';
     for(var i=0;i<=35;i++){
       loop_years+='<option value="'+i+'">'+i+ ' Years</option>';
@@ -441,7 +530,9 @@ $$(document).on('page:init', '.page[data-name="provisional_registration"]', func
     });    
 });
 // ----------------------- C H A N G E  P A S S W O R D  M A T C H  P A S S W O R D ------------------- //
-function validate() {  
+function validate() {
+  checkConnection();
+  chkStatusAndPwd();  
   var password1 = $("#password").val();
   var password2 = $("#confirm_password").val();
   //console.log(password1+"--"+password2)
@@ -673,6 +764,10 @@ function three_jobfun(selected){
   console.log(myValues);
 });*/
 $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) { 
+  //app.panel.close();  
+  //app.panel.destroy(); 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -719,6 +814,8 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
   });  
 });
 function viewDPO(cs_id){
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   mainView.router.navigate("/dpo_details/");
   $.ajax({
@@ -842,6 +939,8 @@ function viewDPO(cs_id){
   });  
 }
 function dpoDetail(csd_id){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/dpo_detail_view/");
   app.preloader.show();
   $.ajax({
@@ -1600,7 +1699,7 @@ function dpoDetail(csd_id){
                     }); // getQualifi_blue ends //
                   }// for loop json_blue.length ends //
                   */
-                  console.log(spec_arr_json+"-----");
+                  //console.log(spec_arr_json+"-----");
                   //console.log(spec_arr_json1+"*****");
                   
                    /* if(spec_arr_json[b]==undefined){
@@ -1759,6 +1858,8 @@ function dpoDetail(csd_id){
   }
 }*/
 $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -1789,7 +1890,7 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
         }else{
           var email = '';
         }
-        prolist+='<tr class="tr-border"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+i+'"></td></tr>';
+        prolist+='<tr class="tr-border" id="pro_tr'+i+'"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+i+'"></td></tr>';
         int_statusBtn(cand_id,i);
         $("#provisional_list").html(prolist); 
         j++;
@@ -1808,15 +1909,19 @@ function int_statusBtn(cand_id,rowid){
     success:function(res){
         if(res==0){
           st_int='<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">add</i>Interview</button>';
+          $("#btn_"+rowid).html(st_int);
         }else{
-          st_int='<button class="col button color-gray button-small button-outline font-8" onclick="viewStatus('+cand_id+')"><i class="fa fa-eye font-12 mr-5"></i> Status</button>';
+          //st_int='<button class="col button color-gray button-small button-outline font-8" onclick="viewStatus('+cand_id+')"><i class="fa fa-eye font-12 mr-5"></i> Status</button>';
+          $("#pro_tr"+rowid).remove();
         }
-        $("#btn_"+rowid).html(st_int);
+        
         app.preloader.hide();
     }
   });
 }
 function add_interview(cand_id){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/add_interview/");
   app.preloader.show();
   $.ajax({ 
@@ -1966,6 +2071,8 @@ function candidate_register(){
   });
 }
 $$(document).on('page:init', '.page[data-name="newbusiness_dev"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   $.ajax({
     type:'POST', 
@@ -2002,6 +2109,8 @@ $$(document).on('page:init', '.page[data-name="newbusiness_dev"]', function (e) 
   
 });
 function editBusinessData(bd_id,bd_type){
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   mainView.router.navigate("/editBusiness/");
   $.ajax({
@@ -2105,6 +2214,8 @@ function edit_development(){
   app.preloader.hide();
 } 
 $$(document).on('page:init', '.page[data-name="add_development"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   $("#location").keydown(enableButton);
   $("#company").keydown(enableButton);
@@ -2149,6 +2260,8 @@ function add_development(){
   });   
 }
 $$(document).on('page:init', '.page[data-name="add_competitior"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   $("#name").keydown(enableButtonComp);
   $("#address").keydown(enableButtonComp);
@@ -2205,6 +2318,8 @@ function showIcons(){
   $(".uploadDiv").addClass("display-block"); 
 }
 function showBusinessdet(bd_id){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/business_details/");
   app.preloader.show();
   $.ajax({ 
@@ -2250,6 +2365,8 @@ function showBusinessdet(bd_id){
 }
 // --------------------------------------------- F E E D B A C K -------------------------------------- //
 $$(document).on('page:init', '.page[data-name="feedback"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();   
   $.ajax({ 
     type:'POST', 
@@ -2271,6 +2388,8 @@ $$(document).on('page:init', '.page[data-name="feedback"]', function (e) {
   });   
 });
 function showFeedback(fb_id){
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   mainView.router.navigate("/feedback_details/");
   $.ajax({ 
@@ -2376,6 +2495,8 @@ function showFeedback(fb_id){
 }
 // ------------------------------------------ A D D  F E E D B A C K ----------------------------------- //
 $$(document).on('page:init', '.page[data-name="add_feedback"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();   
   showIcons();  
   $.ajax({
@@ -2430,6 +2551,8 @@ function add_feedback(){
   });
 }
 $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -2483,6 +2606,8 @@ function viewDetails(cs_id,l_id,rowid,cs_invoice_name){
   });
 }
 function viewFieldVisit(cs_id,comp_name){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/show_fieldVisit/"); 
   app.preloader.show(); 
   var int_cnt='';
@@ -2494,7 +2619,7 @@ function viewFieldVisit(cs_id,comp_name){
     success:function(datares){
       var json_datares = $.parseJSON(datares);
       var list = json_datares.c_order;
-      console.log(list);
+      //console.log(list);
       var tot_ints = list.length;
       var block = '<div class="block"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+' ('+tot_ints+')</h3></div></div></div>';
       $("#compint_details").html(block);
@@ -2515,7 +2640,7 @@ function viewFieldVisit(cs_id,comp_name){
           }else{
             var cls = ''; 
           }           
-          reslist+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="grey-txt fw-600">'+cn_verti+' ('+csd_head_cnt+')</span><br/><i class="f7-icons font-10 text-muted">calendar_fill</i> <span class="grey-txt font-10">'+csd_create_date+'</span></div><div class="item-cell orange-txt text-center font-8 fw-500">';
+          reslist+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="grey-txt fw-600">'+cn_verti+' <span class="text-blue">('+csd_head_cnt+')</span></span><br/><i class="f7-icons font-10 text-muted">calendar_fill</i> <span class="grey-txt font-10">'+csd_create_date+'</span></div><div class="item-cell orange-txt text-center font-8 fw-500">';
           var position = [];           
           var split_pos = csd_head_position.split("|");
           for(var k=0;k<split_pos.length;k++){
@@ -2523,7 +2648,8 @@ function viewFieldVisit(cs_id,comp_name){
             position = pers_nw + "<br/>";            
             reslist+=position;
           }
-          reslist+='</div><div class="item-cell"><button class="col button button-small btn-goutline text-uppercase font-9 w-auto mt-5 float-left" onclick="Add_FieldVisit('+csd_id+')"><i class="f7-icons font-12">add</i></button><button class="col button button-fill button button-small color-blue text-uppercase font-9 w-auto mt-5 float-right" ><i class="fa fa-eye font-12"></i></button></div></div></div></a></li>';
+          reslist+='</div><div class="item-cell"><button class="col button button-small btn-goutline text-uppercase font-9 w-auto mt-5 float-left" onclick="Add_FieldVisit('+csd_id+')"><i class="f7-icons font-12">add</i></button><span id="view_'+i+'"></span></div></div></div></a></li>';
+            showViewIcon(csd_id,comp_name,i);
             //onclick="openStatusAlert('+cs_id+')"            
           }         
         }      
@@ -2533,10 +2659,30 @@ function viewFieldVisit(cs_id,comp_name){
     }
   });
 }
+function showViewIcon(csd_id,comp_name,rowid){ 
+  app.preloader.show();
+  var viewicon='';
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/getdcrcsd_id',
+    data:{'csd_id':csd_id}, 
+    success:function(dcrcsdres){
+      var json_dcrcsd = $.parseJSON(dcrcsdres);
+      //alert(json_dcr);
+      if(json_dcrcsd>0){          
+        viewicon='<button class="col button button-fill button button-small color-gray text-uppercase font-9 w-auto mt-5 float-right" onclick="openFieldVisit('+csd_id+','+"'"+comp_name+"'"+')"><i class="fa fa-eye font-16 color-grey fw-600"></i></button>';
+      }
+      $("#view_"+rowid).html(eyeicon);      
+      app.preloader.hide();      
+    }
+  });
+}
 function Add_FieldVisit(csd_id){
   //actlist+='</div><div class="item-cell "><button class="col button button-fill button button-small color-orange text-uppercase font-9 w-auto mt-5 float-left" onclick="addActivity('+csd_id+','+"'"+csd_verticle+"'"+','+"'"+company_name+"'"+','+l_id+','+cs_id+')"><i class="f7-icons font-12 color-orange">add</i></button><button class="ml-5 col button button-fill button button-small color-blue text-uppercase font-9 w-auto mt-5 float-right display-none" id="view_'+k+'" onclick="viewActivity('+csd_id+','+"'"+csd_verticle+"'"+','+"'"+company_name+"'"+','+l_id+','+cs_id+')"><i class="fa fa-eye font-12"></i></button></div></div></div></a></li>'; 
 }
 $$(document).on('page:init', '.page[data-name="interview_list"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -2590,6 +2736,8 @@ function getintCounts(cs_id,rowid){
   });
 }
 function getInterview(cs_id,comp_name){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/comp_interviews/");
   app.preloader.show(); 
   var int_cnt='';
@@ -2635,6 +2783,8 @@ function getInterview(cs_id,comp_name){
   });
 }
 function getStatus(cs_id,cand_cmp_id,comp_name){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/update_compStatus/");
   app.preloader.show();
   //alert("called");
@@ -2689,7 +2839,7 @@ function add_InterViewStatus(){
   var hidd_cs_id=$('input[name="hidd_cs_id"]').val();
   var hidd_cmp_nm=$('input[name="hidd_cmp_nm"]').val();
   //alert(hidd_cs_id+"---"+hidd_cmp_nm);
-  console.log(form_compintform);
+  //console.log(form_compintform);
   var session_uid = window.localStorage.getItem("session_uid");
   $.ajax({
     type:'POST', 
@@ -2716,6 +2866,8 @@ function add_InterViewStatus(){
   }); 
 }
 $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -2768,6 +2920,8 @@ function getCandiintCounts(cs_id,rowid){
 }
 
 function getCandisel(cs_id,comp_name){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/sel_candidates/");
   app.preloader.show(); 
   var int_cnt='';
@@ -2832,9 +2986,13 @@ function add_joiningDate(){
   });
 }
 function getdatePopup(cand_cmp_id){
+  checkConnection();
+  chkStatusAndPwd();
   $("#hidd_cand_id").val(cand_cmp_id);
 }
 $$(document).on('page:init', '.page[data-name="employee_list"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -2887,6 +3045,8 @@ function getempcnts(cs_id,rowid){
   });
 }
 function getEmps(cs_id,comp_name){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/employees/");
   app.preloader.show(); 
   var int_cnt='';
@@ -2931,6 +3091,8 @@ function getEmps(cs_id,comp_name){
   });
 }
 $$(document).on('page:init', '.page[data-name="daily_activity_list"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   $.ajax({ 
     type:'POST', 
@@ -2954,6 +3116,8 @@ $$(document).on('page:init', '.page[data-name="daily_activity_list"]', function 
   
 });
 function getDailyActPhone(cs_id,rowid){
+  checkConnection();
+  chkStatusAndPwd();
   app.preloader.show();
   $.ajax({ 
     type:'POST', 
@@ -3035,6 +3199,8 @@ function viewIcon(csd_id,rowid){
   });
 }
 function addActivity(csd_id,csd_verticle,company_name,l_id,cs_id){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/add_activity/");
   app.preloader.show(); 
    $.ajax({ 
@@ -3094,6 +3260,8 @@ function add_activity(){
   });
 }
 function viewActivity(csd_id,csd_verticle,company_name,l_id,cs_id){
+  checkConnection();
+  chkStatusAndPwd();
   mainView.router.navigate("/view_activity/");
   app.preloader.show(); 
   $.ajax({
@@ -3134,6 +3302,72 @@ function viewActivity(csd_id,csd_verticle,company_name,l_id,cs_id){
     }
   });   
 }
+$$(document).on('page:init', '.page[data-name="complain_list"]', function (e) { 
+  checkConnection();
+  chkStatusAndPwd();
+  app.preloader.show();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/complainList',
+    data:{'uid':session_uid,'session_ulevel':session_ulevel}, 
+    success:function(comp_res){
+      var json_comp = $.parseJSON(comp_res);
+      var comp_list = json_comp.comp_list;
+      //console.log(comp_list);
+      var comp_info='';
+      var int_cnt = '';
+      for(var k=0;k<comp_list.length;k++){
+        var comp_name= comp_list[k].cs_invoice_name;
+        var cm_id = comp_list[k].cm_id; 
+        var cm_company = comp_list[k].cm_company;
+        var cm_contact_person = comp_list[k].cm_contact_person;
+        var createname = comp_list[k].createname;
+        var cm_user = comp_list[k].cm_user;
+        var cm_create_on = comp_list[k].cm_create_on;  
+
+        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a><br/><span class="text-grey font-10"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>'; 
+
+        /*comp_info+='<div class="list"><ul>';
+        if(k%2==0){
+          var cls = 'light-orange';
+        }else{
+          var cls = ''; 
+        }
+        //comp_info+='<li class="block "'+cls+'"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-blue"></span>'+comp_name+'<br/><span class="grey-txt font-10"><i class="fa fa-user font-10"></i>: '+cm_contact_person+'</span><br/><sapn class="font-10 text-muted">created by:</span> <span class="grey-txt font-10">'+createname+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Create. Dt: '+cm_create_on+'<br><span class="badge color-blue font-9">'+cm_user+'</span></span></div><div class="item-cell" onclick="getCompDetails('+cm_id+','+"'"+comp_name+"'"+')"><i class="fa fa-eye font-14 text-grey"></i></div></div></div></li>';
+
+        //comp_info+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+comp_name+'<br/><span class="grey-txt font-10">DOB: test2</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">test3</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: test4<br><span class="badge color-blue font-9">test5</span></span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-8" >Status Update</button></div></div></div></a></li>'; 
+          
+
+        comp_info+='</ul></div>'; */     
+        $("#complain_list").html(comp_info);
+        app.preloader.hide();         
+      }
+    }
+  });
+}); 
+function showComplain(cm_id,comp_name,cm_company,cm_contact_person,createname,cm_user){ 
+  checkConnection();
+  chkStatusAndPwd(); 
+  app.preloader.show();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  mainView.router.navigate("/complain_details/");
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/view_complain',
+    data:{'uid':session_uid,'session_ulevel':session_ulevel,'cm_id':cm_id}, 
+    success:function(viewCompres){
+      var json_cres = $.parseJSON(viewCompres);
+      var det_comp = json_cres.json_cres;
+      console.log(det_comp);
+      var c_details = '<div class="block"><div class="row"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+'</h3></div></div></div><div class="row"><div class="col-100">'+comp_name+'</div></div></div>';     
+      $("#c_details").html(c_details);
+    }
+  });
+  app.preloader.hide();   
+}
 // --------------------------------------------- L O G O U T ------------------------------------------ //
 function logOut(){
   checkConnection();
@@ -3149,9 +3383,15 @@ function logOut(){
   window.localStorage.removeItem("session_email"); 
   window.localStorage.removeItem("session_loc");
   window.localStorage.removeItem("session_dp");  
-  mainView.router.navigate('/');
-  //app.panel.close();
-  //app.panel.destroy();  
+  window.localStorage.removeItem("session_u_pwd");
+  window.localStorage.removeItem("session_u_status");   
+  //app.router.navigate('/');   
+  app.panel.close();
+  app.panel.destroy();  
+  //mainView.router.navigate("/");   
+  //app.views.main.router.navigate("/");
+  //mainView.router.navigate('/');
+  window.location.href="index.html";
 } 
 /*function openStatusAlert(cs_id){
   var inputOptionsPromise = new Promise(function(resolve) {

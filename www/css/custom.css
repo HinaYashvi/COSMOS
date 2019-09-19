@@ -187,6 +187,16 @@ body{
   /*line-height: 100px;*/
   vertical-align: middle;
 }
+.panel{
+  height: 640px;
+  overflow-x: scroll;
+}
+.lh-30{
+  line-height: 20px!important;
+}
+.h-40p{
+  height: 40px!important;
+}
 .float-left{
   float: left;
 }
@@ -387,6 +397,17 @@ body{
     /*border-top:30px solid #e77e23;*/
     border-top:30px solid #27334A;
 }
+.panelleft{
+    background-color: #27334A!important;
+    color: #fff!important;
+}
+.panel_menus{
+  background: none!important;
+}
+#borderDiv{
+    border-bottom: 1px solid #47525d!important;
+    margin-top: 10px;
+}
 #triangle-topleft-comp {
     position: absolute;
     top: 0;
@@ -454,6 +475,9 @@ body{
 }
 .color-grey{
   color: #27334A;
+}
+.img-circle {
+    border-radius: 50%;
 }
 /* ---------------------- ROTATE STAR -------------------- */
 .gly-spin {

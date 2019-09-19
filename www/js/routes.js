@@ -121,6 +121,22 @@ var routes = [
   {
     path: '/show_fieldVisit/',
     url: './show_fieldVisit.html',
+  },
+  {
+    path: '/change_password/',
+    url: './change_password.html',
+  }, 
+  {
+    path: '/complain_list/',
+    url: './complain_list.html',
+  },
+  {
+    path: '/complain_details/',
+    url: './complain_details.html',
+  }, 
+  {
+    path: '/internet/',
+    url: './internet.html',
   },  
   {
     path: '(.*)',
