@@ -133,6 +133,10 @@ var routes = [
   {
     path: '/complain_details/',
     url: './complain_details.html',
+  },
+  {
+    path: '/add_complain/',
+    url: './add_complain.html',
   }, 
   {
     path: '/internet/',

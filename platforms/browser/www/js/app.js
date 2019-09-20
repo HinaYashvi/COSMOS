@@ -784,31 +784,36 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
      //console.log(json_vertlist); 
       var dpolist=''; 
       var j=1;  
-      for(var i=0;i<json_list.length;i++){
-        var company = json_list[i].cs_invoice_name;
-        var contact = json_list[i].csd_contact_mobile;
-        var cs_id = json_list[i].cs_id; 
-        var l_id = json_list[i].l_id;    
+      if(json_list.length==0){
+         dpolist+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{
+        for(var i=0;i<json_list.length;i++){
+          var company = json_list[i].cs_invoice_name;
+          var contact = json_list[i].csd_contact_mobile;
+          var cs_id = json_list[i].cs_id; 
+          var l_id = json_list[i].l_id;    
 
-        if(contact!=''){
-          var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+contact+'</span>';
-        }else{
-          var cont = '<span class="text-muted">No Contact Found.</span>';
+          if(contact!=''){
+            var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+contact+'</span>';
+          }else{
+            var cont = '<span class="text-muted">No Contact Found.</span>';
+          }
+          dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-500 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
+          
+          var verticles = json_vertlist[i];
+          var tot = tot_vert[i];
+          var vert=''; 
+          $.each( verticles, function( key, value ) {        
+            //console.log( key + ": " + value );
+            vert+=key+" "+"("+value+") "; 
+          });   
+          dpolist+='<br/><i class="f7-icons font-10 text-muted fw-600">data</i>&nbsp;<span class="text-muted font-10 fw-600">'+vert+'</span><br/></td>';
+          dpolist+='<td onclick="viewDPO('+cs_id+')" class="text-muted font-16"><i class="fa fa-eye font-14 text-muted"></i><span class="font-10 fw-600"> - ('+tot+')</span></td></tr>';
+          //$("#dpo_list").html(dpolist); 
+          j++;
         }
-        dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-500 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
-        
-        var verticles = json_vertlist[i];
-        var tot = tot_vert[i];
-        var vert=''; 
-        $.each( verticles, function( key, value ) {        
-          //console.log( key + ": " + value );
-          vert+=key+" "+"("+value+") "; 
-        });   
-        dpolist+='<br/><i class="f7-icons font-10 text-muted fw-600">data</i>&nbsp;<span class="text-muted font-10 fw-600">'+vert+'</span><br/></td>';
-        dpolist+='<td onclick="viewDPO('+cs_id+')" class="text-muted font-16"><i class="fa fa-eye font-14 text-muted"></i><span class="font-10 fw-600"> - ('+tot+')</span></td></tr>';
-        $("#dpo_list").html(dpolist); 
-        j++;
       }
+      $("#dpo_list").html(dpolist); 
       app.preloader.hide();
     }
   });  
@@ -1874,27 +1879,32 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
       var prolist='';
       var st_int='';
       var j=1; 
-      for(var i=0;i<json_list.length;i++){
-        var cand_id = json_list[i].cand_id; 
-        var cand_fname = json_list[i].cand_fname;
-        var cand_mobile = json_list[i].cand_mobile;
-        var cand_email = json_list[i].cand_email;  
-        var created_by = json_list[i].createname; 
-        if(cand_mobile!=''){
-          var cont = '<span class="text-muted"><i class="f7-icons font-14">phone_fill</i>&nbsp;:&nbsp'+cand_mobile+'</span>';
-        }else{
-          var cont = '<span class="text-muted">No Contact Found.</span>';
+      if(json_list.length==0){
+         prolist+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{
+        for(var i=0;i<json_list.length;i++){
+          var cand_id = json_list[i].cand_id; 
+          var cand_fname = json_list[i].cand_fname;
+          var cand_mobile = json_list[i].cand_mobile;
+          var cand_email = json_list[i].cand_email;  
+          var created_by = json_list[i].createname; 
+          if(cand_mobile!=''){
+            var cont = '<span class="text-muted"><i class="f7-icons font-14">phone_fill</i>&nbsp;:&nbsp'+cand_mobile+'</span>';
+          }else{
+            var cont = '<span class="text-muted">No Contact Found.</span>';
+          }
+          if(cand_email!=''){
+            var email = '<span class="text-muted"><i class="f7-icons font-14">email_fill</i>&nbsp;:&nbsp'+cand_email+'</span>';
+          }else{
+            var email = '';
+          }
+          prolist+='<tr class="tr-border" id="pro_tr'+i+'"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+i+'"></td></tr>';
+          int_statusBtn(cand_id,i);
+          //$("#provisional_list").html(prolist); 
+          j++;
         }
-        if(cand_email!=''){
-          var email = '<span class="text-muted"><i class="f7-icons font-14">email_fill</i>&nbsp;:&nbsp'+cand_email+'</span>';
-        }else{
-          var email = '';
-        }
-        prolist+='<tr class="tr-border" id="pro_tr'+i+'"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+i+'"></td></tr>';
-        int_statusBtn(cand_id,i);
-        $("#provisional_list").html(prolist); 
-        j++;
       }
+      $("#provisional_list").html(prolist); 
       app.preloader.hide();
     }
   });  
@@ -2367,22 +2377,30 @@ function showBusinessdet(bd_id){
 $$(document).on('page:init', '.page[data-name="feedback"]', function (e) { 
   checkConnection();
   chkStatusAndPwd();
-  app.preloader.show();   
+  app.preloader.show();  
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/feedbacks',
+    data:{'session_ulevel':session_ulevel,'uid':session_uid},
     success:function(feedback_result){   
       var json_feedback = $.parseJSON(feedback_result);
-      var feed_list = json_feedback.feedback;
+      var feed_list = json_feedback.feedback; 
       var feedDiv='';
-      for(i=0;i<feed_list.length;i++){ 
-        var fb_id = feed_list[i].fb_id;
-        var cs_invoice_name = feed_list[i].cs_invoice_name;
-        var fb_date = feed_list[i].fb_date;
-        var fb_contact_person = feed_list[i].fb_contact_person;
-        feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="text-muted"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="text-muted font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
-        $("#feedback_list").html(feedDiv);
+      if(feed_list.length==0){
+         feedDiv+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{       
+        for(i=0;i<feed_list.length;i++){ 
+          var fb_id = feed_list[i].fb_id;
+          var cs_invoice_name = feed_list[i].cs_invoice_name;
+          var fb_date = feed_list[i].fb_date;
+          var fb_contact_person = feed_list[i].fb_contact_person;
+          feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="text-muted"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="text-muted font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
+          //$("#feedback_list").html(feedDiv);
+        }
       }
+      $("#feedback_list").html(feedDiv);
       app.preloader.hide();             
     }
   });   
@@ -2696,19 +2714,25 @@ $$(document).on('page:init', '.page[data-name="interview_list"]', function (e) {
       //console.log(intrvw_list);
       var intrvw_info='';
       var int_cnt = '';
-      for(var k=0;k<intrvw_list.length;k++){
-        var comp_name= intrvw_list[k].cs_invoice_name;
-        var cs_id = intrvw_list[k].cs_id;
-        if(k==0){
-          var cls = 'accordion-item-opened';
-        }else{
-          var cls = '';
-        } 
-        intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cnt_'+k+'"></span></td></tr>';        
-        getintCounts(cs_id,k);       
-        $("#intervw_info").html(intrvw_info);
-        app.preloader.hide();         
+      if(intrvw_list.length==0){
+         intrvw_info+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{
+        for(var k=0;k<intrvw_list.length;k++){
+          var comp_name= intrvw_list[k].cs_invoice_name;
+          var cs_id = intrvw_list[k].cs_id;
+          if(k==0){
+            var cls = 'accordion-item-opened';
+          }else{
+            var cls = '';
+          } 
+          intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cnt_'+k+'"></span></td></tr>';        
+          getintCounts(cs_id,k);       
+          //$("#intervw_info").html(intrvw_info);
+                 
+        }
       }
+      $("#intervw_info").html(intrvw_info);
+      app.preloader.hide();   
     }
   });
 }); 
@@ -2873,7 +2897,7 @@ $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) {
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   $.ajax({ 
     type:'POST', 
-    url:base_url+'liveappcontroller/selCandidateList',
+    url:base_url+'liveappcontroller/selCandidateList', 
     data:{'uid':session_uid,'session_ulevel':session_ulevel}, 
     success:function(candi_res){
       var json_field = $.parseJSON(candi_res);
@@ -2881,19 +2905,25 @@ $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) {
       //console.log(candi_list);
       var selcan_info='';
       var int_cnt = '';
-      for(var k=0;k<candi_list.length;k++){
-        var comp_name= candi_list[k].cs_invoice_name;
-        var cs_id = candi_list[k].cs_id;
-        if(k==0){
-          var cls = 'accordion-item-opened';
-        }else{
-          var cls = '';
-        } 
-        selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntcandi_'+k+'"></span></td></tr>';        
-        getCandiintCounts(cs_id,k);       
-        $("#selected_info").html(selcan_info);
-        app.preloader.hide();         
+      if(candi_list.length==0){
+         selcan_info+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{
+        for(var k=0;k<candi_list.length;k++){
+          var comp_name= candi_list[k].cs_invoice_name;
+          var cs_id = candi_list[k].cs_id;
+          if(k==0){
+            var cls = 'accordion-item-opened';
+          }else{
+            var cls = '';
+          } 
+          selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntcandi_'+k+'"></span></td></tr>';    
+          getCandiintCounts(cs_id,k);       
+          //$("#selected_info").html(selcan_info);
+          //app.preloader.hide();         
+        }
       }
+      $("#selected_info").html(selcan_info);
+      app.preloader.hide();      
     }
   });
 }); 
@@ -3006,19 +3036,25 @@ $$(document).on('page:init', '.page[data-name="employee_list"]', function (e) {
       console.log(emp_list);
       var emp_info='';  
       var int_cnt = '';
-      for(var k=0;k<emp_list.length;k++){
-        var comp_name= emp_list[k].cs_invoice_name;
-        var cs_id = emp_list[k].cs_id;
-        if(k==0){
-          var cls = 'accordion-item-opened';
-        }else{
-          var cls = '';
-        } 
-        emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntemp_'+k+'"></span></td></tr>';              
-        getempcnts(cs_id,k);
-        $("#emp_info").html(emp_info);
-        app.preloader.hide();         
+      if(emp_list.length==0){
+         emp_info+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{
+        for(var k=0;k<emp_list.length;k++){
+          var comp_name= emp_list[k].cs_invoice_name;
+          var cs_id = emp_list[k].cs_id;
+          if(k==0){
+            var cls = 'accordion-item-opened';
+          }else{
+            var cls = '';
+          } 
+          emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntemp_'+k+'"></span></td></tr>';              
+          getempcnts(cs_id,k);
+          //$("#emp_info").html(emp_info);
+          //app.preloader.hide();         
+        }
       }
+      $("#emp_info").html(emp_info);
+      app.preloader.hide();    
     }
   });
 }); 
@@ -3063,7 +3099,7 @@ function getEmps(cs_id,comp_name){
       $("#compint_details").html(block);
       emp_dets+='<div class="list"><ul>';
       if(tot_eints==0){
-         emp_dets+='<li class="light-orange"><div class="item-inner item-cell"><div class="item-row ml-10 mt-5"><div class="item-cell orange-txt font-14 fw-600">No Employees.</div></div></li>';
+         emp_dets+='<li class=""><div class="item-inner item-cell"><div class="item-row ml-10 mt-5"><div class="item-cell orange-txt font-14 fw-600">No Employees.</div></div></li>';
       }else{
         for(var i=0;i<tot_eints;i++){
           var cn_nm = elist[i].cand_fname+" "+elist[i].cand_lname;
@@ -3327,7 +3363,7 @@ $$(document).on('page:init', '.page[data-name="complain_list"]', function (e) {
         var cm_user = comp_list[k].cm_user;
         var cm_create_on = comp_list[k].cm_create_on;  
 
-        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a><br/><span class="text-grey font-10"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>'; 
+        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+','+"'"+cm_create_on+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a><br/><span class="text-grey font-10"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>'; 
 
         /*comp_info+='<div class="list"><ul>';
         if(k%2==0){
@@ -3347,7 +3383,7 @@ $$(document).on('page:init', '.page[data-name="complain_list"]', function (e) {
     }
   });
 }); 
-function showComplain(cm_id,comp_name,cm_company,cm_contact_person,createname,cm_user){ 
+function showComplain(cm_id,comp_name,cm_company,cm_contact_person,createname,cm_user,cm_create_on){ 
   checkConnection();
   chkStatusAndPwd(); 
   app.preloader.show();
@@ -3360,13 +3396,77 @@ function showComplain(cm_id,comp_name,cm_company,cm_contact_person,createname,cm
     data:{'uid':session_uid,'session_ulevel':session_ulevel,'cm_id':cm_id}, 
     success:function(viewCompres){
       var json_cres = $.parseJSON(viewCompres);
-      var det_comp = json_cres.json_cres;
-      console.log(det_comp);
-      var c_details = '<div class="block"><div class="row"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+'</h3></div></div></div><div class="row"><div class="col-100">'+comp_name+'</div></div></div>';     
+      var det_comp = json_cres.company;
+      var det_cust = json_cres.customer;
+      var det_empl = json_cres.employee;
+      var det_rslt = json_cres.result;
+      //console.log(det_comp);
+      //console.log(det_cust);
+      //console.log(det_empl);
+      //console.log(det_rslt);       
+      var c_details = '<div class="block"><div class="row"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+'<span class="ml-10 badge color-blue fs-10">'+cm_user+'</span></h3></div></div></div><div class="row"><div class="col-100"><i class="fa fa-user font-14 mr-5 color-grey"></i><span class="text-muted fw-500">'+cm_contact_person+'</span><br/><i class="fa fa-calendar font-13 mr-5 color-grey"></i><span class="text-muted fw-500">'+cm_create_on+'</span><br/><span class="text-grey fw-600 text-uppercase">created by: '+createname+'</span></div></div></div>';     
+      if(det_rslt[0].cm_complain=='Employee'){
+        var emps = det_rslt[0].cm_employee_chk;
+        var split_emp = emps.split("|");
+        var emp_txt = det_rslt[0].cm_employee_detail;
+        var split_etxt = emp_txt.split("|");
+        for(var k=0;k<det_empl.length;k++){
+          var ct_id = det_empl[k].ct_id;
+
+        }
+      }
+      if(det_rslt[0].cm_complain=='Customer'){
+
+      } 
       $("#c_details").html(c_details);
     }
   });
   app.preloader.hide();   
+}
+$$(document).on('page:init', '.page[data-name="add_complain"]', function (e) {
+  checkConnection();
+  app.preloader.show();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/add_compform',
+    data:{'uid':session_uid,'session_ulevel':session_ulevel}, 
+    success:function(dropres){
+      var json_res = $.parseJSON(dropres);
+      var det_comp = json_res.assign_cmpy;
+      var det_cust = json_res.customer;
+      var det_empl = json_res.employee;
+      var comps='';
+      comps+='<option value="">---SELECT---</option>';
+      for(var k=0;k<det_comp.length;k++){
+        var csid = det_comp[k].cs_id;
+        var cs_invoice_name = det_comp[k].cs_invoice_name;
+        comps+='<option value='+csid+'>'+cs_invoice_name+'</option>';
+      }
+      $("#company_name").html(comps);
+
+      /*var contp='';
+      contp+='<option value="">---SELECT---</option>';
+      for(var m=0;m<det_comp.length;m++){
+        var csid = det_comp[m].cs_id;
+        var cs_invoice_name = det_comp[m].cs_invoice_name;
+        contp+='<option value='+csid+'>'+cs_invoice_name+'</option>';
+      }
+      $("#company_name").html(contp);*/
+
+    }
+  });
+  app.preloader.hide();
+});
+function getContPerson(sel_comp){
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/getContPer',
+    data:{'sel_comp':sel_comp}, 
+    success:function(dropres){
+    }
+  });
 }
 // --------------------------------------------- L O G O U T ------------------------------------------ //
 function logOut(){
