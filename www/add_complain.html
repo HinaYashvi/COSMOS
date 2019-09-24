@@ -31,7 +31,7 @@
             <div class="item-inner">
               <div class="item-title item-label form-label">Name Of Company -  कंपनी का नाम <sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
               <div class="item-input-wrap">
-                <select name="company_name" id="company_name" class="form-txtbox form-label p-2" onchange="getContPerson(this.value)"></select>
+                <select name="company_name" id="company_name" class="form-txtbox form-label p-2 font-10" onchange="getContPerson(this.value)"></select>
               </div>
             </div>
           </div>
@@ -42,7 +42,7 @@
             <div class="item-inner">
               <div class="item-title item-label form-label">Contact Person - संपर्क व्यक्ति<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
               <div class="item-input-wrap">
-                <select name="cont_person" id="cont_person" class="form-txtbox form-label p-2"></select>
+                <select name="cont_person" id="cont_person" class="form-txtbox form-label p-2 font-10"></select>
               </div>
             </div>
           </div>
@@ -53,7 +53,9 @@
             <div class="item-inner">
               <div class="item-title item-label form-label">Cosmos Assigned Payroll - कॉसमॉस पेरोल का नियुक्त व्यक्ति</div>
               <div class="item-input-wrap">
-                <input type="text" name="payroll_person" class="form-txtbox p-2" id="payroll_person">
+              	<input type="hidden" name="hidd_payroll_person" id="hidd_payroll_person">
+                <input type="text" name="payroll_person" class="form-txtbox p-2 light-grey" id="payroll_person">
+                <!--div id="payroll_person_div"></div-->
               </div>
             </div>
           </div>
@@ -64,7 +66,9 @@
             <div class="item-inner">
               <div class="item-title item-label form-label">Cosmos Assigned Recruitment - कॉसमॉस भरती का नियुक्त व्यक्ति</div>
               <div class="item-input-wrap">
-                <input type="text" name="recrutment_person" class="form-txtbox p-2" id="recrutment_person">
+              	<input type="hidden" name="hidd_recrutment_person" id="hidd_recrutment_person">
+                <input type="text" name="recrutment_person" class="form-txtbox p-2 light-grey" id="recrutment_person" readonly>
+                <!--div id="cos_ass_rec_div"></div-->
               </div>
             </div>
           </div>
@@ -75,7 +79,7 @@
             <div class="item-inner">
               <div class="item-title item-label form-label">Complain Type - शिकायत का प्रकार<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
               <div class="item-input-wrap">
-                <select name="complain_type" id="complain_type" class="form-txtbox form-label p-2">
+                <select name="complain_type" id="complain_type" class="form-txtbox form-label p-2" onchange="comp_type(this.value)">
                 	<option value="">---SELECT---</option>
                 	<option value="Customer">Customer</option>
                 	<option value="Employee">Employee</option>
@@ -83,12 +87,21 @@
               </div>
             </div>
           </div>
-        </li>
+        </li>       
+    </ul>
 
 
-        
+    <div class="block">
+      <div id="complain_emp" class="display-none">      	
+      	<label class="form-label text-blue text-uppercase fw-500">Employee - कर्मचारी</label> 
+      	<div id="emp_div"></div>     	
+      </div>
+      <div id="complain_cus" class="display-none">
+      	<label class="form-label text-blue text-uppercase fw-500">Customer - ग्राहक</label>
+      	<div id="cust_div"></div>      	
+      </div> 
+    </div>
 
-      </ul>
       <div class="block block-strong row">
         <div class="col"><a class="button convert-form-to-data no-radius link-white form-btn compsave_btn disabled" href="#" onclick="add_competitior()">Save</a></div>      
       </div>

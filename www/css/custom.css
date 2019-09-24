@@ -90,6 +90,12 @@ body{
 .mb-15{
   margin-bottom: 15px;
 }
+.mb-5{
+  margin-bottom: 5%;
+}
+.mb-1{
+  margin-bottom: 1%;
+}
 .w-30{
   width: 30%;
 }
@@ -127,7 +133,8 @@ body{
   margin: 10px 0 0 0!important;
 }
 .form-label{
-  color:#929eaa!important; 
+  /*color:#929eaa!important; */
+  color: #000!important;
 }
 .mh-30{
   min-height:30px!important;
@@ -200,11 +207,17 @@ body{
 .float-left{
   float: left;
 }
+.float-right{
+  float: right;
+}
 .m-20p{
   margin: 20%;
 }
 .m-5p{
   margin: 5%;
+}
+.mt-0{
+  margin-top: 0px!important;
 }
 .mt-5{
   margin-top: 5px;
@@ -264,7 +277,7 @@ body{
   font-size: 14px;
 }
 .font-12{
-  font-size: 12px;
+  font-size: 12px!important;
   /*font-size: 0.81rem;*/
 }
 .font-11{
@@ -355,7 +368,7 @@ body{
   display: block;
 }
 .light-grey{
-  background-color: lightgrey;
+  background-color: lightgrey!important;
 }
 .mdtest{
   width: 131%;
@@ -471,13 +484,25 @@ body{
   width: auto!important;
 }
 .text-blue{
-  color:#2196f3;
+  color:#2196f3!important;
 }
 .color-grey{
   color: #27334A;
 }
 .img-circle {
     border-radius: 50%;
+}
+.w-15{
+  width: 15%;
+}
+.d-inline{
+  display: inline-block;
+}
+.w-80{
+  width:80%;
+}
+.w-85{
+  width:85%;
 }
 /* ---------------------- ROTATE STAR -------------------- */
 .gly-spin {
