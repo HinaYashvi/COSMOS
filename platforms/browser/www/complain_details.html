@@ -24,9 +24,19 @@
   </div>
 
   <div class="page-content"> 
-    <div id="c_details"></div>
-    <div id="complain_dets"></div>
-    <!--div class="block"><button class="col button button color-orange button-outline" type="button" onclick="goback()">Back</button></div-->
+  	<form class="list no-hairlines add_comp" id="add_comp" >
+      	<div id="c_details"></div>	    
+      	<div class="block">
+	      <div id="complain_emp" class="display-none">      	
+	      	<label class="form-label text-blue text-uppercase fw-500">Employee - कर्मचारी</label> 
+	      	<div id="emp_div"></div>     	
+	      </div>
+	      <div id="complain_cus" class="display-none">
+	      	<label class="form-label text-blue text-uppercase fw-500">Customer - ग्राहक</label>
+	      	<div id="cust_div"></div>      	
+	      </div> 
+	    </div>
+  	</form>    
+  	<!--div class="block"><button class="col button button color-orange button-outline" type="button" onclick="goback()">Back</button></div-->
   </div> 
 </div><!-- .page-content -->  
-</div>

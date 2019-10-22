@@ -23,7 +23,9 @@
     </div>
   </div>
 
-  <div class="page-content"> 
+  <div class=""><input type="text" name="search_empl" placeholder="&#xF002; &nbsp;&nbsp;search" id="search_empl" class="form-txtbox p-4 mt-0 searchtxt empty" onkeyup="searchEmployees()"></div> 
+
+  <div class="page-content pt-0"> 
     <div id="compint_details"></div>
     <!--div id="sel_dets"></div-->
     <div class="card data-table int_tbl">      
@@ -38,8 +40,10 @@
       </table>
     </div>
 
-    <div class="block"><button class="col button btn-goutline button-outline" type="button" onclick="goback()">Back</button></div> 
+    <input type="hidden" name="hidd_csid" id="hidd_csid">
+    <input type="hidden" name="hidd_comp" id="hidd_comp">
 
+    <div class="block"><button class="col button button form-btn text-white button-outline" type="button" onclick="goback()">Back</button></div> 
     </div> 
 </div><!-- .page-content -->  
 </div>

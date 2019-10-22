@@ -83,6 +83,9 @@ body{
 .border-white{
   border:1px solid #fff;
 }
+.border-solid{
+  border:1px solid #000;
+}
 .h-33{
   height: 33px!important;
   background: none!important;
@@ -149,6 +152,10 @@ body{
   /*background-color:#018267;*/
   background-color: #71a92e;
 }
+.color-parrot{
+	background-color:#71a92e;
+	color:#fff;
+}
 .h-40{
   height:40px!important;
 }
@@ -157,6 +164,9 @@ body{
 }
 .p-2{
   padding: 2%!important;
+}
+.p-4{
+  padding:4%!important;
 }
 .pl-4{
   padding-left: 4%!important;
@@ -300,6 +310,9 @@ body{
 }
 .font-8{
   font-size: 8px;
+}
+.font-7{
+  font-size: 7px;
 }
 .fw-600{
   font-weight: 600!important;
@@ -503,6 +516,40 @@ body{
 }
 .w-85{
   width:85%;
+}
+.w-39{
+  width:39%!important;
+}
+.w-30{
+  width:30%!important;
+}
+.w-40{
+  width:40%!important;
+}
+.w-28{
+  width:28%!important;
+}
+.searchtxt{
+    width: 100%;
+    border: none!important;
+    background-color: rgba(39, 51, 74, 0.73)!important;
+    color: #fff!important;
+    margin: 55px 0 0 0!important;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+input.empty {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
+label.item-checkbox input[type="checkbox"]:checked ~ .icon-checkbox{
+  border-color: #27334A;
+  background-color: #27334A;
 }
 /* ---------------------- ROTATE STAR -------------------- */
 .gly-spin {

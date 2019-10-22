@@ -23,7 +23,9 @@
     </div>
   </div>
 
-  <div class="page-content"> 
+  <div class=""><input type="text" name="search_selemp" placeholder="&#xF002; &nbsp;&nbsp;search" id="search_selemp" class="form-txtbox p-4 mt-0 searchtxt empty" onkeyup="searchCandidatesselcted()"></div> 
+
+  <div class="page-content pt-0"> 
     <div id="compint_details"></div>
     <!--div id="sel_dets"></div-->
     <div class="card data-table int_tbl">      
@@ -54,7 +56,7 @@
         </div>
 
         <ul>
-          <li>
+          <!--li>
             <div class="item-content item-input">
               <div class="item-inner">
                 <div class="item-title item-label">Joining Date</div>
@@ -63,10 +65,36 @@
                 </div>
               </div>
             </div>
-          </li>
+          </li-->
+
+
+          <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Joining Date</div>
+              <div class="item-input-wrap">                
+                <div class="row">
+                  <div class="col-33">
+                    <select name="join_day" id="join_day" class="form-txtbox form-label p-2" ></select>
+                  </div>
+                  <div class="col-33">
+                    <select name="join_mnth" id="join_mnth" class="form-txtbox form-label p-2" ></select>
+                  </div>
+                  <div class="col-33">
+                    <select name="join_yr" id="join_yr" class="form-txtbox form-label p-2" ></select>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </li>
+
         </ul>
 
         <input type="hidden" name="hidd_cand_id" id="hidd_cand_id">
+        <input type="hidden" name="hidd_cs_id" id="hidd_cs_id">
+        <input type="hidden" name="hidd_compnm" id="hidd_compnm">
 
         <div class="block block-strong row">
           <div class="col"><a class="button convert-form-to-data no-radius link-white form-btn compsave_btn popup-close" href="#" onclick="add_joiningDate()">Save</a></div>   

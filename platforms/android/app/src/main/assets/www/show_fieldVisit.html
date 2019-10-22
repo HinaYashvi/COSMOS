@@ -5,13 +5,28 @@
         <!--a href="#" class="link panel-open" data-panel="left" onclick="openPanel()"><i class="f7-icons size-22 leftbars text-white" >bars</i></a-->
         <a href="#" class="link back"><i class="f7-icons size-22 text-white">arrow_left</i></a>
 	    </div>
-	    <div class="title text-uppercase text-white">View Field Visit</div>
+	    <div class="title text-uppercase text-white">View daily activity</div>
 	    <div class="right">
         <!--a class="link" href="#" >
           <i class="f7-icons size-22 text-white leftbars" >more_vertical_fill</i>
         </a-->
         <a href="#" class="link panel-open" data-panel="left" onclick="openPanel()"><i class="f7-icons size-22 leftbars text-white" >bars</i></a>
       </div>
+
+      <div class="subnavbar">
+        <!-- Searchbar with auto init -->
+        <form class="searchbar">
+          <div class="searchbar-inner">
+            <div class="searchbar-input-wrap">
+              <input type="search" placeholder="Search">
+              <i class="searchbar-icon"></i>
+              <span class="input-clear-button"></span>
+            </div>
+            <span class="searchbar-disable-button if-not-aurora">Cancel</span>
+          </div>
+        </form>
+      </div>
+      
 	  </div>
 	</div> 
 
@@ -24,6 +39,7 @@
   </div>
 
   <div class="page-content"> 
+    <div class="searchbar-backdrop"></div> 
     <div id="compint_details"></div>
     <div id="visit_dets"></div>
     <div class="block"><button class="col button button form-btn text-white button-outline" type="button" onclick="goback()">Back</button></div>

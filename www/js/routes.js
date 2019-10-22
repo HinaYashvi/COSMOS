@@ -137,11 +137,27 @@ var routes = [
   {
     path: '/add_complain/',
     url: './add_complain.html',
+  },
+  {
+    path: '/add_person/',
+    url: './add_person.html',
+  },
+  {
+    path: '/add_visit/',
+    url: './add_visit.html',
   }, 
   {
     path: '/internet/',
     url: './internet.html',
   },  
+  {
+    path:'/search_candidate/',
+    url:'./search_candidate.html',
+  },
+  {
+    path:'/view_visit/',
+    url:'./view_visit.html',
+  },
   {
     path: '(.*)',
     url: './404.html',

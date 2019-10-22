@@ -15,12 +15,32 @@
 	  </div>
 	</div> 
 
-  <div class="fab fab-right-bottom color-fbtn">
+  <!--div class="fab fab-right-bottom color-fbtn">
     <a href="/add_complain/" class="">
       <i class="icon f7-icons">add</i>
       <i class="icon f7-icons">close</i>
     </a>
+  </div-->
+
+  <div class="fab fab-right-bottom color-orange">
+    <a href="#" class="">
+      <!--i class="icon f7-icons">add</i>
+      <i class="icon f7-icons">close</i-->
+      <i class="f7-icons">plus</i>
+      <i class="f7-icons">multiply</i>
+    </a>
+    <div class="fab-buttons fab-buttons-top">
+      <a class="fab-label-button" href="/add_complain/">
+        <span>1</span>
+        <span class="fab-label">Add Complain</span>
+      </a>
+      <a class="fab-label-button" href="/add_person/">
+        <span>2</span>
+        <span class="fab-label">Add Person</span>
+      </a>
+    </div>
   </div>
+
 
   <div class="toolbar toolbar-bottom toolbar-fixed footer-bg">
     <div class="toolbar-inner">
@@ -29,9 +49,16 @@
       <a class="link"></a> 
     </div>
   </div>
-  <div class="page-content">
+
+  <div class=""><input type="text" name="search_comp" placeholder="&#xF002;&nbsp;&nbsp;&nbsp;Search" id="search_comp" class="form-txtbox p-4 mt-0 searchtxt empty" onkeyup="searchCmpln()"></div>  
+
+  <div class="page-content pt-0">
     <!--div id="complain_list"></div-->
-      
+    <!--div class="block">
+      <div class="row">     
+        <div class="col-100"><input type="text" name="search_comp" placeholder="Mobile No" id="search_comp" class="form-txtbox p-4 mt-0" required validate data-error-message="Mobile no should not be empty." onkeyup="searchCmpln()"></div>        
+      </div> 
+    </div-->  
 
     <div class="card data-table int_tbl">      
       <table>
