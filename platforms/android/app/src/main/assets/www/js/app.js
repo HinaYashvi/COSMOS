@@ -11,7 +11,7 @@ var app = new Framework7({
     closeByBackdropClick : true,    
   },  
   animateNavBackIcon:true,
-  dynamicNavbar: true, 
+  dynamicNavbar: true,  
   //theme:'material',
   //material: true, //enable Material theme
   //materialRipple: false,
@@ -19,7 +19,7 @@ var app = new Framework7({
   clicks: { 
     externalLinks: '.external',
   },
-  navbar: { 
+  navbar: {  
     hideOnPageScroll: false,
     iosCenterTitle: false,
     closeByBackdropClick: true,
@@ -504,6 +504,21 @@ function checklogin(){
     //}
 } 
 $$(document).on('page:init', '.page[data-name="dashboard"]', function (e) { 
+  app.dialog.alert("hi");
+  /*var params = {};
+  addressimpl.request("getMACAddress", JSON.stringify(params), function(message) {
+      app.dialog.alert("mac address "+message);
+    }, function() {
+      app.dialog.alert("failed on get mac address");
+    }); */
+    window.plugins.imei.get(
+  function(imei) {
+    alert("got imei: " + imei);
+  },
+  function() {
+    alert("error loading imei"); 
+  }
+); 
   checkConnection();
   chkStatusAndPwd();
   var session_fname = window.localStorage.getItem("session_fname");
@@ -512,6 +527,7 @@ $$(document).on('page:init', '.page[data-name="dashboard"]', function (e) {
   $("#userName").html("<span class='text-white'>Name : "+session_fname+"</span>");
   $("#userMo").html("<span class='text-white'>Mobile : "+session_mobile+"</span>"); 
   $("#userDept").html("<span class='text-white'>Department : "+session_department+"</span>");
+  
 });
 // --------------------------- P R O V I S I O N A L  R E G I S T R A T I O N ----------------------------- //
 $$(document).on('page:init', '.page[data-name="provisional_registration"]', function (e) {
@@ -564,7 +580,7 @@ $$(document).on('page:init', '.page[data-name="provisional_registration"]', func
         $("#state").html(states);    
       }
     });
-
+  
     /*var timer=null;
     $("#confirm_password").keydown(function(){
       clearTimeout(timer);
@@ -1817,7 +1833,7 @@ function dpoDetail(csd_id){
                           k_skill+=json_keyskill[z].key_skill+','; 
                         }
                       }
-                    }
+                    } 
                   }
                  
                   if(split_quali!=null && split_quali!=''){

@@ -418,6 +418,14 @@ module.exports = [
         "id": "cordova-plugin-statusbar.StatusBarProxy",
         "pluginId": "cordova-plugin-statusbar",
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-imei/www/imei.js",
+        "id": "cordova-plugin-imei.IMEIPlugin",
+        "pluginId": "cordova-plugin-imei",
+        "clobbers": [
+            "window.plugins.imei"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -436,7 +444,8 @@ module.exports.metadata =
     "cordova-plugin-network-information": "1.3.4",
     "cordova-plugin-vibration": "2.1.6",
     "cordova-plugin-statusbar": "2.4.3",
-    "cordova-plugin-whitelist": "1.3.4"
+    "cordova-plugin-whitelist": "1.3.4",
+    "cordova-plugin-imei": "0.0.1"
 }
 // BOTTOM OF METADATA
 });
