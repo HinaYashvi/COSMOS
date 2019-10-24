@@ -6,7 +6,7 @@ var app = new Framework7({
   //popupCloseByOutside:true,
   name: 'COSMOS - FO',// App Name
   //id: 'com.phonegap.cosmosfo',       // App id
-  id: 'com.phonegap.NEWFO',
+  id: 'com.phonegap.NEWFO', 
   panel: {
     //swipe: 'left', // Enable swipe panel
     closeByBackdropClick : true,    
