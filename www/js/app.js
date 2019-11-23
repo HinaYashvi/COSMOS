@@ -20,7 +20,7 @@ var app = new Framework7({
   clicks: { 
     externalLinks: '.external',
   },
-  navbar: {  
+  navbar: {     
     hideOnPageScroll: false,
     iosCenterTitle: false,
     closeByBackdropClick: true,
