@@ -385,6 +385,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "window.plugins.imei"
       ]
+    },
+    {
+      "id": "cordova-plugin-android-imei.IMEI",
+      "file": "plugins/cordova-plugin-android-imei/www/index.js",
+      "pluginId": "cordova-plugin-android-imei",
+      "clobbers": [
+        "cordova.plugins.IMEI"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -401,6 +409,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-vibration": "2.1.6",
     "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-imei": "0.0.1"
+    "cordova-plugin-imei": "0.0.1",
+    "cordova-plugin-android-imei": "1.0.0"
   };
 });

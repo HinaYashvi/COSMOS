@@ -13,7 +13,7 @@ var routes = [
   {
     path: '/pro_registrations/',
     url: './pro_registrations.html'
-  },
+  }, 
   {
     path: '/provisional_registration/',
     url: './provisional_registration.html',
@@ -158,6 +158,26 @@ var routes = [
     path:'/view_visit/',
     url:'./view_visit.html',
   },
+  {
+    path:'/search_caninterview/',
+    url:'./search_caninterview.html',
+  },
+  {
+    path:'/inf_scroll/',
+    url:'./inf_scroll.html',
+  }, 
+  {
+    path:'/daily_visit_report/',
+    url:'./daily_visit_report.html', 
+  },   
+  {
+    path:'/expense_mgmt/',
+    url:'./expense_mgmt.html',    
+  },
+  {
+    path:'/add_expense/',
+    url:'./add_expense.html',     
+  },            
   {
     path: '(.*)',
     url: './404.html',

@@ -159,6 +159,26 @@ var routes = [
     url:'./view_visit.html',
   },
   {
+    path:'/search_caninterview/',
+    url:'./search_caninterview.html',
+  },
+  {
+    path:'/inf_scroll/',
+    url:'./inf_scroll.html',
+  }, 
+  {
+    path:'/daily_visit_report/',
+    url:'./daily_visit_report.html', 
+  },   
+  {
+    path:'/expense_mgmt/',
+    url:'./expense_mgmt.html',    
+  },
+  {
+    path:'/add_expense/',
+    url:'./add_expense.html',     
+  },            
+  {
     path: '(.*)',
     url: './404.html',
   },

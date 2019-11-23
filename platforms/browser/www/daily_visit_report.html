@@ -1,0 +1,90 @@
+<div data-name="daily_visit_report" class="page navbar-fixed toolbar-fixed">
+	<div class="navbar inner-header nav-bg">
+	  <div class="navbar-inner sliding">
+	    <div class="left ">
+        <!--a href="#" class="link panel-open" data-panel="left" onclick="openPanel()"><i class="f7-icons size-22 leftbars text-white" >bars</i></a-->
+        <a href="#" class="link back"><i class="f7-icons size-22 text-white">arrow_left</i></a>
+	    </div>
+	    <div class="title text-uppercase text-white">Daily Visit Report</div>
+	    <div class="right">
+        <!--a class="link" href="#" >
+          <i class="f7-icons size-22 text-white leftbars" >more_vertical_fill</i>
+        </a-->
+        <a href="#" class="link panel-open" data-panel="left" onclick="openPanel()"><i class="f7-icons size-22 leftbars text-white" >bars</i></a>
+      </div>
+	  </div>
+	</div> 
+
+  <div class="toolbar toolbar-bottom toolbar-fixed footer-bg">
+    <div class="toolbar-inner">
+      <a class="link"></a>
+      <div class="link text-white text-capitalize ">powered by &nbsp; <span class="fa fa-star gly-spin "></span><a class="link external link-white text-uppercase linkspace poweredby" href="http://staroneweb.co.in" target="_system"> star one web</a></div>
+      <a class="link"></a> 
+    </div>
+  </div>
+         
+  <div class="searchDiv" style="width:100%;">                
+    <form class="list no-hairlines daily_vrep mb-0" id="daily_vrep" > 
+      <ul class="daily_vrep_dropdiv">
+        <li class="mt-15p">
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <!--div class="item-title item-label text-white">FROM</div-->
+              <div class="item-input-wrap">                
+                <div class="row">
+                  <div class="col-33">
+                    <select name="from_dt" id="from_dt" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()" ></select> 
+                  </div>
+                  <div class="col-33">
+                    <select name="from_mnth" id="from_mnth" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()"></select>
+                  </div>
+                  <div class="col-33">
+                    <select name="from_yr" id="from_yr" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()"></select>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+        </li>
+
+        <li>
+          <div class="item-content item-input mt-0">
+            <div class="item-inner">
+              <!--div class="item-title item-label text-white">TO</div-->
+              <div class="item-input-wrap">                  
+                <div class="row"> 
+                  <div class="col-33">
+                    <select name="to_dt" id="to_dt" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()"></select>
+                  </div>
+                  <div class="col-33">
+                    <select name="to_mnth" id="to_mnth" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()"></select>
+                  </div>
+                  <div class="col-33">
+                    <select name="to_yr" id="to_yr" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()"></select>  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </form>
+  </div>    
+
+  <div class="page-content " style="padding-top: 45%!important;">              
+  <div id="tot_data"></div> 
+    <div class="card data-table"> 
+      <table>
+        <thead class="light-orange">
+          <tr>            
+            <th class="label-cell text-uppercase table-th"><strong>Company</strong></th>
+            <th class="label-cell text-uppercase table-th display-none add_from pt-20"><strong>Add By [FROM]</strong></th>
+          </tr>
+        </thead> 
+        <tbody id="report_list"></tbody> 
+      </table>
+    </div>
+  </div> 
+</div><!-- .page-content -->  
+</div>

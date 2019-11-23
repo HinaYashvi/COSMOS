@@ -6,12 +6,12 @@ var app = new Framework7({
   //popupCloseByOutside:true,
   name: 'COSMOS - FO',// App Name
   //id: 'com.phonegap.cosmosfo',       // App id
-  id: 'com.phonegap.NEWFO', 
+  id: 'com.phonegap.NEWFO',
   panel: {
     //swipe: 'left', // Enable swipe panel
     closeByBackdropClick : true,    
   },  
-  animateNavBackIcon:true,
+  animateNavBackIcon:true,  
   dynamicNavbar: true,  
   //theme:'material',
   //material: true, //enable Material theme
@@ -426,7 +426,7 @@ function upload_doc(insert_id,old_doc){
   //alert(uploadControllerURL);
   ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
 }
-function win(r) { alert(r);
+function win(r) { //alert(r);
     //document.writeln(r.response);      
     var responseCode = r.responseCode;
     if(responseCode==200){
@@ -464,7 +464,7 @@ function checklogin(){
           var json = $.parseJSON(data);
           //console.log("json "+json);
           var json_res = json.loggedin_user[0];
-          console.log("!!!!!!!!"+json_res);//alert(json_res+" success"); 
+         // console.log("!!!!!!!!"+json_res);//alert(json_res+" success"); 
           //if(json!=0){  
           if(json_res!=undefined){ 
             if(json.loggedin_user[0].is_delete==0){
@@ -503,32 +503,31 @@ function checklogin(){
         }
       });
     //}
-} 
+}   
 $$(document).on('page:init', '.page[data-name="dashboard"]', function (e) { 
-  app.dialog.alert("hi");
-  /*var params = {};
-  addressimpl.request("getMACAddress", JSON.stringify(params), function(message) {
-      app.dialog.alert("mac address "+message);
-    }, function() {
-      app.dialog.alert("failed on get mac address");
-    }); */
-    window.plugins.imei.get(
-  function(imei) {
-    alert("got imei: " + imei);
-  },
-  function() {
-    alert("error loading imei"); 
-  }
-); 
+//app.dialog.alert("hi"+device.uuid);
+/*  cordova.plugins.IMEI(function (err, imei) {
+    alert("hihello"); 
+  alert('imei'+ imei);
+  alert(err);
+})*/
+//alert(cordova.plugins.uid.IMEI+"****");
   checkConnection();
   chkStatusAndPwd();
   var session_fname = window.localStorage.getItem("session_fname");
   var session_department = window.localStorage.getItem("session_department");
   var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  if(session_ulevel == 1){
+    $("#daily_visti_rep").removeClass("display-none");
+    $("#daily_visti_rep").addClass("display-block");
+  }else{
+    $("#daily_visti_rep").removeClass("display-block");
+    $("#daily_visti_rep").addClass("display-block");
+  }
   $("#userName").html("<span class='text-white'>Name : "+session_fname+"</span>");
   $("#userMo").html("<span class='text-white'>Mobile : "+session_mobile+"</span>"); 
-  $("#userDept").html("<span class='text-white'>Department : "+session_department+"</span>");
-  
+  $("#userDept").html("<span class='text-white'>Department : "+session_department+"</span>");  
 });
 // --------------------------- P R O V I S I O N A L  R E G I S T R A T I O N ----------------------------- //
 $$(document).on('page:init', '.page[data-name="provisional_registration"]', function (e) {
@@ -1563,7 +1562,7 @@ function dpoDetail(csd_id){
                     var other = '';  
                   }
 
-                  sub_accord+='<div class="list accordion-list p-2"><ul><li class="accordion-item light-grey"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title">'+srno+'</div></div></a><div class="accordion-item-content nobgclr elevation-5 ">'+lc_design+educate+qnty+grosssal+ntkhm+expr+skills+food+duty+age+transp+locate+gender+accomodate+s_timing+t_freq+unif+wkly+torch+rnct+umbrela+stick+s_access+m_detect+shoes+s_gun+mat_by+mach_by+other+'</div></li></ul></div>';
+                  sub_accord+='<div class="list accordion-list p-2"><ul><li class="accordion-item light-grey"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title">'+srno+'</div></div><span class="float-right mr-10 orange-txt"><i class="fa fa-play icon-orange"></i></span></a><div class="accordion-item-content nobgclr elevation-5 ">'+lc_design+educate+qnty+grosssal+ntkhm+expr+skills+food+duty+age+transp+locate+gender+accomodate+s_timing+t_freq+unif+wkly+torch+rnct+umbrela+stick+s_access+m_detect+shoes+s_gun+mat_by+mach_by+other+'</div></li></ul></div>';
 
 
                   }// for loop split_design.length ends //
@@ -1907,7 +1906,7 @@ function dpoDetail(csd_id){
                     var r_res= '<div class="item-row pl-4 pb-3"><div class="item-cell grey-txt font-14 fw-600">Roles &amp; Responsibilities</div><div class="item-cell text-grey font-12 ml-0"></div></div>';  
                   }
 
-                  headcnt_accord+='<div class="list accordion-list p-2"><ul><li class="accordion-item light-grey"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title">'+serial+'</div></div></a><div class="accordion-item-content nobgclr elevation-5 ">'+pos_title+pos_no+rep_to+spec+skil+exp+sallry+vac+gend+w_time+r_res+'</div></li></ul></div>';
+                  headcnt_accord+='<div class="list accordion-list p-2"><ul><li class="accordion-item light-grey"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title">'+serial+'</div></div><span class="float-right mr-10 orange-txt"><i class="fa fa-play icon-orange"></i></span></a><div class="accordion-item-content nobgclr elevation-5 ">'+pos_title+pos_no+rep_to+spec+skil+exp+sallry+vac+gend+w_time+r_res+'</div></li></ul></div>';
 
                 }// for llop split_posit.length ends //
                 var headcnt_info = '';
@@ -2839,7 +2838,7 @@ $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) {
       //console.log(json_field);
       var field_list = json_field.dpoList;
       var cont_no = json_field.cont_arr;  
-      console.log(field_list.length);
+      //console.log(field_list.length);
       var fieldDiv='';
       var dcr='';
       for(i=0;i<field_list.length;i++){
@@ -2930,7 +2929,7 @@ function viewFieldVisit(cs_id,comp_name){
             position = pers_nw + "<br/>";            
             reslist+=position;
           }
-          reslist+='</div><div class="item-cell"><button class="col button button-small btn-goutline text-uppercase font-9 w-auto mt-5 float-left" onclick="Add_FieldVisit('+csd_id+','+"'"+comp_name+"'"+')"><i class="f7-icons font-12">plus</i></button><span id="view_'+i+'"></span></div></div></div></a></li>';
+          reslist+='</div><div class="item-cell"><button class="col button button-small btn-goutline text-uppercase font-9 mt-5 float-left" onclick="Add_FieldVisit('+csd_id+','+"'"+comp_name+"'"+')"><i class="f7-icons font-12">plus</i></button><span id="view_'+i+'"></span></div></div></div></a></li>';
             showViewIcon(csd_id,comp_name,i);
             //onclick="openStatusAlert('+cs_id+')"            
           }         
@@ -2963,8 +2962,8 @@ function showViewIcon(csd_id,comp_name,rowid){
       //console.log(json_dcrcsd);
       //alert(json_dcr);
       if(json_dcrcsd>0){  
-        var totvist=json_dcrcsd;        
-        viewicon='<button class="col button btn-goutline button-small color-gray text-uppercase font-9 w-auto mt-5 float-right" onclick="openFieldVisit('+csd_id+','+"'"+comp_name+"'"+')"><i class="fa fa-eye font-16 color-grey fw-600"></i> <span class="redtxt">('+totvist+') </span></button>';
+        var totvist=json_dcrcsd;          
+        viewicon='<button class="col button btn-goutline button-small color-gray text-uppercase font-9 mt-5 float-right" onclick="openFieldVisit('+csd_id+','+"'"+comp_name+"'"+')"><i class="fa fa-eye font-16 color-grey fw-600"></i> <span class="redtxt">('+totvist+') </span></button>';
       }
       $("#view_"+rowid).html(viewicon);      
       app.preloader.hide();      
@@ -2991,6 +2990,8 @@ function openFieldVisit(csd_id,comp_name){
       var present = res.present;
       var problem = res.problem;
       var visit = res.visit;
+      var head_attach = res.head_attach;
+      //  
      // var vpnm = res.vpnm;
      // console.log(vpnm);
 
@@ -3002,10 +3003,10 @@ function openFieldVisit(csd_id,comp_name){
         var k=1;
         for(var i=0;i<res_length;i++){
           var fv_create_on = result[i].fv_create_on;
+          var fv_dateTime = result[i].fv_dateTime;
           var fv_person = result[i].fv_person;
           var vp = result[i].fv_purpose;
           var split_vp = vp.split("|");
-
           if(vp==10){
             var cls= 'display-block';
           }else{
@@ -3013,8 +3014,7 @@ function openFieldVisit(csd_id,comp_name){
           }
           var fv_purreason = result[i].fv_purreason;
           var fv_remark = result[i].fv_remark;
-
-          var fv_headcount = result[i].fv_headcount;
+          var fv_headcount = result[i].fv_headcount;           
           var fv_required = result[i].fv_required;
           var split_fvreq = fv_required.split("|");
           var fv_present = result[i].fv_present;
@@ -3034,6 +3034,7 @@ function openFieldVisit(csd_id,comp_name){
 
           var fv_presentation = result[i].fv_presentation;
           var split_presnt = fv_presentation.split("|");
+          //alert(fv_presentation+"^^^^^^^^"+split_presnt.length);  
           var fv_present_txt = result[i].fv_present_txt;
           var split_ptxt = fv_present_txt.split("|");
           
@@ -3044,10 +3045,10 @@ function openFieldVisit(csd_id,comp_name){
 
           var fv_patrollling = result[i].fv_patrollling;
           var fv_newjoinee = result[i].fv_newjoinee;
-
+ 
           //<div class="block">Headcount<span class="ml-1 redtxt fw-500 headcnts">(3)</span></div>//
-          visitdetails+='<div class="light-orange mb-5"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="col-66"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">Visit - '+k+'</div></div></div><div class="col-33"><span class="float-right mr-10 grey-txt font-12 fw-500">'+fv_create_on+'</span></div></a><div class="accordion-item-content nobgclr elevation-10" style="height: auto;"><ul class="block p-2"><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Name</div><div class="item-cell text-grey font-14">'+fv_person+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Visit Purpose</div><div class="item-cell text-grey font-14">';
-          if(vp!='10'){
+          visitdetails+='<div class="light-orange mb-5"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="col-66"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">Visit - '+k+'</div></div></div><div class="col-33"><span class="float-right mr-10 grey-txt font-12 fw-500">'+fv_dateTime+'</span></div></a><div class="accordion-item-content nobgclr elevation-10" style="height: auto;"><ul class="block p-2"><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Name</div><div class="item-cell text-grey font-14">'+fv_person+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Visit Purpose</div><div class="item-cell text-grey font-14">';
+          if(vp!='10'){ 
             for(var p=0;p<visit.length;p++){
               var vp_id = visit[p].vp_id;
               var vp_name = visit[p].vp_name;
@@ -3058,29 +3059,67 @@ function openFieldVisit(csd_id,comp_name){
                 }
               }
             }
+          } 
+          visitdetails+='</div></div></div></li>  <li class="item-link item-content '+cls+'"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Reason</div><div class="item-cell text-grey font-14">'+fv_purreason+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+fv_remark+'</div></div></div></li> ';
+
+          $(".page-content").after('<div class="popup popup-visit_'+i+'"><div class="block"><p><a class="link popup-close text-uppercase fw-500 text-parrot" href="#">Close</a></p><div id="visitattach_'+i+'"></div></div></div>');  
+          var fv_visit_attach = result[i].app_visit_attach;  
+          //console.log(fv_visit_attach);
+          if(fv_visit_attach!=''){    
+            //console.log("if");
+            var visit_attachment = base_url+fv_visit_attach;
+            visitdetails+='<a class="button popup-open text-parrot" href="#" data-popup=".popup-visit_'+i+'">Visit Attachment</a>'; 
+            var visit_attach='<img src="'+visit_attachment+'" height=325 width=325 />';
+          }else{      
+            //console.log("ELSE");   
+            visitdetails+='';
+            var visit_attach='';        
           }
-          visitdetails+='</div></div></div></li>  <li class="item-link item-content '+cls+'"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Reason</div><div class="item-cell text-grey font-14">'+fv_purreason+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+fv_remark+'</div></div></div></li> <li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Headcounts</div></li>';
+          $("#visitattach_"+i).html(visit_attach);     
+          visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Headcounts</div>';
+
+          $(".page-content").after('<div class="popup popup-hcnt_'+i+'"><div class="block"><p><a class="link popup-close text-uppercase fw-500 text-parrot" href="#">Close</a></p><div id="headattach_'+i+'"></div></div></div>'); 
+          //console.log("LENGTH"+head_attach[i]);         
+          //console.log("*****"+head_attach[i].fd_attach);           
+          // var headcnt_attach = head_attach[i].fd_attach_val;  
+          if(head_attach[i]!=undefined){ 
+          var fd_attach_val =head_attach[i].fd_attach;             
+            if(fd_attach_val!=''){ 
+              var head_attachment = base_url+fd_attach_val;
+              visitdetails+='<a class="button button-fill color-gray popup-open font-9 txtover-init w-100" href="#" data-popup=".popup-hcnt_'+i+'">Attachment</a>';
+              var hd_attach='<img src="'+head_attachment+'" height=325 width=325 />';  
+            }else if(fd_attach_val==''){  
+              visitdetails+='';
+              var hd_attach='';   
+            }   
+          }     
+          visitdetails+='</li>';   
+          $("#headattach_"+i).html(hd_attach);  
+            
             for(var j=0;j<split_fvreq.length;j++){ 
-              visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><div class="font-12">'+split_pos[j]+'</div></div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Required</div><div class="item-cell text-grey font-14">'+split_fvreq[j]+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Present</div><div class="item-cell text-grey font-14">'+split_fvpres[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Absent</div><div class="item-cell text-grey font-14">'+split_abs[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">New</div><div class="item-cell text-grey font-14">'+split_new[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Vacant</div><div class="item-cell text-grey font-14">'+split_vac[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">OT</div><div class="item-cell text-grey font-14">'+split_ot[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+split_remhead[j]+'</div></div></div></li><li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Presentation</div></li>';
+              visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><div class="font-12">'+split_pos[j]+'</div></div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Total Strength</div><div class="item-cell text-grey font-14">'+split_fvreq[j]+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Present</div><div class="item-cell text-grey font-14">'+split_fvpres[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Absent</div><div class="item-cell text-grey font-14">'+split_abs[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">New</div><div class="item-cell text-grey font-14">'+split_new[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Vacant</div><div class="item-cell text-grey font-14">'+split_vac[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">OT</div><div class="item-cell text-grey font-14">'+split_ot[j]+'</div></div></div></li> <li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+split_remhead[j]+'</div></div></div></li>';  
             }
-            for(var a=0;a<split_presnt.length;a++){
+            //alert(present.length + "------"+split_presnt.length);   
+            if(fv_presentation!=''){
+              visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Presentation</div></li>';
+            }        
+            for(var a=0;a<split_presnt.length;a++){ 
               for(var b=0;b<present.length;b++){
-                var ap_id = present[b].ap_id;
-                var ap_name = present[b].ap_name;
-                if(ap_id==split_presnt[a]){
-                  visitdetails+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><label class="item-checkbox item-content text-left"><input type="checkbox" name="presantation[]" value="'+ap_id+'" checked><i class="icon icon-checkbox mr-5"></i>'+ap_name+'</label></div><div class="item-cell text-grey font-14">'+split_ptxt[b]+'</div></div></div></li>';
-                }
-                
+                var ap_id = present[b].ap_id;  
+                var ap_name = present[b].ap_name; 
+                if(ap_id==split_presnt[a]){   
+                  visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600" ><label class="item-checkbox item-content text-left label-width" ><input type="checkbox" name="presantation[]" value="'+ap_id+'" checked><i class="icon icon-checkbox mr-5"></i><span class="">'+ap_name+'</span></label></div><div class="item-cell text-grey font-14">'+split_ptxt[b]+'</div></div></div></li>';
+                }                
               }
-            }
+            } 
             if(fv_problem!=''){
               visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Personal Problems</div></li>';
               for(var y=0;y<split_fvprob.length;y++){
                 for(var z=0;z<problem.length;z++){
                   var apr_id = problem[z].apr_id;
                   var apr_name = problem[z].apr_name;
-                  if(apr_id==split_fvprob[y]){
-                    visitdetails+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><label class="item-checkbox item-content text-left"><input type="checkbox" name="personal_probs[]" value="'+apr_id+'" checked><i class="icon icon-checkbox mr-5"></i>'+apr_name+'</label></div><div class="item-cell text-grey font-14">'+split_prtxt[z]+'</div></div></div></li>';
+                  if(apr_id==split_fvprob[y]){  
+                    visitdetails+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><label class="item-checkbox item-content text-left label-width"><input type="checkbox" name="personal_probs[]" value="'+apr_id+'" checked><i class="icon icon-checkbox mr-5"></i>'+apr_name+'</label></div><div class="item-cell text-grey font-14">'+split_prtxt[z]+'</div></div></div></li>';
                   }
                 }
               }
@@ -3095,8 +3134,7 @@ function openFieldVisit(csd_id,comp_name){
       $("#viewVisit").html(visitdetails);
       app.preloader.hide();
     }
-  });
-  
+  });  
 }
 function Add_FieldVisit(csd_id,comp_name){
   checkConnection();
@@ -3132,7 +3170,8 @@ function Add_FieldVisit(csd_id,comp_name){
       for(var i=0;i<visit.length;i++){
         var vp_id = visit[i].vp_id;
         var vp_name = visit[i].vp_name;
-        vst+='<option value='+vp_id+'>'+vp_name+'</option>';
+        var vp_hindi = visit[i].vp_hindi;
+        vst+='<option value='+vp_id+'>'+vp_name+" - "+vp_hindi+'</option>';
       }
       $("#visit_purpos").html(vst);
       $(".headcnts").html("("+headcnts+")");
@@ -3148,12 +3187,12 @@ function Add_FieldVisit(csd_id,comp_name){
           pos_string = acc_title.split("-->");
           req_val = pos_string[0]; 
           posin = pos_string[1];
-          hdcnt_acr+='<li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content light-orange  elevation-1" style="height: auto;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 grey-txt fw-500">'+acc_title+'</div><div class="float-right font-12">[Required:&nbsp;<span class="badge color-parrot">'+req_val+'</span> ]<input type="hidden" name="required[]" id="required" value="'+req_val+'"/><input type="hidden" name="position[]" id="position" value="'+acc_title+'"/></div></div></a></div><div class="accordion-item-content nobgclr elevation-5 "><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Present<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="present[]" id="present_'+j+'" /></div></div></div><div class="block"><span id="present_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Absent<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="absent[]" id="absent_'+j+'"/></div></div></div><div class="block"><span id="absent_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div></div><div class="row"><div class="col-33"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">New<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="new[]" id="new_'+j+'"/></div></div></div><div class="block"><span id="new_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div><div class="col-33"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Vacant<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="vacant[]" id="vacant_'+j+'"/></div></div></div><div class="block"><span id="vacant_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div><div class="col-33"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">OT<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="OT[]" id="OT_'+j+'" /></div></div></div><div class="block"><span id="ot_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div></div><div class="item-content item-input col-100"><div class="item-inner"><div class="item-title item-label form-label">Remark - टिप्पणी</div><div class="item-input-wrap"><textarea name="remark_head[]" id="remark_head" class="form-txtbox p-2"></textarea></div></div></div><input autocomplete="off" type="hidden" name="posin[]" value="'+posin+'" ><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Quantity</div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="qty[]" /></div></div></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Period</div><div class="item-input-wrap"><select class="form-txtbox form-label p-2 font-12" name="period[]" id="period_'+j+'" onchange="setValue(this.value,'+j+')"><option value="">---SELECT---</option><option value="Temporary" >Temporary days</option><option value="Permanent">Permanent days</option></select></div></div></div></div></div><div class="display-none Datefrom_'+j+'" ><div class="row"><div class="col-33 w-30"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">From Day</div><div class="item-input-wrap"><select name="from_dt[]" id="from_dt_'+j+'" class="form-txtbox form-label p-2" ><option value=""></option>'; 
-            for(var k=1;k<=31;k++){
+          hdcnt_acr+='<li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content light-orange  elevation-1" style="height: auto;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 grey-txt fw-500">'+acc_title+'</div><div class="float-right font-12">[Required:&nbsp;<span class="badge color-parrot">'+req_val+'</span> ]<input type="hidden" name="required[]" id="required" value="'+req_val+'"/><input type="hidden" name="position[]" id="position" value="'+acc_title+'"/></div></div></a></div><div class="accordion-item-content nobgclr elevation-5 "><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Present<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="present[]" id="present_'+j+'" /></div></div></div><div class="block"><span id="present_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Absent<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="absent[]" id="absent_'+j+'"/></div></div></div><div class="block"><span id="absent_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div></div><div class="row"><div class="col-33"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">New<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="new[]" id="new_'+j+'"/></div></div></div><div class="block"><span id="new_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div><div class="col-33"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Vacant<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="vacant[]" id="vacant_'+j+'"/></div></div></div><div class="block"><span id="vacant_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div><div class="col-33"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">OT<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="OT[]" id="OT_'+j+'" /></div></div></div><div class="block"><span id="ot_msg_'+j+'" class="redtxt font-10 valmsg"></span></div></div></div><div class="item-content item-input col-100"><div class="item-inner"><div class="item-title item-label form-label">Remark - टिप्पणी</div><div class="item-input-wrap"><textarea name="remark_head[]" id="remark_head" class="form-txtbox p-2"></textarea></div></div></div><input autocomplete="off" type="hidden" name="posin[]" value="'+posin+'" ><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">New Requirement</div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2" name="qty[]" /></div></div></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Period</div><div class="item-input-wrap"><select class="form-txtbox form-label p-2 font-12" name="period[]" id="period_'+j+'" onchange="setValue(this.value,'+j+')"><option value="">---SELECT---</option><option value="Temporary" >Temporary days</option><option value="Permanent">Permanent days</option></select></div></div></div></div></div><div class="display-none Datefrom_'+j+'" ><div class="row"><div class="col-33 w-30"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">From Day</div><div class="item-input-wrap"><select name="from_dt[]" id="from_dt_'+j+'" class="form-txtbox form-label p-2" ><option value=""></option>'; 
+            for(var k=1;k<=31;k++){ 
               if(k<=9){ 
                 k="0"+k;
               }else{
-                k=k;
+                k=k;  
               }
               hdcnt_acr+='<option value="'+k+'">'+k+'</option>';
             } 
@@ -3195,8 +3234,7 @@ function Add_FieldVisit(csd_id,comp_name){
             hdcnt_acr+='<li class="item-content item-input showtwoBlocks "><div class="item-inner"><span class="item-title item-label form-label mb-15">Attachment - आसक्ति</span><div class="item-input-wrap"><div class="uploadDiv w-100 "><div class="col-100"><div class="row"><div class="20"></div><div class="col-50 picbox text-white" ><span onclick="capturePhoto_activity();" ><div class="innerDiv"><img src="img/icons/photo-camera-1.png" height="30" width="30" /><br/><span class="picbox-text">Capture</span></span></div></div><div class="col-50 picbox text-white" ><a onclick="getPhoto_activity(pictureSource.PHOTOLIBRARY);"><div class="innerDiv"><img src="img/icons/gallery.png" height="30" width="30" /><br/><span class="picbox-text">Photo Gallery</span></div></a></div><div class="20"></div></div></div></div></div></li><li class="item-content item-input imageblock_act display-block" style="width:100%;" id="imageblock_act"><div class="item-inner"><div class="item-input-wrap"><img id="image_activity" src="" style="width:100%;"></div></div></li>  <li><div class="item-content item-input"><div class="item-inner"><div class="item-input-wrap"><div class="row mt-10"><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-left" name="back1" id="back1" onclick="gobackDiv1()">Previous</button></div><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-right" name="next1" id="next1" onclick="getReqfields2('+j+')">Next</button></div></div></div></div></div></li>';
           }
           k++; 
-        }
-        
+        }        
         $("#head_cnts").html(hdcnt_acr);
       }
       // ------------------------------- P R E S E N T A T I O N --------------------------------- //
@@ -3219,9 +3257,9 @@ function Add_FieldVisit(csd_id,comp_name){
         var apr_hindi = problem[b].apr_hindi;
         var prob_name = apr_name+" - "+apr_hindi;
         pers_prob+='<div class="w-100 mt-5"><div class="light-orange w-15 d-inline mr-5 mt-0 float-left mb-1" ><label class="item-checkbox item-content"><input type="checkbox" name="problems[]" value="'+apr_id+'"><i class="icon icon-checkbox"></i></label></div><div class="light-orange w-80 d-inline mb-1"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">'+prob_name+'</div></div></a><div class="accordion-item-content nobgclr elevation-10"><div class="block p-2"><input type="text" name="problem_txt[]" id="problem_txt" class="form-txtbox p-2"/></div></div></div></div> <div>';
-      }
-      pers_prob+='<li><div class="block"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Observation During Patrolling - <br/> पैट्रोलिंग के दौरान अवलोकन</div><div class="item-input-wrap"><textarea name="patrolling" id="patrolling" class="form-txtbox p-2"></textarea></div></div></div><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">New Joinee Documents Collected - <br/> नए जोइन दस्तावेज एकत्रित किए गए</div><div class="item-input-wrap"><textarea name="new_joinee" id="new_joinee" class="form-txtbox p-2"></textarea></div></div></div></div></li><li><div class="item-content item-input"><div class="item-inner"><div class="item-input-wrap"><div class="row mt-10"><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-left" name="back2" id="back2" onclick="gobackDiv3()">Previous</button></div><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-right" name="next2" id="next2" onclick="getReqfields4()">Next</button></div></div></div></div></div></li>';
-      $("#personal_probs").html(pers_prob);
+      }              
+      pers_prob+='<li><div class="block"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Observation During Patrolling - <br/> पैट्रोलिंग के दौरान अवलोकन</div><div class="item-input-wrap"><textarea name="patrolling" id="patrolling" class="form-txtbox p-2"></textarea></div></div></div><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">New Joinee Documents Collected - <br/> नए जोइन दस्तावेज एकत्रित किए गए</div><div class="item-input-wrap"><textarea name="new_joinee" id="new_joinee" class="form-txtbox p-2"></textarea></div></div></div></div></li>     <li class="item-content item-input showtwoBlocks_visitattach "><div class="item-inner"><span class="item-title item-label form-label mb-15">Visit Attachment - मुलाक़ात आसक्ति</span><div class="item-input-wrap"><div class="uploadDiv_visit w-100 "><div class="col-100"><div class="row"><div class="20"></div><div class="col-50 picbox text-white" ><span onclick="capturePhoto_activityVisit();" ><div class="innerDiv"><img src="img/icons/photo-camera-3.png" height="30" width="30" /><br/><span class="picbox-text">Capture</span></span></div></div><div class="col-50 picbox text-white" ><a onclick="getPhoto_activityVisit(pictureSource.PHOTOLIBRARY);"><div class="innerDiv"><img src="img/icons/gallery-2.png" height="30" width="30" /><br/><span class="picbox-text">Photo Gallery</span></div></a></div><div class="20"></div></div></div></div></div></li><li class="item-content item-input imageblock_actVisit display-block" style="width:100%;" id="imageblock_actVisit"><div class="item-inner"><div class="item-input-wrap"><img id="image_activity_visit" src="" style="width:100%;"></div></div></li>              <li><div class="item-content item-input"><div class="item-inner"><div class="item-input-wrap"><div class="row mt-10"><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-left" name="back2" id="back2" onclick="gobackDiv3()">Previous</button></div><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-right" name="next2" id="next2" onclick="getReqfields4()">Next</button></div></div></div></div></div></li>';
+      $("#personal_probs").html(pers_prob);  
 
       // ------------------------------ C O L L E C T E D  D O C U M E N T S ---------------------------- //
       var coll_docs='';
@@ -3259,6 +3297,49 @@ function Add_FieldVisit(csd_id,comp_name){
     }
   });
 }
+// ********************************************************************************************* //
+function capturePhoto_activityVisit() { 
+  //alert("capturePhoto_activity");
+  navigator.camera.getPicture(onPhotoDataSuccVisit, onFail, {
+  quality: 100,
+  targetWidth: 600,
+  targetHeight: 600,
+  destinationType: destinationType.FILE_URI,
+  saveToPhotoAlbum: false,
+  correctOrientation: true,
+  }); 
+}
+function onPhotoDataSuccVisit(imageURI){
+  var cameraImage = document.getElementById('image_activity_visit');
+  //alert(cameraImage+"-------"+imageURI);
+  cameraImage.style.display = 'block';
+  cameraImage.src = imageURI;
+}
+
+function getPhoto_activityVisit(source) {
+  //alert("called getPhoto_activity"); 
+  navigator.camera.getPicture(onPhotoURISuccVisit, onFail, {
+    quality: 100,
+    correctOrientation: 1,
+    targetWidth: 600,
+    targetHeight: 600,
+    destinationType: destinationType.FILE_URI,
+    sourceType: source
+  });
+} 
+function onPhotoURISuccVisit(imageURI) {
+  var galleryImage = document.getElementById('image_activity_visit');
+  //alert(galleryImage+"^^^^^^"+imageURI);
+  galleryImage.style.display = 'block';
+  galleryImage.src = imageURI;
+}
+// ********************************************************************************************* //
+
+
+
+
+
+
 function capturePhoto_activity() { 
   //alert("capturePhoto_activity");
   navigator.camera.getPicture(onPhotoDataSucc, onFail, {
@@ -3296,7 +3377,7 @@ function onPhotoURISucc(imageURI) {
 }
 function saveDailyActivity(){
   //alert("called")
-  checkConnection();
+  checkConnection(); 
   app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -3304,22 +3385,30 @@ function saveDailyActivity(){
   //console.log(add_acti_from); 
   var session_uid = window.localStorage.getItem("session_uid");
   var old_doc_act = 'NULL';
+  var old_doc_visit = 'NULL';
   $.ajax({
     type:'POST', 
     url:base_url+'liveappcontroller/addDailyActivity',
     data:add_acti_from+"&session_uid="+session_uid,
     success:function(save_result){
-     // alert("^^^^"+save_result);
-      upload_doc_activity(save_result,old_doc_act);
-      mainView.router.navigate("/field_visit/");
+      //alert("^^^^"+save_result);  
+      var res = $.parseJSON(save_result);
+      var res_fdid = res.fd_id; 
+      var res_fvid = res.fv_id;  
+      //alert("res_fdid = "+res_fdid+"^^^^res_fvid="+res_fvid);  
+      /*upload_doc_activity(save_result,old_doc_act);
+      upload_doc_activityVisit(save_result,old_doc_visit);*/
+      upload_doc_activity(res_fdid,old_doc_act);
+      upload_doc_activityVisit(res_fvid,old_doc_visit);
+      mainView.router.navigate("/field_visit/"); 
     }
   });
   app.preloader.hide();
 }
-function upload_doc_activity(insert_id,old_doc){ 
- // alert("Upload function "+insert_id);
+function upload_doc_activityVisit(insert_id,old_doc_visit){ 
+  //alert("Upload function "+insert_id);
   var session_uid = window.localStorage.getItem("session_uid");
-  var img = document.getElementById('image_activity'); 
+  var img = document.getElementById('image_activity_visit'); 
   //app.dialog.preloader('Uploading....');
   var imageURI = img.src;
   //alert("imageURI "+imageURI);
@@ -3338,22 +3427,50 @@ function upload_doc_activity(insert_id,old_doc){
   //alert("imgfilename :: "+imgfilename);
   var split_imgfilename = imgfilename.split("?");
   var actual_imgname = split_imgfilename[0];
+  var ft = new FileTransfer(); 
+  //var uploadControllerURL = base_url+"liveappcontroller/photoupload_activityVisit/"+session_uid+"/"+insert_id+"/"+old_doc_visit+"/"+imgfilename; 
+  var uploadControllerURL = base_url+"liveappcontroller/photoupload_activityVisit/"+session_uid+"/"+insert_id+"/"+old_doc_visit+"/"+actual_imgname;  
+  //alert(uploadControllerURL);
+  ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
+}
+function upload_doc_activity(insert_id,old_doc){  
+ // alert("Upload function "+insert_id);
+  var session_uid = window.localStorage.getItem("session_uid");
+  var img = document.getElementById('image_activity'); 
+  //app.dialog.preloader('Uploading....');
+  var imageURI = img.src;
+  //alert("imageURI "+imageURI);
+  var options = new FileUploadOptions();
+  options.fileKey="file";
+  options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+  options.mimeType="image/jpeg";
+  options.chunkedMode = false;
+  options.headers = {
+     Connection: "close" 
+  };
+  var params = {}; 
+  params.fullpath =imageURI;
+  params.name = options.fileName;
+  var imgfilename = params.name; 
+  //alert("imgfilename :: "+imgfilename);
+  var split_imgfilename = imgfilename.split("?");
+  var actual_imgname = split_imgfilename[0];
   var ft = new FileTransfer();
   var uploadControllerURL = base_url+"liveappcontroller/photoupload_activity/"+session_uid+"/"+insert_id+"/"+old_doc+"/"+imgfilename; 
   //alert(uploadControllerURL);
   ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
 }
+ 
 function getCandDocs(cand_id,rowid){
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/candDocs',
     data:{'cand_id':cand_id}, 
-    success:function(cand_docs){
+    success:function(cand_docs){ 
       var doccand = $.parseJSON(cand_docs);
       var canddocs1 = doccand.docscandi; 
       var len = canddocs1.length;       
-      if(len > 0){
-        var datachk='display-block';              
+      //if(len > 0){                      
         var aadhar =  canddocs1[0].cd_doc_aadharcard;    
         var chkbook = canddocs1[0].cd_doc_cheqe;
         var passbook = canddocs1[0].cd_doc_passbook;
@@ -3364,69 +3481,88 @@ function getCandDocs(cand_id,rowid){
         var marksheet = canddocs1[0].cd_doc_marksheet;
 
         // AADHAR CARD // 
-        if(aadhar == 1){
+        if(len > 0 && aadhar == 1){          
         }else{
-          $("#aadhar_chk_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="aadhar_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Aadhar Card</span></div>');
+          $("#aadhar_chk_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="aadhar_'+cand_id+'[]" value="1"><i class="icon icon-checkbox"></i></label><span class="ml-5">Aadhar Card</span></div>');
         }
-        // EMPLOYEE PHOTO //
-        if(empphoto == 1){
-        }else{
-          $("#emppic_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="photo_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Employee Photo </span></div>');
-        }
-        // RESUME //
-        if(resume == 1){
-        }else{
-          $("#empresum_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="resume_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Resume</span></div>');
-        }
-        // ELECTION CARD //
-        if(election_card == 1){
-        }else{
-          $("#empelectcard_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="election_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Election Card</span></div>');
-        }
-        // SCHOOL LEAVING CERTIFICATE //
-        if(leaving_certi == 1){
-        }else{
-          $("#empleaving_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="leaving_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">School Leaving Certificate</span></div>');
-        }
-        // MARKSHEET //
-        if(marksheet == 1){
-        }else{
-          $("#mrksheet_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="mark_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Marksheet Copy</span></div>');
-        }
-      }else{
-        // AADHAR CARD // 
-        $("#aadhar_chk_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="aadhar_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Aadhar Card</span></div>');
-
-        if(chkbook == 1 || passbook == 1){ 
-          var datachk='display-none';
-        }else{
+        if(len == 0){
           var datachk='display-block';
-        }
-
+        }else{
+          if(chkbook == 1 || passbook == 1){ 
+            var datachk='display-none';
+          }else{
+            var datachk='display-block';
+          }
+        } 
         // CHEQUE BOOK //
-        $("#cancelled_chq_"+rowid).html('<div class="block mb-5 '+datachk+'""><label class="checkbox"><input type="checkbox" name="cheqe_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Cancelled Cheque</span></div>');
+        $("#cancelled_chq_"+rowid).html('<div class="block mb-5 '+datachk+'""><label class="checkbox"><input type="checkbox" name="cheqe_'+cand_id+'[]" value="1" class="onlyone_chkbox" id="1" onclick="selectOnlyThis(this.id)" ><i class="icon icon-checkbox"></i></label><span class="ml-5">Cancelled Cheque</span></div>');
 
         // BANK PASS BOOK //
-        $("#bankpass_"+rowid).html('<div class="block mb-5 '+datachk+'"><label class="checkbox"><input type="checkbox" name="bank_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Bank Pass Book First Page</span></div>');
-
+        $("#bankpass_"+rowid).html('<div class="block mb-5 '+datachk+'"><label class="checkbox"><input type="checkbox" name="bank_'+cand_id+'[]" value="1" class="onlyone_chkbox" id="2" onclick="selectOnlyThis(this.id)" ><i class="icon icon-checkbox"></i></label><span class="ml-5">Bank Pass Book First Page</span></div>');  
+     
         // EMPLOYEE PHOTO //
-        $("#emppic_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="photo_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Employee Photo </span></div>'); 
+        if(len > 0 && empphoto == 1){           
+        }else{
+          $("#emppic_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="photo_'+cand_id+'[]" value="1"><i class="icon icon-checkbox"></i></label><span class="ml-5">Employee Photo </span></div>');
+        }
 
         // RESUME //
-        $("#empresum_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="resume_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Resume</span></div>'); 
+        if(len > 0 && resume == 1){
+        }else{
+          $("#empresum_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="resume_'+cand_id+'[]" value="1"><i class="icon icon-checkbox"></i></label><span class="ml-5">Resume</span></div>');
+        }
 
         // ELECTION CARD //
-        $("#empelectcard_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="election_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Election Card</span></div>');
-
+        if(len > 0 && election_card == 1){
+        }else{
+          $("#empelectcard_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="election_'+cand_id+'[]" value="1"><i class="icon icon-checkbox"></i></label><span class="ml-5">Election Card</span></div>');
+        }
         // SCHOOL LEAVING CERTIFICATE //
-        $("#empleaving_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="leaving_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">School Leaving Certificate</span></div>');
-
+        if(len > 0 && leaving_certi == 1){
+        }else{
+          $("#empleaving_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="leaving_'+cand_id+'[]" value="1"><i class="icon icon-checkbox"></i></label><span class="ml-5">School Leaving Certificate</span></div>');
+        }
         // MARKSHEET //
-        $("#mrksheet_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="mark_'+cand_id+'[]" value="1"><i class="icon-checkbox"></i></label><span class="ml-5">Marksheet Copy</span></div>');
-      }                
+        if(len > 0 && marksheet == 1){ 
+        }else{
+          $("#mrksheet_"+rowid).html('<div class="block mb-5"><label class="checkbox"><input type="checkbox" name="mark_'+cand_id+'[]" value="1"><i class="icon icon-checkbox"></i></label><span class="ml-5">Marksheet Copy</span></div>');    
+        }
     }
   });
-}
+} 
+function selectOnlyThis(id) { 
+    for (var i = 1;i <= 2; i++){
+        document.getElementById(i).checked = false;
+    }
+    document.getElementById(id).checked = true;
+}  
+/*
+function onlyone_chk(obj){    
+  alert("called");       
+  //$('.onlyone_chkbox').not(this).prop('checked', false);  
+  if($(obj).is(":checked")) { 
+  $(obj).addAttr("checked");       
+    alert("called****^^^^^^^^^ ");      
+      $(".onlyone_chkbox").not($(this)).each(function () {
+        console.log("hi"); 
+          //$(this).removeAttr("checked");
+          $(obj).removeAttr("checked");  
+      }) 
+  }
+}       
+*/
+//$('input.onlyone_chkbox').on('change', function() {
+/*function onlyone_chk(){   
+  alert("called--*******"); 
+    $('input.onlyone_chkbox').not(this).prop('checked', false);   
+} */
+
+/*$(".onlyone_chk").click(function() {
+    alert("called"); 
+    $(this).siblings('input:checkbox').prop('checked', false);
+});*/
+  
+
 function setValue(val,rowid) {
   if(val == 'Temporary') {
     $('.Datefrom_'+rowid).removeClass('display-none');
@@ -3469,6 +3605,7 @@ function getReqfields1(){
     //app.preloader.hide();
   }
 }
+   
 function gobackDiv1(){  
   app.preloader.show();
   $("#wiz-2").addClass("display-none");
@@ -3738,6 +3875,12 @@ function getInterview(cs_id,comp_name){
           }else{
             var cn_dob='';
           }
+
+          if(cn_intdt_tm!=null && cn_intdt_tm!='0000-00-00'){
+            var cn_intdt_tm = 'Int. Dt: '+cn_intdt_tm;
+          }else{
+            var cn_intdt_tm = '';
+          }
          
           //alert(cand_cmp_id);
             if(i%2==0){
@@ -3746,7 +3889,7 @@ function getInterview(cs_id,comp_name){
               var cls = ''; 
             }
             //list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: '+cn_intdt_tm+'<br><span class="badge color-blue font-10">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-8 popup-open" data-popup=".popup-status" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
-            list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+ positn+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: '+cn_intdt_tm+'<br><span class="badge color-blue font-9">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-8" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
+            list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+ positn+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">'+cn_intdt_tm+'<br><span class="badge color-blue font-9">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-8" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
             //onclick="openStatusAlert('+cs_id+')"
             
           }         
@@ -4419,8 +4562,33 @@ function showComplain(cm_id,comp_name,cm_company,cm_contact_person,createname,cm
       var det_comp = json_cres.company;
       var det_cust = json_cres.customer;
       var det_empl = json_cres.employee;
-      var det_rslt = json_cres.result;      
-      var c_details = '<div class="block"><div class="row"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+'<span class="ml-10 badge color-blue fs-10">'+cm_user+'</span></h3></div></div></div><div class="row"><div class="col-100"><i class="fa fa-user font-14 mr-5 color-grey"></i><span class="text-muted fw-500">'+cm_contact_person+'</span><br/><i class="fa fa-calendar font-13 mr-5 color-grey"></i><span class="text-muted fw-500 font-12">'+cm_create_on+'</span><br/><span class="text-grey fw-600 text-uppercase font-12">created by: '+createname+'</span></div></div></div>';     
+      var det_rslt = json_cres.result; 
+      var det_vert = json_cres.vertical;
+      //console.log(det_rslt);  
+      //console.log(det_vert);                
+      if(cm_contact_person!=''){
+        var cont_per = '<i class="fa fa-user font-14 mr-5 color-grey"></i><span class="text-muted fw-500">'+cm_contact_person+'</span><br/>';
+      }else{
+        var cont_per = '';   
+      }  
+  
+      if(det_rslt[0].v_id!=0 || det_rslt[0].v_id!=''){     
+        for(var vt=0;vt<det_vert.length;vt++){
+        if(det_rslt[0].v_id == det_vert[vt].v_id){
+          var v_name = det_vert[vt].vertical_name;
+          //alert(v_name);  
+          var vrtcl='<i class="f7-icons font-10 color-grey mr-5">layers_fill</i><span class="text-muted fw-500 font-12">'+v_name+'</span><br/>';
+          }
+        }
+      }else{       
+        var vrtcl='';
+      }   
+      if(vrtcl!=undefined){
+        var vert=vrtcl;
+      }else{
+        var vert='';
+      }
+      var c_details = '<div class="block"><div class="row"><div class="col-100"><div class="grey-txt fw-600"><h3>'+comp_name+'<span class="ml-10 badge color-blue fs-10">'+cm_user+'</span></h3></div></div></div><div class="row"><div class="col-100">'+cont_per+vert+'<i class="fa fa-calendar font-13 mr-5 color-grey"></i><span class="text-muted fw-500 font-12">'+cm_create_on+'</span><br/><span class="text-grey fw-600 text-uppercase font-12">created by: '+createname+'</span></div></div></div>';     
       // ---------------------------- EMPLOYEE ----------------------------- //
       if(det_rslt[0].cm_complain=='Employee'){
         $("#complain_emp").removeClass("display-none");
@@ -4563,6 +4731,8 @@ $$(document).on('page:init', '.page[data-name="add_complain"]', function (e) {
       var det_comp = json_res.assign_cmpy;
       var det_cust = json_res.customer;
       var det_empl = json_res.employee;
+      var det_vert = json_res.vertical;
+
       //console.log(det_empl);
       var comps='';
       comps+='<option value="">---SELECT---</option>';
@@ -4572,6 +4742,17 @@ $$(document).on('page:init', '.page[data-name="add_complain"]', function (e) {
         comps+='<option value='+csid+'>'+cs_invoice_name+'</option>';
       }
       $("#company_name").html(comps);
+
+
+      var verti='';
+      verti+='<option value="">---SELECT---</option>';
+      for(var v=0;v<det_vert.length;v++){
+        var v_id = det_vert[v].v_id;
+        var vertical_name = det_vert[v].vertical_name;
+        verti+='<option value='+v_id+'>'+vertical_name+'</option>';
+      }
+      $("#comp_verti").html(verti);   
+
       var dynamic_chks = '';
       for(var h=0;h<det_empl.length;h++){
         var ct_id = det_empl[h].ct_id;
@@ -4689,7 +4870,7 @@ function comp_type(comptype){
         }
       }else if(comptype=='Customer'){
         //console.log(comp_emp);
-        console.log(det_cust);
+        //console.log(det_cust);
         //alert(comp_emp.length);
         for(var a=0;a<det_cust.length;a++){
           var ct_select = det_cust[a].ct_select;
@@ -4736,13 +4917,13 @@ function getContPerson(sel_comp){
   $.ajax({
     type:'POST', 
     url:base_url+'liveappcontroller/assignedPayroll',
-    data:{'sel_comp':sel_comp,'assingn_type':'PR','u_department':'Recruitment'}, 
+    data:{'sel_comp':sel_comp,'assingn_type':'PR','u_department':'Payroll'}, 
     success:function(pr_per){
       var jsonpr_per = $.parseJSON(pr_per);
       var json_oprn_person = jsonpr_per.oprn_person;
       //console.log(json_oprn_person);
       var op_person = [];
-      var op_uid = [];      
+      var op_uid = [];       
       var prp_list='';        
       for(var k=0;k<json_oprn_person.length;k++){
         op_person.push(json_oprn_person[k].fname);
@@ -4756,16 +4937,17 @@ function getContPerson(sel_comp){
   });
 
   $.ajax({
-    type:'POST', 
+    type:'POST',      
     url:base_url+'liveappcontroller/assignedPayroll',
-    data:{'sel_comp':sel_comp,'assingn_type':'MK'}, 
-    success:function(pr_per){
+    data:{'sel_comp':sel_comp,'assingn_type':'MK','u_department':'Recruitment'}, 
+    success:function(pr_per){ 
       var jsonpr_per_rec = $.parseJSON(pr_per);
       var json_oprn_person_rec = jsonpr_per_rec.oprn_person;
       var op_person_rec = [];
       var op_uid_rec = [];      
       var prp_list='';        
       for(var a=0;a<json_oprn_person_rec.length;a++){
+        //alert(json_oprn_person_rec[a].fname);          
         op_person_rec.push(json_oprn_person_rec[a].fname);
         op_uid_rec.push(json_oprn_person_rec[a].u_id);
       }    
@@ -4775,7 +4957,22 @@ function getContPerson(sel_comp){
       $("#hidd_recrutment_person").val(mkuid); 
     }
   });
-      
+
+
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/cosmosOPperson',
+    data:{'sel_comp':sel_comp}, 
+    success:function(res){
+      var jsonpr_res = $.parseJSON(res);
+      var json_cosmos_per = jsonpr_res.FLDperson;
+      var json_cosmos_perid = jsonpr_res.Flduid;   
+      //alert(json_cosmos_per+"----"+json_cosmos_perid);   
+      $("#operation_name").val(json_cosmos_per);
+      $("#operation_id").val(json_cosmos_perid); 
+    }
+  });
+
   /*$.ajax({
     method: "POST",
     url: base_url+'liveappcontroller/getcompEmps',
@@ -4908,7 +5105,7 @@ function add_person(){
     url:base_url+'liveappcontroller/addPerson',
     data:add_person_from+"&session_uid="+session_uid,
     success:function(prsn_ins){
-      console.log(prsn_ins); 
+      //console.log(prsn_ins); 
       app.dialog.alert("Person added successfully!");
       app.preloader.hide();
       mainView.router.navigate("/complain_list/");
@@ -4935,6 +5132,190 @@ function add_person(){
     }  
    });      
 }
+
+$$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (e) {
+  checkConnection();
+  chkStatusAndPwd();
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+
+  var d = new Date();
+  var month = d.getMonth()+1;
+  var day = d.getDate();
+  var output = ((''+day).length<2 ? '0' : '') + day + '/' +
+      ((''+month).length<2 ? '0' : '') + month + '/' +
+      d.getFullYear();  
+
+  var from_days='<option value="">FROM DATE</option>';
+  var to_days='<option value="">TO DATE</option>';
+  from_days+='';
+  to_days+='';
+  for(var k=1;k<=31;k++){
+    if(k<=9){
+      k="0"+k; 
+    }else{
+      k=k;
+    }
+    if(day==k){
+      var selected='selected';
+    }else{
+      var selected='';
+    }
+    from_days+='<option value="'+k+'" '+selected+'>'+k+'</option>';
+    to_days+='<option value="'+k+'" '+selected+'>'+k+'</option>';
+  }
+  $("#from_dt").html(from_days);
+  $("#to_dt").html(to_days);
+
+  //var dob_mnth='';
+  var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  from_mnth+='<option value="">FROM MONTH</option>';
+  to_mnth+='<option value="">TO MONTH</option>';
+  for(var h=0;h<monthNames.length;h++){
+    var monthno=h+1;
+    if(month == monthno){
+      var sel_month = 'selected';
+    }else{
+      var sel_month = '';
+    }
+    from_mnth+='<option value="'+(h+1)+'" '+sel_month+'>'+monthNames[h]+'</option>';
+    to_mnth+='<option value="'+(h+1)+'" '+sel_month+'>'+monthNames[h]+'</option>';
+  }    
+  $("#from_mnth").html(from_mnth);
+  $("#to_mnth").html(to_mnth);
+
+  var currentDate = new Date()
+  var curr_year = currentDate.getFullYear();
+  var add_years = curr_year + parseInt(2);
+  var from_yr='';
+  var to_yr='';
+  from_yr+='<option value="">FROM YEAR</option>';
+  to_yr+='<option value="">TO YEAR</option>'; 
+  for(var m=1950;m<=add_years;m++){
+    if(d.getFullYear() == m){
+      var sel_year = 'selected';
+    }else{
+      var sel_year = '';
+    }
+    from_yr+='<option value="'+m+'" '+sel_year+'>'+m+'</option>';
+    to_yr+='<option value="'+m+'" '+sel_year+'>'+m+'</option>';
+  }    
+  $("#from_yr").html(from_yr);
+  $("#to_yr").html(to_yr);  
+
+  var f_yr = $("#from_yr").val();
+  var f_mnth = $("#from_mnth").val();
+  var f_dt = $("#from_dt").val();
+
+  var t_yr = $("#to_yr").val();
+  var t_mnth = $("#to_mnth").val();
+  var t_dt = $("#to_dt").val();
+
+  var today_from = f_yr+"/"+f_mnth+"/"+f_dt; 
+  var today_to = t_yr+"/"+t_mnth+"/"+t_dt;
+
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/getTodayFieldVisit',
+    data:{'today_from':today_from,'today_to':today_to,'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
+    success:function(today_vis){ 
+      var vis_res= $.parseJSON(today_vis);
+      var res_vis = vis_res.today_visit;
+      //console.log(res_vis+"@@@@");
+      var rep_tr='';
+      var tot_data='';
+      if(res_vis.length==0){
+          rep_tr='<tr><td class="text-uppercase text-grey fw-600 font-14">No Visits.</td><td></td></tr>';
+      }else{  
+        tot_data+='<div class="block redtxt fw-500">Total Visits: ('+res_vis.length+')</div>'; 
+        for(var i=0;i<res_vis.length;i++){
+          var add_from='';
+          var csd_id = res_vis[i].csd_id;
+          var csd_invoice_name = res_vis[i].csd_invoice_name;
+          var fv_dateTime = res_vis[i].fv_dateTime;
+          var created_name = res_vis[i].created_name;
+          var fv_from = res_vis[i].fv_from;
+          if(session_ulevel == 1 || session_ulevel == 2 || session_ulevel == 3){
+            $(".add_from").removeClass("display-none");
+            $(".add_from").addClass("display-block");
+            add_from+='</td><td class="text-muted font-10">'+created_name+'<strong>['+fv_from+']</strong>';
+          }else{
+            add_from='';  
+          } 
+          rep_tr+='<tr><td class="text-uppercase fw-500 font-10"><a href="#">'+csd_invoice_name+'</a><br/><i class="f7-icons font-10 text-muted mr-5">calendar_fill</i><span class="text-muted font-12">'+fv_dateTime+'</span></td>'+add_from+'</tr>';              
+        } 
+        $("#tot_data").html(tot_data); 
+        $("#report_list").html(rep_tr); 
+      } 
+    }
+  });
+}); 
+
+function inbetween_fieldvisit(){
+  checkConnection();
+  chkStatusAndPwd();
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+
+  var f_yr = $("#from_yr").val();
+  var f_mnth = $("#from_mnth").val();
+  var f_dt = $("#from_dt").val();
+
+  var t_yr = $("#to_yr").val();
+  var t_mnth = $("#to_mnth").val();
+  var t_dt = $("#to_dt").val(); 
+
+  var today_from = f_yr+"/"+f_mnth+"/"+f_dt; 
+  var today_to = t_yr+"/"+t_mnth+"/"+t_dt;
+
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/getTodayFieldVisit',
+    data:{'today_from':today_from,'today_to':today_to,'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
+    success:function(today_vis){ 
+      var vis_res= $.parseJSON(today_vis);
+      var res_vis = vis_res.today_visit;
+      //console.log(res_vis+"@@@@");
+      var rep_tr='';
+      var tot_data='';
+      if(res_vis.length==0){
+          rep_tr='<tr><td class="text-uppercase text-grey fw-600 font-14">No Visits.</td><td></td></tr>';
+      }else{
+        tot_data+='<div class="block redtxt fw-500">Total Visits: ('+res_vis.length+')</div>'; 
+        for(var i=0;i<res_vis.length;i++){ 
+          
+        //console.log(tot_data);  
+          var add_from='';
+          var csd_id = res_vis[i].csd_id;
+          var csd_invoice_name = res_vis[i].csd_invoice_name;
+          var fv_dateTime = res_vis[i].fv_dateTime;
+          var created_name = res_vis[i].created_name;
+          var fv_from = res_vis[i].fv_from;
+          if(session_ulevel == 1 || session_ulevel == 2 || session_ulevel == 3){
+            $(".add_from").removeClass("display-none");
+            $(".add_from").addClass("display-block");
+            add_from+='<td class="text-muted font-10">'+created_name+'<strong>['+fv_from+']</strong></td>';
+          }else{
+            add_from='';  
+          } 
+          
+          rep_tr+='<tr><td class="text-uppercase fw-500 font-10"><a href="#">'+csd_invoice_name+'</a><br/><i class="f7-icons font-10 text-muted mr-5">calendar_fill</i><span class="text-muted font-12">'+fv_dateTime+'</span></td>'+add_from+'</tr>';              
+        } 
+        $("#tot_data").html(tot_data);  
+        $("#report_list").html(rep_tr); 
+      }
+    }
+  });
+
+
+}
+
 function searchCandidate(){
   checkConnection();
   chkStatusAndPwd();
@@ -4942,9 +5323,9 @@ function searchCandidate(){
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   var search_mob = $("#search_mob").val();
-  console.log(search_mob.length);
+  //console.log(search_mob.length);
   if(search_mob.length==0){
-    console.log("empty");
+    //console.log("empty");
     app.preloader.hide();
   }else{
     $.ajax({
@@ -4967,7 +5348,8 @@ function searchCandidate(){
           for(var m=0;m<list_search.length;m++){
             var name = list_search[m].cand_fname+" "+list_search[m].cand_lname;
             var reg_type = list_search[m].reg_type;
-            console.log(reg_type);
+            var cand_id = list_search[m].cand_id;
+            //console.log(reg_type+cand_id);
             if(reg_type!='NULL' && reg_type!=null && reg_type!='null'){ 
               //console.log("if");
               reg_type=reg_type; 
@@ -4975,7 +5357,7 @@ function searchCandidate(){
               //console.log("else");
               reg_type='-';
             }
-            search_data+='<tr><td class="font-10">'+name+'</td><td class="font-10">'+reg_type+'</td></tr>';
+            search_data+='<tr onclick="showCandDetsandIntDets('+cand_id+')"><td class="font-10 fw-600"><a href="#">'+name+'</a></td><td class="font-10">'+reg_type+'</td></tr>'; 
             i++;
             $(".searchcnts").html("Total "+list_search.length+" result(s) found.");
           }
@@ -4986,8 +5368,327 @@ function searchCandidate(){
     });
   }
 }
+function showCandDetsandIntDets(cand_id){
+  //alert(cand_id);  
+  checkConnection();
+  chkStatusAndPwd();
+  mainView.router.navigate("/search_caninterview/");
+  app.preloader.show();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/searchcanddets',
+    data:{'cand_id':cand_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department},
+    success:function(res){
+      var data='';
+      var result = $.parseJSON(res);
+      var searchintList = result.searchintList;
+      //console.log("*************"+searchintList.length); 
+      if(searchintList.length!=0){ 
+        if(searchintList[0].cand_fname!=undefined){
+          var fname = searchintList[0].cand_fname;
+        }else{
+          var fname = '';
+        } 
+        if(searchintList[0].cand_lname!=undefined){
+          var lname = searchintList[0].cand_lname;
+        }else{
+          var lname = '';
+        }
+        if(searchintList[0].reg_type!=undefined){
+          var regtype = searchintList[0].reg_type
+        }else{
+          var regtype = '';
+        }
+        if(searchintList[0].reg_num!=undefined){
+          var regno = searchintList[0].reg_num;
+        }else{
+          var regno = '';
+        }
+        if(searchintList[0].cand_collor_type!=undefined){
+          var coll_type = searchintList[0].cand_collor_type;
+        }else{
+          var coll_type = '';
+        }
+        if(searchintList[0].cand_mobile!=undefined){
+          var cmob = searchintList[0].cand_mobile;
+        }else{
+          var cmob = '';
+        } 
+      }
+      
+      var name = fname+" "+lname;
+      var reg_type = regtype;
+      var reg_num = regno;
+      var cand_collor_type = coll_type;
+      var cand_mobile = cmob;   
+      data+='<input type="hidden" name="hidd_candid" id="hidd_candid" value='+cand_id+' /><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Name</div><div class="item-cell text-grey font-14">'+name+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Type</div><div class="item-cell text-grey font-14">'+reg_type+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Reg code</div><div class="item-cell text-grey font-14">'+reg_num+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Collar type</div><div class="item-cell text-grey font-14">'+cand_collor_type+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Mobile</div><div class="item-cell text-grey font-14">'+cand_mobile+'</div></div></div></li>'; 
+      data+='<div class="block"><div class="col-100"><div class="grey-txt fw-600"><h3>CANDIDATE INTERVIEW DETAILS</h3></div><div class="row mb-5"><div id="addintbtnDiv"></div></div><div class="data-table int_tbl"><table ><thead class="light-orange"><tr><th class="label-cell text-uppercase table-th"><strong># </strong></th><th class="label-cell text-uppercase table-th"><strong>Company details</strong></th></tr></thead><tbody id="intdetails"></tbody></table></div></div>';
+      interviewDetails(cand_id);         
+      $("#interview_det").html(data); 
+      app.preloader.hide();
+    }
+  });
+}
+function interviewDetails(cand_id){
+  checkConnection();
+  chkStatusAndPwd();  
+  app.preloader.show();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
+  var tabledata='';
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/candCompInterviewsall',
+    data:{'cand_id':cand_id},
+    success:function(res){      
+     var json_parse = $.parseJSON(res); 
+     var intercand = json_parse.intercand;  
+     //console.log("json_parse:::::::"+json_parse);        
+     //console.log("intercand @@@@"+intercand);             
+     //var datainter = json_parse.datainter;        
+      var j=1;
+      if(intercand.length > 0){
+        var st_array = [];
+        var add_intbtn  = ''; 
+        for(var i=0;i<intercand.length;i++){        
+          var company_name = intercand[i].company_name;
+          var designation = intercand[i].designation;
+          var STATUSNAME = intercand[i].STATUSNAME;
+          var cand_id= intercand[i].cand_id;
+          //console.log(STATUSNAME+" :: STATUSNAME");
+          st_array.push(STATUSNAME);               
+          //console.log(st_array+" :: st_array"+cand_id); 
+          if(jQuery.inArray("SELECTED", st_array) != -1) {
+            //console.log("is in array");
+            add_intbtn='';
+            $("#addintbtnDiv").html(add_intbtn);       
+          } else {   
+            //console.log("is NOT in array give interview button");  
+            add_intbtn = '<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';      
+            $("#addintbtnDiv").html(add_intbtn);  
+            //var add_intbtn = 'BUTTN HERE';          
+          }        
+                         
+          var calledBY = intercand[i].calledBY;
+          var cand_fname = intercand[i].cand_fname;
+          var cand_email = intercand[i].cand_email;
+          var cand_id = intercand[i].cand_id;
+          //console.log(calledBY);  
+          if(designation!=undefined && designation!=null){  
+            var desig='<br/><span class="text-uppercase font-10 fw-500">Position : &nbsp;</span><span class="badge font-9 fw-600 mb-1">'+designation+'</span>';  
+          }else{
+            var desig='';    
+          }
+          if(STATUSNAME!=undefined && STATUSNAME!=null){   
+            var stus='<br/><span class="text-uppercase font-10 fw-500 mt-5">Last Status : &nbsp;</span><span class="badge color-parrot font-9 fw-600 mb-1">'+STATUSNAME+'</span>';  
+          }else{ 
+            var stus='';      
+          }
+          if(calledBY!=undefined && calledBY!=null){   
+            var caldby='<br/><span class="text-uppercase font-10 fw-500 mt-5">created by : &nbsp;</span><span class="badge color-blue font-9 fw-600 mb-1">'+calledBY+'</span>';  
+          }else{ 
+            var caldby='';          
+          }
 
-// --------------------------------------------- SEARCH PROVISIONAL REG ------------------------------- //
+          tabledata+='<tr><td class="text-uppercase font-10 fw-500">'+j+'</td><td class="text-uppercase font-10 fw-500">'+company_name+desig+stus+caldby+'</td></tr>';    
+          $("#intdetails").html(tabledata);                  
+          app.preloader.hide();
+          j++;
+        }      
+      }else{
+        tabledata+='<tr><td class="text-uppercase font-10 fw-500">No Interviews</td></tr>';    
+          $("#intdetails").html(tabledata);            
+          app.preloader.hide();   
+      }
+    }
+  });   
+}
+
+$$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {  
+  checkConnection();
+  chkStatusAndPwd();
+  app.preloader.show();
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/expense_list',
+    data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
+    success:function(expense_res){ 
+      var parse_exp = $.parseJSON(expense_res);
+      var expense_data = parse_exp.expense;
+      var expense_master = parse_exp.expense_master;
+      var exp_data = '';
+      if(expense_data.length==0){
+        exp_data = '<tr><td class="text-uppercase text-grey fw-600 font-14">No Data available.</td><td></td></tr>';
+      }else{        
+        for(var i=0;i<expense_data.length;i++){
+          var ex_id = expense_data[i].ex_id;
+          var ex_status = expense_data[i].ex_status;
+          var exuser = expense_data[i].exuser;
+          var ex_travel_mode = expense_data[i].ex_travel_mode;
+          var ex_purpose = expense_data[i].ex_purpose;
+          var ex_other = expense_data[i].ex_other;
+          var ex_date_from = expense_data[i].ex_date_from;
+          var ex_km = expense_data[i].ex_km;
+
+          if(session_ulevel==1 && session_department=='All'){
+            if(ex_status!=''){    
+              var chk ='<div id="triangle-topleft-dev"><span class="impfont fw-700 r-3"><i class="material-icons done_chk_approve font-12" style="transform:rotate(315deg);position: absolute;right:-4px;">done_all</i></span></div>';               
+            }else{
+              var chk='';         
+            }     
+          } 
+          if(ex_purpose == 15){
+            var ex_oth = ex_other;
+          }else{
+            for(var j= 0 ;j<expense_master.length;j++){
+              var ep_id = expense_master[j].ep_id;
+              var ep_name = expense_master[j].ep_name;
+              if(ex_purpose == ep_id){
+                var ex_oth = ep_name;
+              }  
+            }   
+          }  
+          if(ex_km!=''){                   
+            var km='<br/><span class="text-muted">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';    
+          }else{            
+            var km='';                 
+          }     
+
+          if(ex_travel_mode=='Two Wheeler'){     
+            var t_mode = '<img src="img/icons/motor-sports.svg" class="wh-22"/>';  
+          }else if(ex_travel_mode=='Auto'){
+            var t_mode = '<img src="img/icons/rickshaw.svg" class="wh-20" />'; 
+          }else if(ex_travel_mode=='Four Wheeler'){
+            var t_mode = '<img src="img/icons/car.svg" class="wh-22"/>'; 
+          }else if(ex_travel_mode=='Cab-Taxi'){
+            var t_mode = '<img src="img/icons/taxi.svg" class="wh-20"/>';    
+          }else if(ex_travel_mode=='Bus'){    
+            var t_mode = '<img src="img/icons/bus.svg" class="wh-22"/>';  
+          }else if(ex_travel_mode=='Train'){
+            var t_mode = '<img src="img/icons/train.svg" class="wh-20"/>';
+          }else if(ex_travel_mode=='Flight'){
+            var t_mode = '<img src="img/icons/air-freight (1).svg" class="wh-16"/>';    
+          }                  
+                            
+          //exp_data+='<tr><td class="text-uppercase fw-600 font-10"><a href="#" class="">'+chk+'</a><span class="ml-5">'+exuser+'</span><br/><span class=""><i class="f7-icons font-12 text-parrot ">calendar_fill</i></span><span class="ml-5">'+ex_date_from+'</span><br/>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted font-10"><a href="#" class="">'+ex_oth+'</a></td></tr>'; 
+          exp_data+='<tr class="tr-border"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 text-muted font-11">'+ex_date_from+'</span><br/><span class="font-10">'+ex_oth+'</span>'+chk+'</td></tr>';        
+          $("#exp_list").html(exp_data);     
+          app.preloader.hide();                     
+        }
+      }    
+    }
+  });
+});
+function Traveltype(sel_ttype){
+  if(sel_ttype==1){
+    $('.for_local').removeClass("display-none");
+    $('.for_local').addClass("display-block");
+    $('.for_outstation').removeClass("display-block");
+    $('.for_outstation').addClass("display-none")
+  }else{
+    $('.for_local').removeClass("display-block");
+    $('.for_local').addClass("display-none");
+    $('.for_outstation').removeClass("display-none");
+    $('.for_outstation').addClass("display-block");
+  }
+} 
+function TravelMode(select_tmode){ 
+  if(select_tmode=='Four Wheeler' || select_tmode=='Two Wheeler'){
+    $(".veh_typ").removeClass("display-none");
+    $(".veh_typ").addClass("display-block");
+    $('.vehicle').prop('required',true);
+    $('.veh_other').removeClass("display-block");
+    $('.veh_other').addClass("display-none");
+    $('.vehother').prop('required',false);
+    if(select_tmode=='Two Wheeler'){      
+      $(".vehicle option[value='Diesel']").prop("disabled",true);
+      $(".vehicle option[value='CNG']").prop("disabled",true);
+    }else{
+      $(".vehicle option[value='Diesel']").prop("disabled",false);
+      $(".vehicle option[value='CNG']").prop("disabled",false);
+    }
+  }else if(select_tmode=='Flight'){
+    $(".veh_typ").removeClass("display-block");
+    $(".veh_typ").addClass("display-none");
+    $('.vehicle').prop('required',false);
+    $('.veh_other').removeClass("display-block");
+    $('.veh_other').addClass("display-none");
+    $('.vehother').prop('required',false);
+  }else{
+    $(".veh_typ").removeClass("display-block");
+    $(".veh_typ").addClass("display-none");
+    $('.vehicle').prop('required',false);
+    $('.veh_other').addClass("display-block");
+    $('.veh_other').removeClass("display-none");
+    $('.vehother').prop('required',true);
+  }
+}
+function fromcmp_other(selectcomp){
+  var fromcompany = $("#fromcompany").val();
+  if(fromcompany==00){
+    $('.from_other').removeClass("display-none");
+    $('.from_other').addClass("display-block");
+  }else{
+    $('.from_other').removeClass("display-block");
+    $('.from_other').addClass("display-none");
+    $.ajax({
+      method: "POST",
+      url: base_url+"liveappcontroller/get_deputation",
+      data: {'cs_id': fromcompany},
+      success: function (result) {
+        var res = $.parseJSON(result);
+        var unit_nm = res.unit_nm;
+        var unit_div='';
+        for(var i=0;i<unit_nm.length;i++){
+          var dp_id = unit_nm[i].dp_id;
+          var dp_unit_name = unit_nm[i].dp_unit_name;
+          unit_div+='<option value="'+dp_id+'">'+dp_unit_name+'</option>';
+          $(".deputation_div").html(unit_div);          
+        }
+      }
+    });
+  }
+}
+$$(document).on('page:init', '.page[data-name="add_expense"]', function (e) {  
+  checkConnection();
+  chkStatusAndPwd();
+  app.preloader.show();
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/add_expenseform',    
+    success:function(res){ 
+      var parsdata = $.parseJSON(res);
+      var company_data = parsdata.company;
+      var expense_data = parsdata.expense; 
+      var comp_dropdown = '';
+
+      for(var i=0;i<company_data.length;i++){
+        var cs_id = company_data[i].cs_id;
+        var cs_invoice_name = company_data[i].cs_invoice_name; 
+        comp_dropdown+='<option value="'+cs_id+'">'+cs_invoice_name+'</option>';        
+      }
+      comp_dropdown+='<option value="00">Other</option>';
+      $(".fromcompany").html(comp_dropdown);
+    }
+  });
+  app.preloader.hide();    
+});
+
+// -------------------------------------- SEARCH PROVISIONAL REG ------------------------------- //
 function searchProreg(){
   checkConnection();
   chkStatusAndPwd();
@@ -5253,12 +5954,13 @@ function searchDailyAct(){
           var l_id = field_list[i].l_id;
           var cs_invoice_name = field_list[i].cs_invoice_name;        
           var contact = field_list[i].csd_contact_mobile;
-          var nocon = cont_no[i];
+          var nocon = cont_no[i][0];  
+          //console.log("CONTACT "+nocon);          
           if(nocon!=''){
-            var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
-          }else{
-            var cont = '<span class="text-muted">No Contact Found.</span>';
-          }
+            var cont= '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
+          }else{ 
+            var cont= '<span class="text-muted">No Contact Found.</span>';
+          }  
 
           /*if(contact!=''){
             var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+contact+'</span>';
@@ -5562,3 +6264,78 @@ function logOut(){
 
 
 
+/*$$(document).on('page:init', '.page[data-name="inf_scroll"]', function (e) {
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
+  var html = '';
+  $.ajax({ 
+    type:'POST', 
+    url:base_url+'liveappcontroller/interviewList',
+    data:{'uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
+    success:function(intervw_res){
+      var json_field = $.parseJSON(intervw_res);
+      var intrvw_list = json_field.int_list;
+      console.log(intrvw_list.length);
+      // var intrvw_info='';      
+      var int_cnt = '';
+      if(intrvw_list.length==0){
+         html+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
+      }else{
+        // Loading flag
+        var allowInfinite = true;  
+        // Last loaded index
+        //var lastItemIndex = $$('.list li').length;
+        var lastItemIndex = $$('#intervw_info td').length; 
+        // Max items to load
+        var maxItems = 200;
+        // Append items per load 
+        var itemsPerLoad = 20;
+
+        // Attach 'infinite' event handler
+$$('.infinite-scroll-content').on('infinite', function () {
+  // Exit, if loading in progress
+  if (!allowInfinite) return;
+
+  // Set loading flag
+  allowInfinite = false;
+
+  // Emulate 1s loading
+  setTimeout(function () { 
+    // Reset loading flag
+    allowInfinite = true;
+
+    if (lastItemIndex >= maxItems) {
+      // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+      app.infiniteScroll.destroy('.infinite-scroll-content');
+      // Remove preloader
+      $$('.infinite-scroll-preloader').remove();
+      return;  
+    }
+    var tot = parseInt(lastItemIndex) + parseInt(itemsPerLoad); 
+    
+        for(var k=lastItemIndex + 1; k<=intrvw_list.length ;k++){
+          var comp_name= intrvw_list[k].cs_invoice_name;
+          var cs_id = intrvw_list[k].cs_id;
+          if(k==0){
+            var cls = 'accordion-item-opened';
+          }else{ 
+            var cls = '';
+          } 
+          html+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cnt_'+k+'"></span></td></tr>';        
+          getintCounts(cs_id,k);       
+          //$("#intervw_info").html(intrvw_info);
+                 $$('#intervw_info').html(html); 
+        } 
+      
+      //$("#intervw_info").html(html); 
+      
+      lastItemIndex = $$('#intervw_info td').length;
+  }, 1000); 
+});
+      app.preloader.hide();   
+    } 
+  }     
+
+});
+});*/

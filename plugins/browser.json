@@ -7,49 +7,55 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-android-imei": {
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
+    },
     "cordova-plugin-battery-status": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
-    },
-    "cordova-plugin-media-capture": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-geolocation": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-globalization": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
+    },
+    "cordova-plugin-imei": {
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
+    },
+    "cordova-plugin-media-capture": {
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
-    },
-    "cordova-plugin-vibration": {
-      "PACKAGE_NAME": "com.phonegap.cosmosfo"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.phonegap.cosmosfo"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
+    },
+    "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.phonegap.cosmosfo"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     }
   },
   "dependent_plugins": {
     "cordova-plugin-compat": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     },
     "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.phonegap.helloworld"
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     }
   }
 }

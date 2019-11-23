@@ -1,0 +1,134 @@
+<div data-name="add_expense" class="page navbar-fixed toolbar-fixed">
+	<div class="navbar inner-header nav-bg">
+	  <div class="navbar-inner sliding">
+	    <div class="left ">
+        <a href="#" class="link back"><i class="f7-icons size-22 text-white">arrow_left</i></a>
+	    </div>
+	    <div class="title text-uppercase text-white">Add Expense</div>
+	    <div class="right">
+        <a href="#" class="link panel-open" data-panel="left" onclick="openPanel()"><i class="f7-icons size-22 leftbars text-white" >bars</i></a>
+      </div>
+	  </div>
+	</div> 
+
+  <div class="toolbar toolbar-bottom toolbar-fixed footer-bg">
+    <div class="toolbar-inner">
+      <a class="link"></a>
+      <div class="link text-white text-capitalize ">powered by &nbsp; <span class="fa fa-star gly-spin "></span><a class="link external link-white text-uppercase linkspace poweredby" href="http://staroneweb.co.in" target="_system"> star one web</a></div>
+      <a class="link"></a> 
+    </div>
+  </div>
+
+  <div class="page-content">
+    <form class="list no-hairlines add_comp" id="add_comp" >
+      <ul>
+        <li class="tr-border">
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Travel Type<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
+              <div class="item-input-wrap">
+                <select name="traveltype" id="traveltype" class="form-txtbox form-label p-2 font-10" onchange="Traveltype(this.value)">
+                  <option value="">---SELECT---</option>  
+                  <option value="1">Local</option>  
+                  <option value="2">Outstation</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        
+
+
+        <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Travel Mode<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
+              <div class="item-input-wrap">
+                <select name="cont_person" id="cont_person" class="form-txtbox form-label p-2 font-10" onchange="TravelMode(this.value)">
+                  <option value="">---SELECT---</option> 
+                  <option value="Two Wheeler">Two Wheeler</option>  
+                  <option value="Auto">Auto</option>  
+                  <option value="Four Wheeler">Four Wheeler</option>  
+                  <option value="Cab-Taxi">Cab-Taxi</option>  
+                  <option value="Bus">Bus</option>  
+                  <option value="Train">Train</option>  
+                  <option value="Flight">Flight</option> 
+                </select>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="veh_typ display-none" >
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Vehicle Type<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
+              <div class="item-input-wrap">
+                <select name="vehicle" id="vehicle" class="form-txtbox form-label p-2 font-10 vehicle" >
+                  <option value="">---SELECT---</option> 
+                  <option value="Petrol">Petrol</option>  
+                  <option value="Diesel">Diesel</option>  
+                  <option value="CNG">CNG</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="veh_other display-none">
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Rupees</div>
+              <div class="item-input-wrap">
+                <input type="text" name="vehother" class="form-txtbox p-2 vehother" id="vehother" >
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li>                       
+          <a href="#" class="item-link smart-select smart-select-init" data-searchbar="true" data-searchbar-placeholder="Search Company">        
+            <select name="fromcompany" id="fromcompany" class="form-txtbox form-label p-2 font-10 fromcompany" onchange="fromcmp_other(this.value)" maxlength="1"></select>         
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title">From Company</div>
+              </div>
+            </div> 
+          </a>
+        </li>
+
+        <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Unit Name 1<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
+              <div class="item-input-wrap">
+                <select name="unit_from" id="unit_from" class="form-txtbox form-label p-2 font-10 deputation_div"></select>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="from_other display-none">                       
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Other</div>
+              <div class="item-input-wrap">
+                <input type="text" name="from_other" class="form-txtbox p-2" id="from_other" >
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <div class="block"><li class="for_local display-none">localdiv</li></div>
+        <div class="block"><li class="for_outstation display-none">out station</li></div>
+
+              
+    </ul>
+
+    <div class="block block-strong row">
+      <div class="col"><a class="button convert-form-to-data no-radius link-white form-btn expsave_btn" href="#" onclick="add_expense()">Save</a></div>      
+    </div>
+  </form>
+  </div>
+</div>

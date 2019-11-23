@@ -4,7 +4,8 @@
   "displayName": "COSMOS-FO",
   "cordova": {
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ],
     "plugins": {
       "cordova-plugin-battery-status": {},
@@ -21,11 +22,15 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-imei": {},
-      "window.plugins.imei": {}
+      "window.plugins.imei": {},
+      "cordova-plugin-android-imei": {},
+      "cordova-plugin-dreamover-uid": {}
     }
   },
   "dependencies": {
     "cordova-android": "~8.1.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-plugin-android-imei": "~1.0.0",
     "cordova-plugin-battery-status": "~1.2.4",
     "cordova-plugin-camera": "~2.4.1",
     "cordova-plugin-device": "~1.1.6",
@@ -38,6 +43,7 @@
     "cordova-plugin-media-capture": "~1.4.3",
     "cordova-plugin-network-information": "~1.3.3",
     "cordova-plugin-statusbar": "~2.4.3",
+    "cordova-plugin-uid": "^1.3.0",
     "cordova-plugin-vibration": "~2.1.5",
     "cordova-plugin-whitelist": "~1.3.4"
   },

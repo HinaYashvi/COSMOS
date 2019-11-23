@@ -1,6 +1,6 @@
 {
-  "name": "helloworld",
-  "short_name": "helloworld",
+  "name": "COSMOS-FO",
+  "short_name": "COSMOS-FO",
   "description": "Description of your app from template",
   "start_url": "index.html",
   "scope": "index.html",

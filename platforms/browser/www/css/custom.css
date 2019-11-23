@@ -48,7 +48,7 @@ body{
     display: inline-block;
     font-size: 33px;
     line-height: 38px;
-    position: inherit;
+    position: inherit;  
 }
 .login-screen-content .inputbox input {
     background: rgba(255, 255, 255, 0.32) none repeat scroll 0 0!important;
@@ -71,7 +71,7 @@ body{
   border-radius: 0px;
 }
 .text-white{
-  color: #fff;
+  color: #fff!important; 
 }
 .login-btn{
   /*background: #E77E23;*/
@@ -90,6 +90,9 @@ body{
   height: 33px!important;
   background: none!important;
 }
+.mb-10{
+  margin-bottom: 10px!important;
+}
 .mb-15{
   margin-bottom: 15px;
 }
@@ -99,8 +102,14 @@ body{
 .mb-1{
   margin-bottom: 1%;
 }
+.mb-0{
+  margin-bottom: 0%;
+}
 .w-30{
   width: 30%;
+}
+.mt-15p{
+  margin-top: 15%!important;
 }
 /*.dashboard-box{
   text-align: justify;
@@ -145,6 +154,9 @@ body{
 .p-1{
   padding: 1%!important;
 }
+.p-7{
+  padding: 7%!important;
+}
 .pr-0{
   padding-right: 0px!important;
 }
@@ -156,11 +168,20 @@ body{
 	background-color:#71a92e;
 	color:#fff;
 }
+.text-parrot{
+  color:#71a92e;
+}
 .h-40{
   height:40px!important;
 }
 .pt-0{
   padding-top:0px!important;
+}
+.pt-20{
+  padding-top:20px!important;
+}
+.pt-27p{
+  padding-top:27%!important;
 }
 .p-2{
   padding: 2%!important;
@@ -211,6 +232,9 @@ body{
 .lh-30{
   line-height: 20px!important;
 }
+.lh-10{
+  line-height: 10px!important;
+}
 .h-40p{
   height: 40px!important;
 }
@@ -231,6 +255,9 @@ body{
 }
 .mt-5{
   margin-top: 5px;
+}
+.mt-8{
+  margin-top: 8px!important;
 }
 .mt-10{
   margin-top: 10px;
@@ -278,10 +305,13 @@ body{
   overflow: scroll;  
 }
 .font-18{
-  font-size: 18px;
+  font-size: 18px; 
 }
 .font-16{
   font-size: 16px;
+}
+.font-15{
+  font-size: 15px!important;
 }
 .font-14{
   font-size: 14px;
@@ -327,6 +357,22 @@ body{
   height: 16px;
   width: 16px;
 }
+.wh-18{
+  height: 18px;
+  width: 18px;
+}
+.wh-22{
+  height: 22px;
+  width: 22px;
+}
+.wh-26{
+  height: 26px;
+  width: 26px;
+}
+.wh-20{
+  height: 20px;
+  width: 20px;
+}   
 .wh-80{
   height: 80px;
   width: 80px;
@@ -383,6 +429,9 @@ body{
 .light-grey{
   background-color: lightgrey!important;
 }
+.done_chk_approve{
+  color:#fff!important; 
+}
 .mdtest{
   width: 131%;
   font-size: 12px!important;
@@ -402,12 +451,16 @@ body{
 .ml-1{
   margin-left: 1%;
 }
+.ml-20{
+  margin-left: 20%;
+}
 .font-10{
   font-size: 10px;
 }
 .text-lowercase{
   text-transform: lowercase;
 }
+     
 #triangle-topleft-dev {
     position: absolute;
     top: 0;
@@ -540,6 +593,11 @@ body{
     font-weight: 400;
     letter-spacing: 1.5px;
     text-transform: uppercase;
+    position: fixed;
+}
+.searchDiv{
+    position: absolute;
+    z-index: 111;
 }
 input.empty {
     font-family: FontAwesome;
@@ -547,9 +605,23 @@ input.empty {
     font-weight: normal;
     text-decoration: inherit;
 }
-label.item-checkbox input[type="checkbox"]:checked ~ .icon-checkbox{
+label.item-checkbox input[type="checkbox"]:checked ~ .icon-checkbox,.checkbox input[type="checkbox"]:checked ~ i{
   border-color: #27334A;
-  background-color: #27334A;
+  background-color: #27334A; 
+}
+.label-width{
+  justify-content: flex-start!important;
+  width: 180%!important;
+}
+.daily_vrep_dropdiv{
+  background-color: rgba(39, 51, 74, 0.73)!important;
+  height: 135px;   
+}
+.md .item-input-focused:not(.item-input-outline) .item-input-wrap:after{
+  background: none!important; 
+}
+.done-chk{
+  color: #34b7f1;
 }
 /* ---------------------- ROTATE STAR -------------------- */
 .gly-spin {

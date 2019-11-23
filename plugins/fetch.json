@@ -118,5 +118,21 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-android-imei": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-android-imei@~1.0.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-dreamover-uid": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-uid"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

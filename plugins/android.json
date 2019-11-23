@@ -42,6 +42,12 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
+    },
+    "cordova-plugin-imei": {
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
+    },
+    "cordova-plugin-android-imei": {
+      "PACKAGE_NAME": "com.phonegap.NEWFO"
     }
   },
   "dependent_plugins": {
