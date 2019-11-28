@@ -276,7 +276,9 @@ body{
   /*border-bottom: 1px solid #f1f1f1;*/
   border-bottom: 1px solid #d4d9dd;
 }
-
+.div-border{
+  border-bottom: 1px solid #27334a;
+}
 #myUL{
   list-style-type: none;
   padding: 0;
@@ -357,6 +359,11 @@ body{
   height: 16px;
   width: 16px;
 }
+.valmsgcss{
+  width: 31%;
+  float: left;
+  position: absolute;
+}
 .wh-18{
   height: 18px;
   width: 18px;
@@ -398,6 +405,9 @@ body{
 }
 .mr-25{ 
   margin-right: 25px;
+}
+.mr-15p{
+  margin-right: 15%;
 }
 .text-uppercase{
   text-transform: uppercase;

@@ -177,7 +177,11 @@ var routes = [
   {
     path:'/add_expense/',
     url:'./add_expense.html',     
-  },            
+  }, 
+  {
+    path:'/view_expense/',
+    url:'./view_expense.html',     
+  },           
   {
     path: '(.*)',
     url: './404.html',

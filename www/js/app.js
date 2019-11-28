@@ -5,8 +5,8 @@ var app = new Framework7({
   pushState: true,
   //popupCloseByOutside:true,
   name: 'COSMOS - FO',// App Name
-  //id: 'com.phonegap.cosmosfo',       // App id
-  id: 'com.phonegap.NEWFO',
+  id: 'com.phonegap.cosmosfo',       // App id
+  //id: 'com.phonegap.NEWFO',
   panel: {
     //swipe: 'left', // Enable swipe panel
     closeByBackdropClick : true,    
@@ -518,7 +518,7 @@ $$(document).on('page:init', '.page[data-name="dashboard"]', function (e) {
   var session_department = window.localStorage.getItem("session_department");
   var session_mobile = window.localStorage.getItem("session_mobile");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
-  if(session_ulevel == 1){
+  if(session_ulevel == 1 || session_ulevel == 2 || session_ulevel == 3){
     $("#daily_visti_rep").removeClass("display-none");
     $("#daily_visti_rep").addClass("display-block");
   }else{
@@ -3434,7 +3434,7 @@ function upload_doc_activityVisit(insert_id,old_doc_visit){
   ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
 }
 function upload_doc_activity(insert_id,old_doc){  
- // alert("Upload function "+insert_id);
+  //alert("Upload function "+insert_id);
   var session_uid = window.localStorage.getItem("session_uid");
   var img = document.getElementById('image_activity'); 
   //app.dialog.preloader('Uploading....');
@@ -4340,7 +4340,7 @@ function getDailyActPhone(cs_id,rowid){
   }); 
 }
 function dailyActDetails(cs_id){
-  mainView.router.navigate("/dailyAct_details/")
+  mainView.router.navigate("/dailyAct_details/");
   app.preloader.show();
   $.ajax({ 
     type:'POST', 
@@ -4916,18 +4916,19 @@ function getContPerson(sel_comp){
 
   $.ajax({
     type:'POST', 
-    url:base_url+'liveappcontroller/assignedPayroll',
-    data:{'sel_comp':sel_comp,'assingn_type':'PR','u_department':'Payroll'}, 
+    url:base_url+'liveappcontroller/assignedPayrollPersons',
+    //data:{'sel_comp':sel_comp,'assingn_type':'PR','u_department':'Payroll'}, 
+    data:{'sel_comp':sel_comp}, 
     success:function(pr_per){
       var jsonpr_per = $.parseJSON(pr_per);
-      var json_oprn_person = jsonpr_per.oprn_person;
+      var json_payroll_person = jsonpr_per.payroll_person;
       //console.log(json_oprn_person);
       var op_person = [];
       var op_uid = [];       
       var prp_list='';        
-      for(var k=0;k<json_oprn_person.length;k++){
-        op_person.push(json_oprn_person[k].fname);
-        op_uid.push(json_oprn_person[k].u_id);
+      for(var k=0;k<json_payroll_person.length;k++){
+        op_person.push(json_payroll_person[k].fname);
+        op_uid.push(json_payroll_person[k].u_id);
       }    
       var opperson=op_person.join(" - ");
       var opuid=op_uid.join("|");   
@@ -4959,7 +4960,7 @@ function getContPerson(sel_comp){
   });
 
 
-  $.ajax({
+  $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/cosmosOPperson',
     data:{'sel_comp':sel_comp}, 
@@ -5219,6 +5220,25 @@ $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (
 
   $.ajax({
     type:'POST', 
+    url:base_url+'liveappcontroller/getFieldusers',    
+    success:function(field_users){
+      var f_users = $.parseJSON(field_users);
+      var users = f_users.user;
+      var field_user='';
+      field_user+='<option value="">---SELECT---</option>';
+      for(var i=0;i<users.length;i++){
+        var u_id = users[i].u_id;
+        var fname = users[i].fname;
+        var lname = users[i].lname;
+        var name = fname+" "+lname;
+        field_user+='<option value="'+u_id+'">'+name+'</option>';
+      }
+      $("#field_user").html(field_user);
+    }
+  });
+
+  $.ajax({
+    type:'POST', 
     url:base_url+'liveappcontroller/getTodayFieldVisit',
     data:{'today_from':today_from,'today_to':today_to,'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
     success:function(today_vis){ 
@@ -5228,7 +5248,10 @@ $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (
       var rep_tr='';
       var tot_data='';
       if(res_vis.length==0){
-          rep_tr='<tr><td class="text-uppercase text-grey fw-600 font-14">No Visits.</td><td></td></tr>';
+        tot_data+='<div class="block redtxt fw-500">Total Visits: ('+res_vis.length+')</div>';
+        rep_tr='<tr><td class="text-uppercase text-grey fw-600 font-14">No Visits.</td></tr>';
+        $("#tot_data").html(tot_data); 
+        $("#report_list").html(rep_tr); 
       }else{  
         tot_data+='<div class="block redtxt fw-500">Total Visits: ('+res_vis.length+')</div>'; 
         for(var i=0;i<res_vis.length;i++){
@@ -5255,6 +5278,7 @@ $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (
 }); 
 
 function inbetween_fieldvisit(){
+  //alert("called"); 
   checkConnection();
   chkStatusAndPwd();
   var session_fname = window.localStorage.getItem("session_fname");
@@ -5269,7 +5293,12 @@ function inbetween_fieldvisit(){
 
   var t_yr = $("#to_yr").val();
   var t_mnth = $("#to_mnth").val();
-  var t_dt = $("#to_dt").val(); 
+  var t_dt = $("#to_dt").val();  
+
+  var field_user = $("#field_user").val();
+  var comp_name = $("#comp_name").val();
+
+  //alert(field_user+"---"+comp_name); 
 
   var today_from = f_yr+"/"+f_mnth+"/"+f_dt; 
   var today_to = t_yr+"/"+t_mnth+"/"+t_dt;
@@ -5277,15 +5306,19 @@ function inbetween_fieldvisit(){
   $.ajax({
     type:'POST', 
     url:base_url+'liveappcontroller/getTodayFieldVisit',
-    data:{'today_from':today_from,'today_to':today_to,'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
+    data:{'today_from':today_from,'today_to':today_to,'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid,'field_user':field_user,'comp_name':comp_name},
     success:function(today_vis){ 
       var vis_res= $.parseJSON(today_vis);
       var res_vis = vis_res.today_visit;
       //console.log(res_vis+"@@@@");
       var rep_tr='';
       var tot_data='';
+      //alert(res_vis.length);
       if(res_vis.length==0){
+          tot_data+='<div class="block redtxt fw-500">Total Visits: ('+res_vis.length+')</div>'; 
           rep_tr='<tr><td class="text-uppercase text-grey fw-600 font-14">No Visits.</td><td></td></tr>';
+          $("#report_list").html(rep_tr);
+          $("#tot_data").html(tot_data);
       }else{
         tot_data+='<div class="block redtxt fw-500">Total Visits: ('+res_vis.length+')</div>'; 
         for(var i=0;i<res_vis.length;i++){ 
@@ -5501,7 +5534,10 @@ function interviewDetails(cand_id){
         }      
       }else{
         tabledata+='<tr><td class="text-uppercase font-10 fw-500">No Interviews</td></tr>';    
-          $("#intdetails").html(tabledata);            
+          $("#intdetails").html(tabledata);  
+          add_intbtn = '<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';      
+            $("#addintbtnDiv").html(add_intbtn);   
+                  
           app.preloader.hide();   
       }
     }
@@ -5528,6 +5564,8 @@ $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {
       var exp_data = '';
       if(expense_data.length==0){
         exp_data = '<tr><td class="text-uppercase text-grey fw-600 font-14">No Data available.</td><td></td></tr>';
+        $("#exp_list").html(exp_data);
+        app.preloader.hide(); 
       }else{        
         for(var i=0;i<expense_data.length;i++){
           var ex_id = expense_data[i].ex_id;
@@ -5580,7 +5618,7 @@ $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {
           }                  
                             
           //exp_data+='<tr><td class="text-uppercase fw-600 font-10"><a href="#" class="">'+chk+'</a><span class="ml-5">'+exuser+'</span><br/><span class=""><i class="f7-icons font-12 text-parrot ">calendar_fill</i></span><span class="ml-5">'+ex_date_from+'</span><br/>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted font-10"><a href="#" class="">'+ex_oth+'</a></td></tr>'; 
-          exp_data+='<tr class="tr-border"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 text-muted font-11">'+ex_date_from+'</span><br/><span class="font-10">'+ex_oth+'</span>'+chk+'</td></tr>';        
+          exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 text-muted font-11">'+ex_date_from+'</span><br/><span class="font-11">'+ex_oth+'</span>'+chk+'</td></tr>';        
           $("#exp_list").html(exp_data);     
           app.preloader.hide();                     
         }
@@ -5588,17 +5626,354 @@ $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {
     }
   });
 });
+function showExpense(ex_id){
+  //alert(ex_id);
+  app.preloader.show();
+  mainView.router.navigate("/view_expense/");
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/Viewexpense',
+    data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid,'ex_id':ex_id},
+    success:function(expensedet){
+      var ex_data = $.parseJSON(expensedet);
+      var result = ex_data.result;
+      var company = ex_data.company;
+      var expense = ex_data.expense;
+      var exp_det = '';
+      //console.log(result);
+      var t_type = result[0].ex_travel_type;
+      var f_comp = result[0].ex_from;
+      var to_comp = result[0].ex_to;
+      var ex_vehicle = result[0].ex_vehicle;
+      var ex_travel_mode = result[0].ex_travel_mode;
+      var ex_purpose = result[0].ex_purpose;
+      var ex_other = result[0].ex_other;
+      var ex_remark = result[0].ex_remark;
+      var ex_travel_type = result[0].ex_travel_type;
+      
+
+      if(t_type==1){
+        var type_t='LOCAL';
+      }else if(t_type==2){
+        var type_t='OUTSTATION';
+      }else{
+        var type_t='';
+      }
+      for(var j=0;j<company.length;j++){
+        var cs_id = company[j].cs_id;
+        var cs_invoice_name = company[j].cs_invoice_name;        
+        if(f_comp){
+          //console.log("IF");
+          if(f_comp == cs_id){          
+            var comp=cs_invoice_name;
+          }
+        }
+
+        if(f_comp!=to_comp){
+          if(to_comp == cs_id){
+            var to_comp='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">To company</div><div class="item-cell text-grey font-14">'+cs_invoice_name+'</div></div></div></li>';
+          }
+        }
+      }
+
+      if(ex_vehicle!=''){
+        var v_type = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Vehicle type</div><div class="item-cell text-grey font-14">'+ex_vehicle+'</div></div></div></li>';
+      }else{
+        var v_type = '';
+      }
+
+      for(var i=0;i<expense.length;i++){
+        var ep_id = expense[i].ep_id;
+        var ep_name = expense[i].ep_name;
+        if(ep_id == ex_purpose){
+          var purpose='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Purpose</div><div class="item-cell text-grey font-14">'+ep_name+'</div></div></div></li>';
+        }
+      }
+      if(ex_other.length!=0){          
+        var purp_other = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Purpose(other)</div><div class="item-cell text-grey font-14">'+ex_other+'</div></div></div></li>';
+      }else{
+        var purp_other = '';
+      }     
+      
+      exp_det+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Travel type </div><div class="item-cell text-grey font-14 font-500 text-blue">'+type_t+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">From company</div><div class="item-cell text-grey font-14">'+comp+to_comp+'<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Travel mode </div><div class="item-cell text-grey font-14 font-500 ">'+ex_travel_mode+'</div></div></div></li>'+v_type+purpose+purp_other+'<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+ex_remark+'</div></div></div></li>';
+
+        if(ex_travel_type==1){
+          var ex_date_from = result[0].ex_date_from;
+          var ex_km = result[0].ex_km;   
+          var ex_app_kilometer = result[0].ex_app_kilometer;
+          var km_rs = result[0].ex_km_rupee;
+          var exmode = result[0].ex_travel_mode;
+          var vehicle = result[0].ex_vehicle;
+          var ex_km = result[0].ex_km;
+          var ex_amount = result[0].ex_amount;
+          var ex_app_amount = result[0].ex_app_amount;
+          var ex_food = result[0].ex_food;
+          var ex_app_food = result[0].ex_app_food;
+          var ex_accomodation = result[0].ex_accomodation;
+          var ex_app_accomo = result[0].ex_app_accomo;
+          var ex_misce = result[0].ex_misce;
+          var ex_app_misc = result[0].ex_app_misc;
+          var ex_total = result[0].ex_total;
+          var ex_app_total = result[0].ex_app_total;
+
+          if(ex_app_kilometer!=''){
+            var app_kms = ' <span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_kilometer+'</span>';
+          }else{
+            var app_kms = '';
+          }        
+          if(ex_app_amount!=''){
+            var app_amt = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_amount+'</span>';
+          }else{
+            var app_amt = '';
+          }   
+          if(ex_app_food!=''){
+            var app_food = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_food+'</span>';
+          }else{
+            var app_food = '';
+          }
+          if(ex_app_accomo!=''){
+            var app_accomo = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_accomo+'</span>';
+          }else{
+            var app_accomo = '';
+          } 
+          if(ex_app_misc!=''){
+            var app_misc = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_misc+'</span>';
+          }else{
+            var app_misc = '';
+          } 
+          if(ex_app_total!=''){
+            var app_total = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_total+'</span>';
+          }else{
+            var app_total = '';
+          }
+          getExp_price(exmode,vehicle,ex_km);          
+          var localHtml='<li class="for_local accordion-item light-orange accordion-item-opened display-block"><a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Travel Type&nbsp;:&nbsp;LOCAL</div></div><span class="float-right mr-10 orange-txt"></span></a><div class="accordion-item-content nobgclr elevation-1"><div class="list no-hairlines-between"><ul><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Expense Date</div><div class="item-cell text-grey font-14">'+ex_date_from+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Kilometers</div><div class="item-cell text-grey font-14">'+ex_km+app_kms+'</div></div></div></li><li class="item-link item-content final_km"></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Amount</div><div class="item-cell text-grey font-14">'+ex_amount+app_amt+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Food</div><div class="item-cell text-grey font-14">'+ex_food+app_food+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Accomodation</div><div class="item-cell text-grey font-14">'+ex_accomodation+app_accomo+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Miscellaneous</div><div class="item-cell text-grey font-14">'+ex_misce+app_misc+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Total</div><div class="item-cell text-grey font-14">'+ex_total+app_total+'</div></div></div></li>';                  
+          $(".block_local").html(localHtml);
+        }else if(ex_travel_type==2){
+          //outstation
+          var ex_date_from = result[0].ex_date_from;          
+          var ex_location_from = result[0].ex_location_from;          
+          var ex_outamount = result[0].ex_outamount;          
+          var ex_app_rupee = result[0].ex_app_rupee;          
+          var ex_date_to = result[0].ex_date_to;          
+          var ex_location_to = result[0].ex_location_to;          
+
+          var ex_every_date = result[0].ex_every_date;
+          var split_ex_every_date  = ex_every_date.split("|");
+          //console.log(split_ex_every_date);
+
+
+          //var ex_every_date_show = result[0].ex_every_date_show;
+          //var split_ex_every_date_show = ex_every_date_show.split("|");
+          var ex_local_from = result[0].ex_local_from;
+          var split_ex_local_from  = ex_local_from.split("|");
+          var ex_local_to = result[0].ex_local_to;
+          var split_ex_local_to  = ex_local_to.split("|");
+          var ex_travelmode = result[0].ex_travelmode;
+          var split_ex_travelmode  = ex_travelmode.split("|");
+          var ex_app_amount = result[0].ex_app_amount;
+          var split_ex_app_amount  = ex_app_amount.split("|");
+          var ex_app_food = result[0].ex_app_food;
+          var split_ex_app_food  = ex_app_food.split("|");
+          var ex_app_accomo = result[0].ex_app_accomo;
+          var split_ex_app_accomo  = ex_app_accomo.split("|");
+          var ex_app_misc = result[0].ex_app_misc;
+          var split_ex_app_misc  = ex_app_misc.split("|");
+          var ex_app_total = result[0].ex_app_total;
+          var split_ex_app_total  = ex_app_total.split("|");
+          var ex_amount = result[0].ex_amount;
+          var split_ex_amount  = ex_amount.split("|");
+          var ex_food = result[0].ex_food;
+          var split_ex_food  = ex_food.split("|");
+          var ex_misce = result[0].ex_misce;
+          var split_ex_misce = ex_misce.split("|");
+          var ex_accomodation = result[0].ex_accomodation;
+          var split_ex_accomodation = ex_accomodation.split("|");
+          var ex_total = result[0].ex_total;
+          var split_ex_total = ex_total.split("|"); 
+
+          var ex_final = result[0].ex_final;
+          var ex_app_final = result[0].ex_app_final;
+
+          if(ex_app_final!=''){
+            var app_final = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_final+'</span>';
+          }else{
+            var app_final = '';
+          }
+
+          if(ex_app_rupee!=''){
+            var app_rupee = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+ex_app_rupee+'</span>';
+          }else{
+            var app_rupee = '';
+          }
+          var outstationHtml='';
+          outstationHtml+='<li class="for_local accordion-item light-orange accordion-item-opened display-block"><a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Travel Type&nbsp;:&nbsp;OUTSTATION</div></div><span class="float-right mr-10 orange-txt"></span></a><div class="accordion-item-content nobgclr elevation-1"><div class="list no-hairlines-between"><ul><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">From Date</div><div class="item-cell text-grey font-14">'+ex_date_from+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Location - From</div><div class="item-cell text-grey font-14">'+ex_location_from+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Amount</div><div class="item-cell text-grey font-14">'+ex_outamount+app_rupee+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">To Date</div><div class="item-cell text-grey font-14">'+ex_date_to+'</div></div></div></li><li class="item-link item-content div-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Location - To</div><div class="item-cell text-grey font-14">'+ex_location_to+'</div></div></div></li>';
+          
+          for(var z=0;z<split_ex_local_from.length;z++){
+            var every_date = split_ex_every_date[z];
+            //var every_date_show = split_ex_every_date_show[z];
+            /*var split_every_dt = every_date.split("-");
+            console.log(split_every_dt);
+            var dd_every_dt = split_every_dt[2];
+            var mm_every_dt = split_every_dt[1];
+            var yr_every_dt = split_every_dt[0];
+            var date_every = dd_every_dt+"-"+mm_every_dt+"-"+yr_every_dt;*/
+
+            var localfrom = split_ex_local_from[z];
+            var local_to = split_ex_local_to[z];
+            var travelmode = split_ex_travelmode[z];
+            var ex_amount = split_ex_amount[z];
+            var app_amount = split_ex_app_amount[z];
+            var ex_food = split_ex_food[z];
+            var app_food = split_ex_app_food[z];
+            var ex_accom = split_ex_accomodation[z];
+            var app_accomo = split_ex_app_accomo[z];
+            var ex_misce = split_ex_misce[z];
+            var app_misc = split_ex_app_misc[z];
+            if(split_ex_total[z]!=undefined){
+              var ex_total = split_ex_total[z];
+            }else{
+              var ex_total = '';
+            }
+            var app_total = split_ex_app_total[z];
+
+            if(app_amount!=''){
+              if(app_amount!="undefined" || app_amount!=undefined){                
+                if(ex_app_amount.length!=0){                  
+                  var app_amt = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+app_amount+'</span>';
+                }
+              }
+            }else{              
+              var app_amt = '';
+            }
+            if(app_food!=''){
+              if(app_food!="undefined" || app_food!=undefined){ 
+                if(ex_app_food.length!=0){
+                  var food_app = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+app_food+'</span>';
+                }
+              }
+            }else{
+              var food_app = '';
+            }
+            if(app_accomo!=''){
+              if(app_accomo!="undefined" || app_accomo!=undefined){ 
+                if(ex_app_accomo.length!=0){
+                  var accomo_app = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+app_accomo+'</span>';
+                }
+              }
+            }else{
+              var accomo_app = '';
+            }
+            if(app_misc!=''){
+              if(app_misc!="undefined" || app_misc!=undefined){ 
+                if(ex_app_misc.length!=0){
+                  var misc_app = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+app_misc+'</span>';
+                }
+              }
+            }else{
+              var misc_app = '';
+            }
+            if(app_total!=''){
+              if(app_total!="undefined" || app_total!=undefined){                
+                if(ex_app_total.length!=0){                  
+                  var app_tot = '<span class="redtxt fw-600"> | </span> <span class="fw-600 text-blue">'+app_total+'</span>';
+                }
+              }
+            }else{              
+              var app_tot = '';
+            }
+            outstationHtml+='<li class="item-link item-content "><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Date</div><div class="item-cell text-grey font-14">'+every_date+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Local (From-To)</div><div class="item-cell text-grey font-14">'+localfrom+' - '+local_to+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Travel Mode</div><div class="item-cell text-grey font-14">'+travelmode+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Amount</div><div class="item-cell text-grey font-14">'+ex_amount+app_amt+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Food</div><div class="item-cell text-grey font-14">'+ex_food+food_app+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Accomodation</div><div class="item-cell text-grey font-14">'+ex_accom+accomo_app+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Miscellaneous</div><div class="item-cell text-grey font-14">'+ex_misce+misc_app+'</div></div></div></li><li class="item-link item-content div-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">TOTAL</div><div class="item-cell text-grey font-14">'+ex_total+app_tot+'</div></div></div></li>';
+          }
+          outstationHtml+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600">FINAL TOTAL</div><div class="item-cell text-grey font-14">'+ex_final+app_final+'</div></div></div></li>';
+          $(".block_outstation").html(outstationHtml);
+        }
+      $("#viewexpense").html(exp_det);
+      app.preloader.hide();    
+    }
+  });
+}
+function getExp_price(exmode,vehicle,ex_km){
+  //alert("called"+exmode+"*******"+vehicle+"----"+ex_km);
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/getExpprice',
+    data:{'exmode':exmode,'vehicle':vehicle,'ex_km':ex_km},
+    success:function(res){
+      var exppric = $.parseJSON(res);
+      var km_final = exppric.km_final;
+      //alert(km_final);
+      /*if(exmode=='Four Wheeler' || exmode=='Two Wheeler'){
+        if(km_final!=0){
+        var final_km= '<div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">KM Rs</div><div class="item-cell text-grey font-14">'+km_final+'</div></div></div>';        
+        }
+      }else{
+        var final_km= '<div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">KM Rs</div><div class="item-cell text-grey font-14">0</div></div></div>';
+      }*/
+      var final_km= '<div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">KM Rs</div><div class="item-cell text-grey font-14">'+km_final+'</div></div></div>';  
+      $(".final_km").html(final_km);     
+        
+      
+    }
+  });
+}
 function Traveltype(sel_ttype){
   if(sel_ttype==1){
     $('.for_local').removeClass("display-none");
     $('.for_local').addClass("display-block");
     $('.for_outstation').removeClass("display-block");
-    $('.for_outstation').addClass("display-none")
+    $('.for_outstation').addClass("display-none");
+    $('.for_outstation_detDiv').removeClass("display-block");
+    $('.for_outstation_detDiv').addClass("display-none");
+    $(".add_outstationdet").removeClass("display-block");
+    $('.add_outstationdet').addClass("display-none");
   }else{
     $('.for_local').removeClass("display-block");
     $('.for_local').addClass("display-none");
     $('.for_outstation').removeClass("display-none");
     $('.for_outstation').addClass("display-block");
+    $('.for_outstation_detDiv').removeClass("display-none");
+    $('.for_outstation_detDiv').addClass("display-block");
+    $('.add_outstationdet').removeClass("display-none");
+    $('.add_outstationdet').addClass("display-block");
+    var exp_from_days='';
+    exp_from_days='<option value=""></option>';
+    for(var k=1;k<=31;k++){
+      if(k<=9){
+        k="0"+k;
+      }else{
+        k=k;
+      }
+      exp_from_days+='<option value="'+k+'">'+k+'</option>';
+    }
+    $("#exp_from_dt").html(exp_from_days);
+    $("#exp_to_dt").html(exp_from_days);
+    $("#dt_0").html(exp_from_days);
+    var exp_from_mnth='';
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    exp_from_mnth+='<option value=""></option>';
+    for(var h=0;h<monthNames.length;h++){
+      exp_from_mnth+='<option value="'+(h+1)+'">'+monthNames[h]+'</option>';
+    }    
+    $("#exp_from_mnth").html(exp_from_mnth);
+    $("#exp_to_mnth").html(exp_from_mnth);
+    $("#mnth_0").html(exp_from_mnth);
+
+    var currentDate = new Date()
+    var curr_year = currentDate.getFullYear();
+    var add_years = curr_year + parseInt(2);
+    var exp_from_yr='';
+    exp_from_yr+='<option value=""></option>';
+    for(var m=1950;m<=add_years;m++){
+      exp_from_yr+='<option value="'+m+'">'+m+'</option>';
+    }    
+    $("#exp_from_yr").html(exp_from_yr);
+    $("#exp_to_yr").html(exp_from_yr);
+    $("#yr_0").html(exp_from_yr);
   }
 } 
 function TravelMode(select_tmode){ 
@@ -5648,11 +6023,39 @@ function fromcmp_other(selectcomp){
         var res = $.parseJSON(result);
         var unit_nm = res.unit_nm;
         var unit_div='';
+        unit_div+='<option value="">SELECT</option>';
         for(var i=0;i<unit_nm.length;i++){
           var dp_id = unit_nm[i].dp_id;
           var dp_unit_name = unit_nm[i].dp_unit_name;
           unit_div+='<option value="'+dp_id+'">'+dp_unit_name+'</option>';
           $(".deputation_div").html(unit_div);          
+        }
+      }
+    });
+  }
+}
+function tocmp_other(selectcomp){
+  var tocompany = $("#tocompany").val();
+  if(tocompany==00){
+    $('.to_other').removeClass("display-none");
+    $('.to_other').addClass("display-block");
+  }else{
+    $('.to_other').removeClass("display-block");
+    $('.to_other').addClass("display-none");
+    $.ajax({
+      method: "POST",
+      url: base_url+"liveappcontroller/get_deputation",
+      data: {'cs_id': tocompany},
+      success: function (result) {
+        var res = $.parseJSON(result);
+        var unit_nm = res.unit_nm;
+        var unit_div_to='';
+        unit_div_to+='<option value="">SELECT</option>';
+        for(var i=0;i<unit_nm.length;i++){
+          var dp_id = unit_nm[i].dp_id;
+          var dp_unit_name = unit_nm[i].dp_unit_name;
+          unit_div_to+='<option value="'+dp_id+'">'+dp_unit_name+'</option>';
+          $(".unit_to").html(unit_div_to);          
         }
       }
     });
@@ -5675,7 +6078,7 @@ $$(document).on('page:init', '.page[data-name="add_expense"]', function (e) {
       var company_data = parsdata.company;
       var expense_data = parsdata.expense; 
       var comp_dropdown = '';
-
+      comp_dropdown='<option value="">SELECT</option>';
       for(var i=0;i<company_data.length;i++){
         var cs_id = company_data[i].cs_id;
         var cs_invoice_name = company_data[i].cs_invoice_name; 
@@ -5683,12 +6086,508 @@ $$(document).on('page:init', '.page[data-name="add_expense"]', function (e) {
       }
       comp_dropdown+='<option value="00">Other</option>';
       $(".fromcompany").html(comp_dropdown);
+      $(".tocompany").html(comp_dropdown);
+
+      var purpose='';
+      purpose='<option value="">SELECT</option>';
+      for(var j=0;j<expense_data.length;j++){
+        var ep_id = expense_data[j].ep_id;
+        var ep_name = expense_data[j].ep_name;
+        purpose+='<option value="'+ep_id+'">'+ep_name+'</option>';
+      }
+      $("#purpose").html(purpose);   
     }
   });
-  app.preloader.hide();    
-});
+  var exp_days='<option value=""></option>';
+    exp_days+='';
+    for(var k=1;k<=31;k++){
+      if(k<=9){
+        k="0"+k;
+      }else{
+        k=k;
+      }
+      exp_days+='<option value="'+k+'">'+k+'</option>';
+    }
+    $("#exp_dt").html(exp_days);
 
+    var exp_mnth='';
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    exp_mnth+='<option value=""></option>';
+    for(var h=0;h<monthNames.length;h++){
+      exp_mnth+='<option value="'+(h+1)+'">'+monthNames[h]+'</option>';
+    }    
+    $("#exp_mnth").html(exp_mnth);
+
+    var currentDate = new Date()
+    var curr_year = currentDate.getFullYear();
+    var add_years = curr_year + parseInt(2);
+    var exp_yr='';
+    exp_yr+='<option value=""></option>';
+    for(var m=1950;m<=add_years;m++){
+      exp_yr+='<option value="'+m+'">'+m+'</option>';
+    }    
+    $("#exp_yr").html(exp_yr);
+    app.preloader.hide();    
+});
+function mul_station(j){
+  if($(".lc_amt_"+j).val() != ""){
+    var lcamt = $('.lc_amt_'+j).val();
+    if(lcamt == ''){  lcamt=0; }
+    lcl_amnt = parseFloat(lcamt, 2);
+  }else{
+    var lcl_amnt = 0;   
+  }
+  if($(".lc_food_"+j).val() != ""){
+    var lcfood = $('.lc_food_'+j).val();
+    if(lcfood == ''){  lcfood=0; }
+    lcfood = parseFloat(lcfood, 2);
+  }else{
+    var lcfood = 0;   
+  }
+  if($(".lc_accom_"+j).val() != ""){
+    var lc_accom = $('.lc_accom_'+j).val();
+    if(lc_accom == ''){  lc_accom=0; }
+    lc_accom = parseFloat(lc_accom, 2);
+  }else{
+    var lc_accom = 0;   
+  }
+  if($(".lc_misc_"+j).val() != ""){
+    var lc_misc = $('.lc_misc_'+j).val();
+    if(lc_misc == ''){  lc_misc=0; }
+    lc_misc = parseFloat(lc_misc, 2);
+  }else{
+    var lc_misc = 0;   
+  }    
+  var ttl_amt = (lcl_amnt+lcfood+lc_accom+lc_misc);
+  $(".ttl_amt_"+j).val(ttl_amt);    
+  finaltotal(j);    
+  //console.log(ttl_amt);
+  //console.log('-=-=--= outstation -=-=-'+lcl_amnt+'--lcl_amnt---'+lcfood+'--lcfood---'+lc_accom+'--lc_accom---'+lc_misc+'----lc_misc---');
+}
+function finaltotal(j){  
+  var net_total = $('.ttl_amt_' + j).val();
+  var sum = 0;
+  $("input[class *= 'net_total']").each(function(){
+    sum += +$(this).val();
+  });
+  var sumfnl = sum.toFixed(2);
+  $(".total_final").val(sumfnl);
+}
+var rownew = 1;
+function mul_outside(){
+  //alert("in");
+  $("#hidd_totdiv").val('');
+  var cnt = rownew++;
+  //var divhtml='hello';
+  var divhtml='<li class="for_outstation accordion-item light-orange accordion-item-opened mt-10"><a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Travel Type&nbsp;:&nbsp;Outstation</div></div><span class="float-right mr-10 orange-txt"></span></a><div class="accordion-item-content nobgclr elevation-1"><div class="list no-hairlines-between"><ul><li><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Date<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><div class="row"><div class="col-33"><select name="dt[]" id="dt_'+cnt+'" class="form-txtbox form-label p-2 dt_'+cnt+'"></select><span id="dt_msg_'+cnt+'" class="redtxt font-10 valmsg valmsgcss"></span> </div><div class="col-33"><select name="mnth[]" id="mnth_'+cnt+'" class="form-txtbox form-label p-2 mnth_'+cnt+'" ></select><span id="mnth_msg_'+cnt+'" class="redtxt font-10 valmsg valmsgcss"></span></div><div class="col-33"><select name="yr[]" id="yr_'+cnt+'" class="form-txtbox form-label p-2 yr_'+cnt+'" ></select><span id="yr_msg_'+cnt+'" class="redtxt font-10 valmsg valmsgcss"></span></div></div></div></div></div></li><li><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Local - From<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="text" name="lc_from[]" class="form-txtbox p-2 lc_from'+cnt+'" id="lc_from'+cnt+'"></div></div></div></li><span id="outloc_from_'+cnt+'" class="block redtxt font-10 valmsg valmsgcss w-100"></span><li><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Local - To<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="text" name="lc_to[]" class="form-txtbox p-2 lc_to'+cnt+'" id="lc_to'+cnt+'" ></div></div></div></li><span id="outloc_to_'+cnt+'" class="block redtxt font-10 valmsg valmsgcss w-100"></span><li><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Amount<sup class="redtxt fw-600 ml-1 font-12">*</sup></div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2 lc_amt_'+cnt+'" name="lc_amt[]" id="lc_amt'+cnt+'" onkeyup="mul_station('+cnt+');" ></div></div></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">TravelMode<sup class="redtxt fw-600 ml-1 font-12" >*</sup></div><div class="item-input-wrap"><select name="mode[]" id="mode'+cnt+'" class="form-txtbox form-label p-2"><option value="">SELECT</option><option value="Auto">Auto</option><option value="Four Wheeler">Four Wheeler</option><option value="Cab-Taxi">Cab-Taxi</option><option value="Bus">Bus</option></select></div></div></div></div></div></li><span id="modemsg_'+cnt+'" class="redtxt font-10 valmsg float-right mr-15p"></span><span id="outamt_'+cnt+'" class="block redtxt font-10 valmsg"></span><li><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Food</div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2 lc_food_'+cnt+'" name="lc_food[]" id="lc_food_'+cnt+'" onkeyup="mul_station('+cnt+');"></div></div></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Accommodation</div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2 lc_accom_'+cnt+'" name="lc_accom[]" id="lc_accom_'+cnt+'" onkeyup="mul_station('+cnt+');"></div></div></div></div></div></li><li><div class="row"><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Miscellaneous</div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2 lc_misc_'+cnt+'" name="lc_misc[]" id="lc_misc_'+cnt+'" onkeyup="mul_station('+cnt+');"></div></div></div></div><div class="col-50"><div class="item-content item-input"><div class="item-inner"><div class="item-title item-label form-label">Total</div><div class="item-input-wrap"><input type="number" class="form-txtbox p-2 light-grey ttl_amt_'+cnt+' net_total" name="ttl_amt[]" id="ttl_amt'+cnt+'" readonly></div></div></div></div></div></li></div></li>';
+    $("#hidd_totdiv").val(cnt);
+    //rownew++;
+  $('.more_outstation').append(divhtml);
+  var exp_from_days='';
+    exp_from_days='<option value=""></option>';
+    for(var k=1;k<=31;k++){
+      if(k<=9){
+        k="0"+k;
+      }else{
+        k=k;
+      }
+      exp_from_days+='<option value="'+k+'">'+k+'</option>';
+    }
+    $("#dt_"+cnt).html(exp_from_days);
+    var exp_from_mnth='';
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    exp_from_mnth+='<option value=""></option>';
+    for(var h=0;h<monthNames.length;h++){
+      exp_from_mnth+='<option value="'+(h+1)+'">'+monthNames[h]+'</option>';
+    }
+    $("#mnth_"+cnt).html(exp_from_mnth);
+
+    var currentDate = new Date()
+    var curr_year = currentDate.getFullYear();
+    var add_years = curr_year + parseInt(2);
+    var exp_from_yr='';
+    exp_from_yr+='<option value=""></option>';
+    for(var m=1950;m<=add_years;m++){
+      exp_from_yr+='<option value="'+m+'">'+m+'</option>';
+    }  
+    $("#yr_"+cnt).html(exp_from_yr);
+}
+function getexpdetail(purp_oth){
+  if(purp_oth == 15){
+    $(".exp_other").removeClass("display-none");
+    $(".exp_other").addClass("display-block");
+  }else{
+    $(".exp_other").addClass("display-none");
+    $(".exp_other").removeClass("display-block");
+  }
+}
+function add_expense(){
+  
+  var add_expns = $(".add_expns").serialize();
+  //console.log(add_expns);
+  var flag=0;
+  var traveltype = $("#traveltype").val();
+  //alert(traveltype);
+  var travel_mode = $("#travel_mode").val();
+  var vehicle = $("#vehicle").val();
+  var vehother = $("#vehother").val();
+  var fromcompany = $("#fromcompany").val();
+  var tocompany = $("#tocompany").val();
+  var purpose = $("#purpose").val();
+  
+  if(traveltype==''){
+    $("#traveltype").focus();
+    $("#ttype_msg").html('Select travel type');
+    flag++;
+    return false;
+  }else{
+    $("#ttype_msg").html('');
+  }
+  if(travel_mode==''){
+    $("#travel_mode").focus();
+    $("#tmode_msg").html('Select travel mode');
+    flag++;
+    return false;
+  }else{
+    $("#tmode_msg").html('');
+  }
+  if(travel_mode=='Two Wheeler' || travel_mode=='Four Wheeler'){
+    $("#rupees_msg").html('');
+    if(vehicle==''){
+      $("#vehicle").focus();
+      $("#vtype_msg").html('Select vehicle type');
+      flag++;
+      return false;
+    }else{
+      $("#vtype_msg").html('');
+      $("#rupees_msg").html('');
+    }
+  }else{
+    $("#rupees_msg").html('');
+    if(vehother==''){
+      $("#vehother").focus();
+      $("#vtype_msg").html('');
+      $("#rupees_msg").html("Enter Rupees");
+      flag++;
+      return false;
+    }else{
+       $("#rupees_msg").html('');
+    }
+  }
+  if(fromcompany==''){
+    $("#fromcompany").focus();
+    $("#fromcomp_msg").html('Select from company');
+    flag++;
+    return false;
+  }else{
+    $("#fromcomp_msg").html('');
+  }
+  if(tocompany==''){
+    $("#tocompany").focus();
+    $("#tocomp_msg").html('Select to company');
+    flag++;
+    return false;
+  }else{
+    $("#tocomp_msg").html('');
+  }
+  if(purpose==''){
+    $("#purpose").focus();
+    $("#purp_msg").html('Select purpose');
+    flag++;
+    return false;
+  }else{
+    $("#purp_msg").html('');
+  }
+  if(traveltype==1){
+    var exp_dt = $("#exp_dt").val();
+    var exp_mnth = $("#exp_mnth").val();
+    var exp_yr = $("#exp_yr").val();
+    var kilometer = $("#kilometer").val();
+    if(exp_dt==''){
+      $("#exp_dt").focus();
+      $("#expdt_msg").html('Select expense date');
+      flag++;
+      return false;
+    }else{
+      $("#expdt_msg").html('');
+    }
+    if(exp_mnth==''){
+      $("#exp_mnth").focus();
+      $("#expnmth_msg").html('Select expense month');
+      flag++;
+      return false;
+    }else{
+      $("#expnmth_msg").html('');
+    }
+    if(exp_yr==''){
+      $("#exp_yr").focus();
+      $("#expyr_msg").html('Select expense year');
+      flag++;
+      return false;
+    }else{
+      $("#expyr_msg").html('');
+    }
+    if(kilometer==''){
+      $("#kilometer").focus();
+      $("#km_msg").html('Enter kiolmeters');
+      flag++;
+      return false;
+    }else{
+      $("#km_msg").html('');
+    }
+  }else if(traveltype==2){
+    var exp_from_dt = $("#exp_from_dt").val();
+    var exp_from_mnth = $("#exp_from_mnth").val();
+    var exp_from_yr = $("#exp_from_yr").val();
+    var exp_to_dt = $("#exp_to_dt").val();
+    var exp_to_mnth = $("#exp_to_mnth").val();
+    var exp_to_yr = $("#exp_to_yr").val();
+    var out_amount = $("#out_amount").val();
+    var location_from = $("#location_from").val();
+    var location_to = $("#location_to").val();
+    var hidd_totdiv = $("#hidd_totdiv").val();
+    var dt = $("#dt_"+hidd_totdiv).val();
+    var mnth = $("#mnth_"+hidd_totdiv).val();
+    var yr = $("#yr_"+hidd_totdiv).val();
+    var lc_from = $("#lc_from"+hidd_totdiv).val();
+    var lc_to = $("#lc_to"+hidd_totdiv).val();
+    var lc_amt = $("#lc_amt"+hidd_totdiv).val();
+    var mode = $("#mode"+hidd_totdiv).val();
+    if(exp_from_dt==''){
+      $("#exp_from_dt").focus();
+      $("#expfromdt_msg").html('Select date');
+      flag++;
+      return false;
+    }else{
+      $("#expfromdt_msg").html('');
+    }
+    if(exp_from_mnth==''){
+      $("#exp_from_mnth").focus();
+      $("#expfromnmth_msg").html('Select month');
+      flag++;
+      return false;
+    }else{
+      $("#expfromnmth_msg").html('');
+    }
+    if(exp_from_yr==''){
+      $("#exp_from_yr").focus();
+      $("#expfromyr_msg").html('Select year');
+      flag++;
+      return false;
+    }else{
+      $("#expfromyr_msg").html('');
+    }
+
+    if(exp_to_dt==''){
+      $("#exp_to_dt").focus();
+      $("#exptodt_msg").html('Select date');
+      flag++;
+      return false;
+    }else{
+      $("#exptodt_msg").html('');
+    }
+    if(exp_to_mnth==''){
+      $("#exp_to_mnth").focus();
+      $("#exptonmth_msg").html('Select month');
+      flag++;
+      return false;
+    }else{
+      $("#exptonmth_msg").html('');
+    }
+    if(exp_to_yr==''){
+      $("#exp_to_yr").focus();
+      $("#exptoyr_msg").html('Select year');
+      flag++;
+      return false;
+    }else{
+      $("#exptoyr_msg").html('');
+    }
+
+    if(out_amount==''){
+      $("#out_amount").focus();
+      $("#amt_msg").html('Enter amount');
+      flag++;
+      return false;
+    }else{
+      $("#amt_msg").html('');
+    }
+    if(location_from==''){
+      $("#location_from").focus();
+      $("#locfrom_msg").html('Enter location from');
+      flag++;
+      return false;
+    }else{
+      $("#locfrom_msg").html('');
+    }
+    if(location_to==''){
+      $("#location_to").focus();
+      $("#locto_msg").html('Enter location to');
+      flag++;
+      return false;
+    }else{
+      $("#locto_msg").html('');
+    }
+    if(dt==''){
+      $("#dt_"+hidd_totdiv).focus();
+      $("#dt_msg_"+hidd_totdiv).html('Select date');
+      flag++;
+      return false;
+    }else{
+      $("#dt_msg_"+hidd_totdiv).html('');
+    }
+    if(mnth==''){
+      $("#mnth_"+hidd_totdiv).focus();
+      $("#mnth_msg_"+hidd_totdiv).html('Select month');
+      flag++;
+      return false;
+    }else{
+      $("#mnth_msg_"+hidd_totdiv).html('');
+    }
+    if(yr==''){
+      $("#yr_"+hidd_totdiv).focus();
+      $("#yr_msg_"+hidd_totdiv).html('Select year');
+      flag++;
+      return false;
+    }else{
+      $("#yr_msg_"+hidd_totdiv).html('');
+    }
+    if(lc_from==''){
+      $("#lc_from"+hidd_totdiv).focus();
+      $("#outloc_from_"+hidd_totdiv).html('Enter location from');
+      flag++;
+      return false;
+    }else{
+      $("#outloc_from_"+hidd_totdiv).html('');
+    }
+    if(lc_to==''){
+      $("#lc_to"+hidd_totdiv).focus();
+      $("#outloc_to_"+hidd_totdiv).html('Enter location to');
+      flag++;
+      return false;
+    }else{
+      $("#outloc_to_"+hidd_totdiv).html('');
+    }
+    if(lc_amt==''){
+      $("#lc_amt"+hidd_totdiv).focus();
+      $("#outamt_"+hidd_totdiv).html('Enter amount');
+      flag++;
+      return false;
+    }else{
+      $("#outamt_"+hidd_totdiv).html('');
+    }
+    if(mode==''){
+      $("#mode"+hidd_totdiv).focus();
+      $("#modemsg_"+hidd_totdiv).html('Select travel mode');
+      flag++;
+      return false;
+    }else{
+      $("#modemsg_"+hidd_totdiv).html('');
+    }
+
+  }
+
+  
+
+  var session_uid = window.localStorage.getItem("session_uid");
+  app.preloader.show(); 
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/addExpense',
+    data:add_expns+"&session_uid="+session_uid,
+    success:function(result){
+      if(result=='inserted'){
+        app.dialog.alert("Data Entered successfully");
+      }else if(result=='not'){
+        app.dialog.alert("Error Inserting Data");
+      } 
+      mainView.router.navigate('/expense_mgmt/');     
+      app.preloader.hide();
+    }
+  });
+}
+// -------------------------------------- SEARCH EXPENSE --------------------------------------- //
+function searchExpense(){
+  /*checkConnection();
+  chkStatusAndPwd();
+  app.preloader.show();
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/expense_list',
+    data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
+    success:function(expense_res){ 
+      var parse_exp = $.parseJSON(expense_res);
+      var expense_data = parse_exp.expense;
+      var expense_master = parse_exp.expense_master;
+      var exp_data = '';
+      if(expense_data.length==0){
+        exp_data = '<tr><td class="text-uppercase text-grey fw-600 font-14">No Data available.</td><td></td></tr>';
+        $("#exp_list").html(exp_data);
+        app.preloader.hide(); 
+      }else{        
+        for(var i=0;i<expense_data.length;i++){
+          var ex_id = expense_data[i].ex_id;
+          var ex_status = expense_data[i].ex_status;
+          var exuser = expense_data[i].exuser;
+          var ex_travel_mode = expense_data[i].ex_travel_mode;
+          var ex_purpose = expense_data[i].ex_purpose;
+          var ex_other = expense_data[i].ex_other;
+          var ex_date_from = expense_data[i].ex_date_from;
+          var ex_km = expense_data[i].ex_km;
+
+          if(session_ulevel==1 && session_department=='All'){
+            if(ex_status!=''){    
+              var chk ='<div id="triangle-topleft-dev"><span class="impfont fw-700 r-3"><i class="material-icons done_chk_approve font-12" style="transform:rotate(315deg);position: absolute;right:-4px;">done_all</i></span></div>';               
+            }else{
+              var chk='';         
+            }     
+          } 
+          if(ex_purpose == 15){
+            var ex_oth = ex_other;
+          }else{
+            for(var j= 0 ;j<expense_master.length;j++){
+              var ep_id = expense_master[j].ep_id;
+              var ep_name = expense_master[j].ep_name;
+              if(ex_purpose == ep_id){
+                var ex_oth = ep_name;
+              }  
+            }   
+          }  
+          if(ex_km!=''){                   
+            var km='<br/><span class="text-muted">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';    
+          }else{            
+            var km='';                 
+          }     
+
+          if(ex_travel_mode=='Two Wheeler'){     
+            var t_mode = '<img src="img/icons/motor-sports.svg" class="wh-22"/>';  
+          }else if(ex_travel_mode=='Auto'){
+            var t_mode = '<img src="img/icons/rickshaw.svg" class="wh-20" />'; 
+          }else if(ex_travel_mode=='Four Wheeler'){
+            var t_mode = '<img src="img/icons/car.svg" class="wh-22"/>'; 
+          }else if(ex_travel_mode=='Cab-Taxi'){
+            var t_mode = '<img src="img/icons/taxi.svg" class="wh-20"/>';    
+          }else if(ex_travel_mode=='Bus'){    
+            var t_mode = '<img src="img/icons/bus.svg" class="wh-22"/>';  
+          }else if(ex_travel_mode=='Train'){
+            var t_mode = '<img src="img/icons/train.svg" class="wh-20"/>';
+          }else if(ex_travel_mode=='Flight'){
+            var t_mode = '<img src="img/icons/air-freight (1).svg" class="wh-16"/>';    
+          }
+          exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 text-muted font-11">'+ex_date_from+'</span><br/><span class="font-11">'+ex_oth+'</span>'+chk+'</td></tr>';        
+          $("#exp_list").html(exp_data);     
+          app.preloader.hide();                     
+        }
+      }    
+    }
+  });*/
+}
 // -------------------------------------- SEARCH PROVISIONAL REG ------------------------------- //
+
 function searchProreg(){
   checkConnection();
   chkStatusAndPwd();

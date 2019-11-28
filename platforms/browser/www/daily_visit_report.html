@@ -25,7 +25,7 @@
          
   <div class="searchDiv" style="width:100%;">                
     <form class="list no-hairlines daily_vrep mb-0" id="daily_vrep" > 
-      <ul class="daily_vrep_dropdiv">
+      <ul class="daily_vrep_dropdiv" style="height: auto!important">
         <li class="mt-15p">
           <div class="item-content item-input">
             <div class="item-inner">
@@ -42,10 +42,15 @@
                     <select name="from_yr" id="from_yr" class="form-txtbox text-white p-7 font-12" onchange="inbetween_fieldvisit()"></select>
                   </div>
                 </div>
+
               </div>
+
+
             </div> 
           </div>
         </li>
+
+        
 
         <li>
           <div class="item-content item-input mt-0">
@@ -68,11 +73,29 @@
           </div>
         </li>
 
+        <li>
+          <div class="item-content item-input mt-0">
+            <div class="item-inner">
+              <!--div class="item-title item-label text-white">TO</div-->
+              <div class="item-input-wrap">                  
+                <div class="row">
+                  <div class="col-100">
+                    <select name="field_user" id="field_user" class="form-txtbox text-white p-2 font-12" onchange="inbetween_fieldvisit()"></select>
+                  </div> 
+                  <div class="col-100 mt-5">
+                    <input type="text" name="comp_name" id="comp_name" onkeyup="inbetween_fieldvisit()" placeholder="Company">
+                  </div>                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
       </ul>
     </form>
   </div>    
 
-  <div class="page-content " style="padding-top: 45%!important;">              
+  <div class="page-content " style="padding-top: 70%!important;">              
   <div id="tot_data"></div> 
     <div class="card data-table"> 
       <table>

@@ -13,7 +13,7 @@ var routes = [
   {
     path: '/pro_registrations/',
     url: './pro_registrations.html'
-  },
+  }, 
   {
     path: '/provisional_registration/',
     url: './provisional_registration.html',
@@ -177,7 +177,11 @@ var routes = [
   {
     path:'/add_expense/',
     url:'./add_expense.html',     
-  },            
+  }, 
+  {
+    path:'/view_expense/',
+    url:'./view_expense.html',     
+  },           
   {
     path: '(.*)',
     url: './404.html',

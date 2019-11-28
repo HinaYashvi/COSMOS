@@ -3,7 +3,7 @@
   "display": "standalone",
   "name": "COSMOS-FO",
   "short_name": "COSMOS-FO",
-  "version": "com.phonegap.NEWFO",
+  "version": "com.phonegap.cosmosfo",
   "description": "This mobile application is developed for the ease of field officers of COSMOS.",
   "author": "PhoneGap Team",
   "icons": [],

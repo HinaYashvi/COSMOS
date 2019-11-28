@@ -20,7 +20,7 @@
   </div>
 
   <div class="page-content">
-    <form class="list no-hairlines add_comp" id="add_comp" >
+    <form class="list no-hairlines add_expns" id="add_expns" >
       <ul>
         <li class="tr-border">
           <div class="item-content item-input">
@@ -32,20 +32,18 @@
                   <option value="1">Local</option>  
                   <option value="2">Outstation</option>
                 </select>
+                <span id="ttype_msg" class="redtxt font-10 valmsg"></span>
               </div>
             </div>
           </div>
         </li>
-
-        
-
 
         <li>
           <div class="item-content item-input">
             <div class="item-inner">
               <div class="item-title item-label form-label">Travel Mode<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
               <div class="item-input-wrap">
-                <select name="cont_person" id="cont_person" class="form-txtbox form-label p-2 font-10" onchange="TravelMode(this.value)">
+                <select name="travel_mode" id="travel_mode" class="form-txtbox form-label p-2 font-10" onchange="TravelMode(this.value)">
                   <option value="">---SELECT---</option> 
                   <option value="Two Wheeler">Two Wheeler</option>  
                   <option value="Auto">Auto</option>  
@@ -55,6 +53,7 @@
                   <option value="Train">Train</option>  
                   <option value="Flight">Flight</option> 
                 </select>
+                <span id="tmode_msg" class="redtxt font-10 valmsg"></span>
               </div>
             </div>
           </div>
@@ -65,12 +64,13 @@
             <div class="item-inner">
               <div class="item-title item-label form-label">Vehicle Type<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
               <div class="item-input-wrap">
-                <select name="vehicle" id="vehicle" class="form-txtbox form-label p-2 font-10 vehicle" >
+                <select name="vehicle" id="vehicle" class="form-txtbox form-label p-2 font-10 vehicle">
                   <option value="">---SELECT---</option> 
                   <option value="Petrol">Petrol</option>  
                   <option value="Diesel">Diesel</option>  
                   <option value="CNG">CNG</option>
                 </select>
+                <span id="vtype_msg" class="redtxt font-10 valmsg"></span>
               </div>
             </div>
           </div>
@@ -79,31 +79,33 @@
         <li class="veh_other display-none">
           <div class="item-content item-input">
             <div class="item-inner">
-              <div class="item-title item-label form-label">Rupees</div>
+              <div class="item-title item-label form-label">Rupees<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
               <div class="item-input-wrap">
                 <input type="text" name="vehother" class="form-txtbox p-2 vehother" id="vehother" >
               </div>
+              <span id="rupees_msg" class="redtxt font-10 valmsg"></span>
             </div>
           </div>
         </li>
 
         <li>                       
           <a href="#" class="item-link smart-select smart-select-init" data-searchbar="true" data-searchbar-placeholder="Search Company">        
-            <select name="fromcompany" id="fromcompany" class="form-txtbox form-label p-2 font-10 fromcompany" onchange="fromcmp_other(this.value)" maxlength="1"></select>         
+            <select name="fromcompany" id="fromcompany" class="form-txtbox form-label p-2 font-10 fromcompany" onchange="fromcmp_other(this.value)" maxlength="1" ></select>               
             <div class="item-content">
               <div class="item-inner">
-                <div class="item-title">From Company</div>
+                <div class="item-title">From Company<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
               </div>
-            </div> 
+            </div>
+            <span id="fromcomp_msg" class="block redtxt font-10 valmsg"></span>  
           </a>
         </li>
 
         <li>
           <div class="item-content item-input">
             <div class="item-inner">
-              <div class="item-title item-label form-label">Unit Name 1<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
+              <div class="item-title item-label form-label">Unit Name 1</div>              
               <div class="item-input-wrap">
-                <select name="unit_from" id="unit_from" class="form-txtbox form-label p-2 font-10 deputation_div"></select>
+                <select name="unit_from" id="unit_from" class="form-txtbox form-label p-2 font-10 deputation_div" ></select>
               </div>
             </div>
           </div>
@@ -120,14 +122,429 @@
           </div>
         </li>
 
-        <div class="block"><li class="for_local display-none">localdiv</li></div>
-        <div class="block"><li class="for_outstation display-none">out station</li></div>
+        <li>                       
+          <a href="#" class="item-link smart-select smart-select-init" data-searchbar="true" data-searchbar-placeholder="Search Company">        
+            <select name="tocompany" id="tocompany" class="form-txtbox form-label p-2 font-10 tocompany" onchange="tocmp_other(this.value)" maxlength="1" ></select>         
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title">To Company<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+              </div>
+            </div> 
+            <span id="tocomp_msg" class="block redtxt font-10 valmsg"></span> 
+          </a>
+        </li>
 
+        <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Unit Name 2</div>              
+              <div class="item-input-wrap">
+                <select name="unit_to" id="unit_to" class="form-txtbox form-label p-2 font-10 unitto unit_to"  ></select>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="to_other display-none">                       
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Other</div>
+              <div class="item-input-wrap">
+                <input type="text" name="to_cmp_other" class="form-txtbox p-2" id="to_cmp_other" >
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Purpose<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
+              <div class="item-input-wrap">
+                <select name="purpose" id="purpose" class="form-txtbox form-label p-2 font-10" onchange="getexpdetail(this.value)" >  
+                </select>
+                <span id="purp_msg" class="redtxt font-10 valmsg"></span> 
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="exp_other display-none">                       
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Other</div>
+              <div class="item-input-wrap">
+                <input type="text" name="purpose_other" class="form-txtbox p-2" id="purpose_other" >
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label">Remark</div>
+              <div class="item-input-wrap">
+                <textarea name="remark" id="remark" class="form-txtbox p-2" rows="3" ></textarea>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <div class="block">
+          <li class="for_local display-none accordion-item light-orange accordion-item-opened">
+            <a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Travel Type&nbsp;:&nbsp;LOCAL</div></div><span class="float-right mr-10 orange-txt"></span></a>
+            <div class="accordion-item-content nobgclr elevation-1">
+              <div class="list no-hairlines-between">
+                <ul>
+                  <li>
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">Expense Date<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                        <div class="item-input-wrap">
+                          <div class="row">
+                            <div class="col-33">
+                              <select name="exp_dt" id="exp_dt" class="form-txtbox form-label p-2" ></select>
+                              <span id="expdt_msg" class="redtxt font-10 valmsg"></span> 
+                            </div>
+                            <div class="col-33">
+                              <select name="exp_mnth" id="exp_mnth" class="form-txtbox form-label p-2" ></select>
+                              <span id="expnmth_msg" class="redtxt font-10 valmsg"></span>
+                            </div>
+                            <div class="col-33">
+                              <select name="exp_yr" id="exp_yr" class="form-txtbox form-label p-2" ></select>
+                              <span id="expyr_msg" class="redtxt font-10 valmsg"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-50">
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label form-label">Kilometer<sup class="redtxt fw-600 ml-1 font-12">*</sup>
+                            </div>
+                            <div class="item-input-wrap">
+                              <input type="number" class="form-txtbox p-2 input-with-value" name="kilometer" id="kilometer" >
+                              <span id="km_msg" class="redtxt font-10 valmsg"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-50">
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label form-label">Food
+                            </div>
+                            <div class="item-input-wrap">
+                              <input type="number" class="form-txtbox p-2" name="food" id="food">
+                            </div>
+                          </div>
+                        </div>
+                      </div>                      
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-50">
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label form-label">Accommodation</div>
+                            <div class="item-input-wrap">
+                              <input type="number" class="form-txtbox p-2" name="accomo" id="accomo">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-50">
+                        <div class="item-content item-input">
+                          <div class="item-inner">
+                            <div class="item-title item-label form-label">Miscellaneous</div>
+                            <div class="item-input-wrap">
+                              <input type="number" class="form-txtbox p-2" name="misc" id="misc">
+                            </div>
+                          </div>
+                        </div>
+                      </div>                      
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </div> 
+
+        <div class="for_outstation_detDiv display-none">
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">From Date<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <div class="row">
+                    <div class="col-33">
+                      <select name="exp_from_dt" id="exp_from_dt" class="form-txtbox form-label p-2" ></select>
+                      <span id="expfromdt_msg" class="redtxt font-10 valmsg valmsgcss"></span>       
+                    </div>
+                    
+                    <div class="col-33">
+                      <select name="exp_from_mnth" id="exp_from_mnth" class="form-txtbox form-label p-2" ></select>
+                      <span id="expfromnmth_msg" class="redtxt font-10 valmsg valmsgcss"></span>    
+                    </div>
+                    
+                    <div class="col-33">
+                      <select name="exp_from_yr" id="exp_from_yr" class="form-txtbox form-label p-2" ></select>  
+                      <span id="expfromyr_msg" class="redtxt font-10 valmsg valmsgcss"></span>   
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">To Date<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <div class="row">
+                    <div class="col-33">
+                      <select name="exp_to_dt" id="exp_to_dt" class="form-txtbox form-label p-2" ></select>
+                      <span id="exptodt_msg" class="redtxt font-10 valmsg valmsgcss"></span>
+                    </div>
+                    <div class="col-33">
+                      <select name="exp_to_mnth" id="exp_to_mnth" class="form-txtbox form-label p-2" ></select>
+                      <span id="exptonmth_msg" class="redtxt font-10 valmsg valmsgcss"></span> 
+                    </div> 
+                    <div class="col-33">
+                      <select name="exp_to_yr" id="exp_to_yr" class="form-txtbox form-label p-2" ></select>
+                      <span id="exptoyr_msg" class="redtxt font-10 valmsg valmsgcss"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>                       
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">Amount<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <input type="number" name="out_amount" class="form-txtbox p-2" id="out_amount" >
+                </div>
+                <span id="amt_msg" class="redtxt font-10 valmsg"></span>
+              </div>
+            </div>
+          </li>
+
+          <li>                       
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">Location - From<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <input type="text" name="location_from" class="form-txtbox p-2" id="location_from" >
+                </div> 
+                               
+              </div>
+            </div>
+          </li>
+          <span id="locfrom_msg" class="block redtxt font-10 valmsg"></span>
+          
+
+          <li>                       
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">Location - To<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <input type="text" name="location_to" class="form-txtbox p-2" id="location_to" >
+                </div>
+                <span id="locto_msg" class="redtxt font-10 valmsg"></span>
+              </div>
+            </div>
+          </li>
+          
+        </div>
+
+        <div class="block add_outstationdet display-none">
+          <div class="row">
+            <div class="col-33"></div>
+            <div class="col-33"></div>
+            <div class="col-33">
+              <button class="col button btn-goutline button-small button-outline font-8 mb-10" onclick="mul_outside()" type="button"><i class="f7-icons font-12 mr-5 ">plus</i>Add</button>
+            </div>
+          </div>
+          <input type="hidden" name="hidd_totdiv" id="hidd_totdiv" value="0">
+          <div class="more_outstation">
+          <li class="for_outstation display-none accordion-item light-orange accordion-item-opened">
+            <a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Travel Type&nbsp;:&nbsp;Outstation</div></div><span class="float-right mr-10 orange-txt"></span></a>            
+          <div class="accordion-item-content nobgclr elevation-1">
+          <div class="list no-hairlines-between">
+            <ul>
+              <li>
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label form-label">Date<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                    <div class="item-input-wrap">
+                      <div class="row">
+                        <div class="col-33">
+                          <select name="dt[]" id="dt_0" class="form-txtbox form-label p-2 dt_0" ></select>
+                          <span id="dt_msg_0" class="redtxt font-10 valmsg valmsgcss"></span> 
+                        </div>
+                        <div class="col-33">
+                          <select name="mnth[]" id="mnth_0" class="form-txtbox form-label p-2 mnth_0" ></select>
+                          <span id="mnth_msg_0" class="redtxt font-10 valmsg valmsgcss"></span>
+                        </div>
+                        <div class="col-33">
+                          <select name="yr[]" id="yr_0" class="form-txtbox form-label p-2 yr_0" ></select>
+                          <span id="yr_msg_0" class="redtxt font-10 valmsg valmsgcss"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>                   
+
+              <li>                       
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label form-label">Local - From<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="lc_from[]" class="form-txtbox p-2 lc_from" id="lc_from0" >
+                      
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <span id="outloc_from_0" class="block redtxt font-10 valmsg valmsgcss w-100"></span>
+
+              <li>                       
+                <div class="item-content item-input">
+                  <div class="item-inner">
+                    <div class="item-title item-label form-label">Local - To<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                    <div class="item-input-wrap">
+                      <input type="text" name="lc_to[]" class="form-txtbox p-2 lc_to" id="lc_to0" >
+                      
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <span id="outloc_to_0" class="block redtxt font-10 valmsg valmsgcss w-100"></span>
+
+              <li>
+                <div class="row">
+                  <div class="col-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">Amount<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                        <div class="item-input-wrap">
+                          <input type="number" class="form-txtbox p-2 lc_amt_0" name="lc_amt[]" id="lc_amt0" onkeyup="mul_station(0);">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+
+                  <div class="col-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">TravelMode<sup class="redtxt fw-600 ml-1 font-12" >*</sup></div>
+                        <div class="item-input-wrap">
+                          <select name="mode[]" id="mode0" class="form-txtbox form-label p-2">
+                            <option value="">SELECT</option>
+                            <option value="Auto">Auto</option>  
+                            <option value="Four Wheeler">Four Wheeler</option>  
+                            <option value="Cab-Taxi">Cab-Taxi</option>  
+                            <option value="Bus">Bus</option>
+                          </select>                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>                      
+                </div> 
+              </li>
+              <span id="modemsg_0" class="redtxt font-10 valmsg float-right mr-15p"></span>
+              <span id="outamt_0" class="block redtxt font-10 valmsg"></span>
               
-    </ul>
+
+              <li>
+                <div class="row">
+                  <div class="col-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">Food</div>
+                        <div class="item-input-wrap">
+                          <input type="number" class="form-txtbox p-2 lc_food_0" name="lc_food[]" id="lc_food_0" onkeyup="mul_station(0);">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">Accommodation</div>
+                        <div class="item-input-wrap">
+                          <input type="number" class="form-txtbox p-2 lc_accom_0" name="lc_accom[]" id="lc_accom_0" onkeyup="mul_station(0);">
+                        </div>
+                      </div>
+                    </div>
+                  </div>                      
+                </div>
+              </li>
+
+              <li>
+                <div class="row">
+                  <div class="col-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">Miscellaneous</div>
+                        <div class="item-input-wrap">
+                          <input type="number" class="form-txtbox p-2 lc_misc_0" name="lc_misc[]" id="lc_misc_0" onkeyup="mul_station(0);">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-50">
+                    <div class="item-content item-input">
+                      <div class="item-inner">
+                        <div class="item-title item-label form-label">Total</div>
+                        <div class="item-input-wrap">
+                          <input type="number" class="form-txtbox p-2 light-grey ttl_amt_0 net_total" name="ttl_amt[]" id="ttl_amt0" readonly>
+                        </div>
+                      </div>
+                    </div>
+                  </div>                      
+                </div>
+              </li>
+
+            </div>              
+          </li>
+        </div>
+
+        <div class="block">
+          <li>
+          <div class="item-content item-input">
+            <div class="item-inner">
+              <div class="item-title item-label form-label redtxt fw-600">FINAL TOTAL</div>              
+              <div class="item-input-wrap">
+                <input type="number" class="form-txtbox p-2 light-grey ttl_amt_0 total_final" name="total_final" id="total_final" readonly>
+              </div>
+            </div>
+          </div>
+        </li>
+        </div>
+
+        </div>
+
+
+
 
     <div class="block block-strong row">
-      <div class="col"><a class="button convert-form-to-data no-radius link-white form-btn expsave_btn" href="#" onclick="add_expense()">Save</a></div>      
+      <div class="col-50"><a type="button" class="button convert-form-to-data no-radius link-white form-btn expsave_btn" href="#" onclick="add_expense()">Save</a></div>  
+      <div class="col-50"><a class="col button btn-goutline button-outline no-radius text-uppercase fw-500" href="#" >Cancel</a></div>    
     </div>
   </form>
   </div>
