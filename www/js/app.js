@@ -4,7 +4,7 @@ var app = new Framework7({
   root: '#app', // App root element
   pushState: true,
   //popupCloseByOutside:true,
-  name: 'COSMOS - FO',// App Name
+  name: 'COSMOS - FO',// App Name 
   id: 'com.phonegap.cosmosfo',       // App id
   //id: 'com.phonegap.NEWFO',
   panel: {
