@@ -4,7 +4,7 @@ var app = new Framework7({
   root: '#app', // App root element
   pushState: true,
   //popupCloseByOutside:true,
-  name: 'COSMOS - FO',// App Name
+  name: 'COSMOS - FO',// App Name 
   id: 'com.phonegap.cosmosfo',       // App id
   //id: 'com.phonegap.NEWFO',
   panel: {
@@ -6507,7 +6507,7 @@ function add_expense(){
 }
 // -------------------------------------- SEARCH EXPENSE --------------------------------------- //
 function searchExpense(){
-  /*checkConnection();
+  checkConnection();
   chkStatusAndPwd();
   app.preloader.show();
   var session_fname = window.localStorage.getItem("session_fname");
@@ -6515,10 +6515,11 @@ function searchExpense(){
   var session_mobile = window.localStorage.getItem("session_mobile");
   var session_ulevel = window.localStorage.getItem("session_ulevel"); 
   var session_uid =  window.localStorage.getItem("session_uid");
+  var search_exp = $("#search_exp").val();
   $.ajax({
     type:'POST', 
-    url:base_url+'liveappcontroller/expense_list',
-    data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid},
+    url:base_url+'liveappcontroller/searchexpense_list',
+    data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid,'search_exp':search_exp},
     success:function(expense_res){ 
       var parse_exp = $.parseJSON(expense_res);
       var expense_data = parse_exp.expense;
@@ -6584,7 +6585,7 @@ function searchExpense(){
         }
       }    
     }
-  });*/
+  });
 }
 // -------------------------------------- SEARCH PROVISIONAL REG ------------------------------- //
 
