@@ -26,17 +26,29 @@
   <div class="page-content">
     <form class="list no-hairlines add_feedback" id="add_feedback" >
       <ul>
-        <li>
+        <!--li>
           <div class="item-content item-input">
             <div class="item-inner">
               <div class="item-title item-label form-label">Name Of Company - कंपनी का नाम<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>              
               <div class="item-input-wrap">
-                <!--input type="text" name="name" id="name" placeholder="Name Of Company" class="form-txtbox p-2" required validate data-error-message="Name of company should not be empty."-->
+                
                 <select name="name" id="name" class="form-txtbox form-label p-2" required validate data-error-message="Please select name of company."></select>
               </div>
             </div>
           </div>
-        </li>
+        </li-->
+
+        <li>         
+          <a href="#" class="item-link smart-select smart-select-init" data-searchbar="true" data-searchbar-placeholder="Search Company">
+            <select name="name" id="name" class="form-txtbox p-2" required validate data-error-message="Please select name of company."></select>
+            <div class="item-content">
+              <div class="item-inner">
+                <div class="item-title">Name Of Company - कंपनी का नाम<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+              </div>
+            </div>
+          </a>
+        </li> 
+
 
         <li>
           <div class="item-content item-input">

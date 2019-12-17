@@ -200,7 +200,18 @@ function checkConnection(){
       mainView.router.navigate('/internet/');   
   }
 }
+/*function check_session(){ 
+  checkConnection();
+  var session_uid = window.localStorage.getItem("session_uid");
+  //alert(session_uid);
+  if(session_uid==null || session_uid==''){ 
+    mainView.router.navigate('/index/');  
+  }else{
+    mainView.router.navigate('/dashboard/');  
+  } 
+}*/
 function onBackKeyDown() {
+  checkConnection(); 
   if(app.views.main.router.history.length==2 || app.views.main.router.url=='/'){
     app.dialog.confirm('Do you want to Exit ?', function () {
       navigator.app.clearHistory(); navigator.app.exitApp();
@@ -289,7 +300,8 @@ function chkStatusAndPwd(){
   }
 }
 // ------------------------------------ BROWSE/CAPTURE IMAGE ---------------------------------------------- //
-function capturePhoto() { 
+function capturePhoto() {
+  checkConnection();   
   navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
   quality: 100,
   targetWidth: 600,
@@ -301,6 +313,7 @@ function capturePhoto() {
   }); 
 }
 function openFM(){
+  checkConnection();  
  // alert("called");
   //fileChooser.open();
   fileChooser.open(function(uri) {
@@ -363,6 +376,7 @@ function failureCallback(message){
   app.dialog.alert('Failed because: ' + message);
 }*/
 function openPanel(){
+  checkConnection();  
   $(".panel-cover").addClass("display-block");
   var sess_user_img = window.localStorage.getItem("session_dp"); 
   if(sess_user_img==''){
@@ -376,12 +390,14 @@ function openPanel(){
   }
 }
 function onPhotoDataSuccess(imageURI){
+  checkConnection();  
   var cameraImage = document.getElementById('image');
   cameraImage.style.display = 'block';
   cameraImage.src = imageURI;
 }
 
-function getPhoto(source) {  
+function getPhoto(source) {
+  checkConnection();    
   navigator.camera.getPicture(onPhotoURISuccess, onFail, {
     quality: 100,
     correctOrientation: 1,
@@ -392,15 +408,18 @@ function getPhoto(source) {
   });
 } 
 function onPhotoURISuccess(imageURI) {
+  checkConnection();  
   var galleryImage = document.getElementById('image');
   //alert(galleryImage);
   galleryImage.style.display = 'block';
   galleryImage.src = imageURI;
 }
 function onFail(message) {
+  checkConnection();  
   app.dialog.alert('Failed because: ' + message);
 }
 function upload_doc(insert_id,old_doc){ 
+  checkConnection();  
   var session_uid = window.localStorage.getItem("session_uid");
   var img = document.getElementById('image'); 
   //app.dialog.preloader('Uploading....');
@@ -427,14 +446,16 @@ function upload_doc(insert_id,old_doc){
   ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
 }
 function win(r) { //alert(r);
-    //document.writeln(r.response);      
-    var responseCode = r.responseCode;
-    if(responseCode==200){
-      //app.dialog.alert("User image upload done.");      
-      app.dialog.close(); 
-    }
+  checkConnection();  
+  //document.writeln(r.response);      
+  var responseCode = r.responseCode;
+  if(responseCode==200){
+    //app.dialog.alert("User image upload done.");      
+    app.dialog.close(); 
+  }
 }
 function fail(error) {
+  checkConnection();  
   app.dialog.alert("An error has occurred: Code = " + error.code);
   app.dialog.alert("upload error source " + error.source);
   app.dialog.alert("upload error target " + error.target);
@@ -895,8 +916,7 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
 });
 function viewDPO(cs_id){
   checkConnection();
-  chkStatusAndPwd();
-  app.preloader.show();
+  chkStatusAndPwd();   
   mainView.router.navigate("/dpo_details/");
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
@@ -906,6 +926,7 @@ function viewDPO(cs_id){
     url:base_url+'liveappcontroller/getDPODetails',
     data:{'cs_id':cs_id,'session_department':session_department,'session_uid':session_uid,'session_ulevel':session_ulevel},
     success:function(dpodet){
+      app.preloader.show();
       var dpo_json = $.parseJSON(dpodet);      
       var details = ''; 
       var company_name = dpo_json.cust_data[0].cs_invoice_name;
@@ -1058,6 +1079,9 @@ function dpoDetail(csd_id){
       var json_white = json.white_hight;
 
       var qlf = json.qlf;
+
+      var custom_other = json.custom_other;
+      var lumsum_facality = json.lumsum_facality;
 
       ///var blue_hight_place = json.blue_hight_place;
 
@@ -1256,8 +1280,13 @@ function dpoDetail(csd_id){
               }else{
                 var csd_attendance = '';
               }
+              if(b_name!=null && b_name!=''){
+                var admore = '<li class="item-link item-content light-grey"><div class="item-inner item-cell"><div class="item-row p-1 text-center"><div class="item-cell grey-txt font-14 fw-600 text-capitalize">Cosmos Company(Branch) :'+b_name+'</div></div></div></li>';
+              }else{
+                var admore = '';
+              }
 
-              bill_info+='<div class="list accordion-list no-margin"><ul><li class="accordion-item light-orange"><a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Billing Information</div></div><span class="float-right mr-10 orange-txt"><i class="fa fa-file-text-o icon-orange"></i></span></a><div class="accordion-item-content nobgclr elevation-1"><div class="list no-hairlines-between"><ul>'+inv_name+inv_address+inv_cycle+slry_slip+client_term+empinv_date+pay_emp+csd_attendance+'</ul></div></div></li></ul></div>';
+              bill_info+='<div class="list accordion-list no-margin"><ul><li class="accordion-item light-orange"><a href="#" class="item-content item-link"><div class="item-inner "><div class="item-title orange-txt fw-600">Billing Information</div></div><span class="float-right mr-10 orange-txt"><i class="fa fa-file-text-o icon-orange"></i></span></a><div class="accordion-item-content nobgclr elevation-1"><div class="list no-hairlines-between"><ul>'+inv_name+inv_address+inv_cycle+slry_slip+client_term+empinv_date+pay_emp+csd_attendance+admore+'</ul></div></div></li></ul></div>';
               $("#bill_info").html(bill_info);
 
               //// ============================ deputation information ================================= ////
@@ -1562,7 +1591,65 @@ function dpoDetail(csd_id){
                     var other = '';  
                   }
 
-                  sub_accord+='<div class="list accordion-list p-2"><ul><li class="accordion-item light-grey"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title">'+srno+'</div></div><span class="float-right mr-10 orange-txt"><i class="fa fa-play icon-orange"></i></span></a><div class="accordion-item-content nobgclr elevation-5 ">'+lc_design+educate+qnty+grosssal+ntkhm+expr+skills+food+duty+age+transp+locate+gender+accomodate+s_timing+t_freq+unif+wkly+torch+rnct+umbrela+stick+s_access+m_detect+shoes+s_gun+mat_by+mach_by+other+'</div></li></ul></div>';
+                  // OTHER FACILITY //
+                  var custom_other = json.custom_other;
+                  var lumsum_facality = json.lumsum_facality;
+                  var c_oth = '';
+
+                  //alert(custom_other[i].pf_amount);
+                  if(custom_other!=undefined){
+                    if(custom_other.length > 0){
+                      if(custom_other[i].pf_amount!=0.00){
+                        c_oth+= "PF";
+                      }
+                      if(custom_other[i].esic_amount!=0.00){
+                        c_oth+= ", ESIC";
+                      }
+                      if(custom_other[i].wc_amount!=0.00){
+                        c_oth+= ", WC";
+                      }
+
+                      if(custom_other[i].leave_value!=0.00){
+                        c_oth+= ", LEAVE"; 
+                        if(custom_other[i].leave_payble=='Monthly'){
+                          c_oth+= " (M)";
+                        }else if(custom_other[i].leave_payble=='Annualy'){
+                          c_oth+= " (A)";
+                        }
+                      }
+
+                      if(custom_other[i].bonus_value!=0.00){
+                        c_oth+= ", BONUS";
+                        if(custom_other[i].bonus_payble=='Monthly'){
+                          c_oth+= " (M).";
+                        }else if(custom_other[i].bonus_payble=='Annualy'){
+                          c_oth+= " (A).";
+                        }
+                      }
+                    }
+                  }else{
+                    c_oth+= '';
+                  }
+
+                  if(lumsum_facality!=undefined){
+                    if(lumsum_facality.length > 0){
+                      if(lumsum_facality[i].pf_amt!=0.00){
+                        c_oth+= "PF";
+                      }
+                      if(lumsum_facality[i].esic_amt!=0.00){
+                        c_oth+= ", ESIC ";
+                      }
+                      if(lumsum_facality[i].wc_amt!=0.00){
+                        c_oth+= ", wc_amt.";
+                      }
+                    }
+                  }else{
+                    c_oth+= '';
+                  }
+
+                  var other_fac = '<div class="item-row pl-4 pb-3"><div class="item-cell grey-txt font-14 fw-600">Other facility</div><div class="item-cell text-grey font-12 ml-0">'+c_oth+'</div></div>';
+
+                  sub_accord+='<div class="list accordion-list p-2"><ul><li class="accordion-item light-grey"><a href="#" class="item-content item-link"><div class="item-inner"><div class="item-title">'+srno+'</div></div><span class="float-right mr-10 orange-txt"><i class="fa fa-play icon-orange"></i></span></a><div class="accordion-item-content nobgclr elevation-5 ">'+lc_design+educate+qnty+grosssal+ntkhm+expr+skills+food+duty+age+transp+locate+gender+accomodate+s_timing+t_freq+unif+wkly+torch+rnct+umbrela+stick+s_access+m_detect+shoes+s_gun+mat_by+mach_by+other+other_fac+'</div></li></ul></div>';
 
 
                   }// for loop split_design.length ends //
@@ -2792,34 +2879,40 @@ function add_feedback(){
   //alert("called");
   //name=TEST%20COMPANY&site_address=www.worldwideweb.com&cont_person=cont%20person&designation=design&service=1&response=2&person_behave=3&comp_handle=4&price=2&document=3&performance=2&any_suggestions=No%20suggestions
   var session_uid = window.localStorage.getItem("session_uid");
-  app.preloader.show();   
+    
   var fb_form = $(".add_feedback").serialize();
   var old_doc='NULL';
-  //console.log(fb_form);
-  $.ajax({
-    type:'POST', 
-    url:base_url+'liveappcontroller/addFeedback',
-    data:fb_form+"&created_by="+session_uid,
-    success:function(data){
-      //alert(data+"****");
-      upload_doc(data,old_doc); 
-      
-      /*if(data=='inserted'){
-        app.dialog.alert("Data inserted successfully!");
-      }else if(data=='not'){
-        app.dialog.alert("Error Inserting Data");
-      }*/
-      var toastIcon = app.toast.create({
-        icon: app.theme === 'ios' ? '<i class="f7-icons">check_round</i>' : '<i class="f7-icons">check_round</i>',
-        text: 'Feedback added successfully.',
-        position: 'center',
-        closeTimeout: 2000,
-      });
-      app.preloader.hide();
-      toastIcon.open();       
-      mainView.router.navigate("/feedback/"); 
-    }
-  });
+  var cname = $("#name").val();
+  if(cname!=''){
+    //console.log(fb_form);
+    $.ajax({
+      type:'POST', 
+      url:base_url+'liveappcontroller/addFeedback',
+      data:fb_form+"&created_by="+session_uid,
+      success:function(data){
+        app.preloader.show(); 
+        //alert(data+"****");
+        upload_doc(data,old_doc); 
+        
+        /*if(data=='inserted'){
+          app.dialog.alert("Data inserted successfully!");
+        }else if(data=='not'){
+          app.dialog.alert("Error Inserting Data");
+        }*/
+        var toastIcon = app.toast.create({
+          icon: app.theme === 'ios' ? '<i class="f7-icons">check_round</i>' : '<i class="f7-icons">check_round</i>',
+          text: 'Feedback added successfully.',
+          position: 'center',
+          closeTimeout: 2000,
+        });
+        app.preloader.hide();
+        toastIcon.open();       
+        mainView.router.navigate("/feedback/"); 
+      }
+    });
+  }else{
+    app.dialog.alert("Select Company");
+  }
 }
 $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) { 
   checkConnection();
@@ -2895,7 +2988,7 @@ function viewFieldVisit(cs_id,comp_name){
   var list = '';
   $.ajax({ 
     type:'POST', 
-    url:base_url+'liveappcontroller/showFieldVisit',
+    url:base_url+'liveappcontroller/showFieldVisit', 
     data:{'cs_id':cs_id}, 
     success:function(datares){
       var json_datares = $.parseJSON(datares);
@@ -2978,7 +3071,7 @@ function openFieldVisit(csd_id,comp_name){
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   var visitdetails='';
-  $.ajax({ 
+  $.ajax({  
     type:'POST', 
     url:base_url+'liveappcontroller/viewVisit',
     data:{'csd_id':csd_id},
@@ -2991,9 +3084,10 @@ function openFieldVisit(csd_id,comp_name){
       var problem = res.problem;
       var visit = res.visit;
       var head_attach = res.head_attach;
+      //alert("hi");
       //  
      // var vpnm = res.vpnm;
-     // console.log(vpnm);
+      //console.log("$$$$"+visit_res);
 
       //var feeddetDiv='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Name Of Company - कंपनी का नाम</div><div class="item-cell text-grey font-14">'+comp_name+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Site Address - साइट का पता</div><div class="item-cell text-grey font-14">'+site_add+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Contact Person - संपर्क व्यक्ति</div><div class="item-cell text-grey font-14">'+cont_person+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation - ओहदा</div><div class="item-cell text-grey font-14">'+per_desig+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Service Quality - (सेवा की गुणवत्ता)</div><div class="item-cell text-grey font-14">'+ser+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Response Time - (जवाब देने का समय)</div><div class="item-cell text-grey font-14">'+resp+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Behaviour of person Deputed - (व्यक्ति का व्यवहार निर्भर)</div><div class="item-cell text-grey font-14">'+behave+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Complaint Handling - (शिकायत देखभाल)</div><div class="item-cell text-grey font-14">'+cmpln+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Price - (क़ीमत)</div><div class="item-cell text-grey font-14">'+prc+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Documentation - (प्रलेखन)</div><div class="item-cell text-grey font-14">'+doc+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Overall Performance - (सम्पूर्ण प्रदर्शन)</div><div class="item-cell text-grey font-14">'+perform+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Any other suggetions for improvment - सुधार के लिए कोई अन्य सुझाव</div><div class="item-cell text-grey font-14">'+fb_suggetion+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Feedback Form Copy - फीडबैक फॉर्म कॉपी</div><div class="item-cell text-grey font-14"><a class="link external orange-txt text-uppercase linkspace poweredby font-10" href="'+base_url+feedback_attach+'" target="_system">'+feedback_attach+'</a></div></div></div></li>';
 
@@ -3001,12 +3095,36 @@ function openFieldVisit(csd_id,comp_name){
       var res_length = result.length;
       if(res_length > 0){
         var k=1;
+        var hattach=0;
+        var len=res_length;
         for(var i=0;i<res_length;i++){
+          var fv_id = result[i].fv_id;
           var fv_create_on = result[i].fv_create_on;
           var fv_dateTime = result[i].fv_dateTime;
           var fv_person = result[i].fv_person;
           var vp = result[i].fv_purpose;
           var split_vp = vp.split("|");
+          var createby = result[i].createby;
+          var dp_unit_name = result[i].dp_unit_name;
+          var fv_visittype = result[i].fv_visittype;
+          var fv_actual_vacant = result[i].fv_actual_vacant;
+          var fv_training = result[i].fv_training;
+          var dp_unit_refrance = result[i].dp_unit_refrance;
+          var dp_headcount = result[i].dp_headcount;
+          var dp_position = result[i].dp_position;
+
+          var dp_day_shift = result[i].dp_day_shift;
+          var dp_night_shift = result[i].dp_night_shift;
+          var dp_shiftTime = result[i].dp_shiftTime;
+          var dp_shift = result[i].dp_shift;
+          var dp_shiftTime_2 = result[i].dp_shiftTime_2;
+          var dp_shift_2 = result[i].dp_shift_2;
+          var dp_shiftTime_3 = result[i].dp_shiftTime_3;
+          var dp_shift_3 = result[i].dp_shift_3;
+          var dp_shiftTime_4 = result[i].dp_shiftTime_4;
+          var dp_shift_4 = result[i].dp_shift_4;
+
+          
           if(vp==10){
             var cls= 'display-block';
           }else{
@@ -3046,8 +3164,44 @@ function openFieldVisit(csd_id,comp_name){
           var fv_patrollling = result[i].fv_patrollling;
           var fv_newjoinee = result[i].fv_newjoinee;
  
+        if(dp_day_shift!=''){
+          var day_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Day Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_day_shift+'</div></div></div></li></ul></div></li>';
+        }else{
+          var day_shift = '';
+        }
+        if(dp_night_shift!=''){
+          var night_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Night Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_night_shift+'</div></div></div></li></ul></div></li>';
+        }else{
+          var night_shift = '';
+        }
+        if(dp_shiftTime!=''){
+          var shift_1 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 1</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_1 = '';
+        }
+
+        if(dp_shiftTime_2!=''){
+          var shift_2 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 2</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_2+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_2+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_2 = '';
+        }
+
+        if(dp_shiftTime_3!=''){
+          var shift_3 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 3</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_3+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_3+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_3 = '';
+        }
+
+        if(dp_shiftTime_4!=''){
+          var shift_4 = '<li class="item-link item-content tr-border text-blue fw-500">General</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_4+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_4+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_4 = '';
+        }
+
           //<div class="block">Headcount<span class="ml-1 redtxt fw-500 headcnts">(3)</span></div>//
-          visitdetails+='<div class="light-orange mb-5"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="col-66"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">Visit - '+k+'</div></div></div><div class="col-33"><span class="float-right mr-10 grey-txt font-12 fw-500">'+fv_dateTime+'</span></div></a><div class="accordion-item-content nobgclr elevation-10" style="height: auto;"><ul class="block p-2"><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Name</div><div class="item-cell text-grey font-14">'+fv_person+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Visit Purpose</div><div class="item-cell text-grey font-14">';
+          visitdetails+='<div class="light-orange mb-5 divID" id="'+i+'"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="col-66"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">Visit - '+len+'<br/><span class="font-10 redtxt fw-500">('+createby+')</span></div></div></div><div class="col-33"><span class="float-right mr-10 grey-txt font-12 fw-500">'+fv_dateTime+'</span></div></a><div class="accordion-item-content nobgclr elevation-10" style="height: auto;"><ul class="block p-2"><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Name</div><div class="item-cell text-grey font-14">'+dp_unit_name+'</div></div></div></li>  <div><div class="" ><li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content elevation-1" style="height: auto;background-color:#cdefff;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 text-blue fw-500 text-uppercase">Unit details</div></div></div></a><div class="accordion-item-content nobgclr elevation-5 "><ul><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Reference</div><div class="item-cell text-grey font-12 ml-0">'+dp_unit_refrance+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Headcount</div><div class="item-cell text-grey font-12 ml-0">'+dp_headcount+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation</div><div class="item-cell text-grey font-12 ml-0">'+dp_position+'</div></div></div></li>'+day_shift+night_shift+shift_1+shift_2+shift_3+shift_4+'</ul> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Name</div><div class="item-cell text-grey font-14">'+fv_person+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Visit Purpose</div><div class="item-cell text-grey font-14">';
+          len--;
+
           if(vp!='10'){ 
             for(var p=0;p<visit.length;p++){
               var vp_id = visit[p].vp_id;
@@ -3060,7 +3214,7 @@ function openFieldVisit(csd_id,comp_name){
               }
             }
           } 
-          visitdetails+='</div></div></div></li>  <li class="item-link item-content '+cls+'"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Reason</div><div class="item-cell text-grey font-14">'+fv_purreason+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+fv_remark+'</div></div></div></li> ';
+          visitdetails+='</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Visit Type</div><div class="item-cell text-grey font-14">'+fv_visittype+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Actual Vacant</div><div class="item-cell text-grey font-14">'+fv_actual_vacant+'</div></div></div></li>   <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Training</div><div class="item-cell text-grey font-14">'+fv_training+'</div></div></div></li>  <li class="item-link item-content '+cls+'"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Reason</div><div class="item-cell text-grey font-14">'+fv_purreason+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+fv_remark+'</div></div></div></li> ';
 
           $(".page-content").after('<div class="popup popup-visit_'+i+'"><div class="block"><p><a class="link popup-close text-uppercase fw-500 text-parrot" href="#">Close</a></p><div id="visitattach_'+i+'"></div></div></div>');  
           var fv_visit_attach = result[i].app_visit_attach;  
@@ -3075,30 +3229,30 @@ function openFieldVisit(csd_id,comp_name){
             visitdetails+='';
             var visit_attach='';        
           }
-          $("#visitattach_"+i).html(visit_attach);     
-          visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Headcounts</div>';
-
-          $(".page-content").after('<div class="popup popup-hcnt_'+i+'"><div class="block"><p><a class="link popup-close text-uppercase fw-500 text-parrot" href="#">Close</a></p><div id="headattach_'+i+'"></div></div></div>'); 
-          //console.log("LENGTH"+head_attach[i]);         
-          //console.log("*****"+head_attach[i].fd_attach);           
-          // var headcnt_attach = head_attach[i].fd_attach_val;  
-          if(head_attach[i]!=undefined){ 
-          var fd_attach_val =head_attach[i].fd_attach;             
-            if(fd_attach_val!=''){ 
+          $("#visitattach_"+i).html(visit_attach);
+          
+          //console.log(i+"==================="+head_attach[fv_id]);            
+                   
+          if(head_attach[fv_id]!=undefined && head_attach[fv_id]!=''){
+            //console.log(k+"*****"+head_attach[i].fd_attach+"hattach = "+hattach+"######## i="+i);
+            var fd_attach_val=head_attach[fv_id];
+            $(".page-content").after('<div class="popup popup-hcnt_'+i+'"><div class="block"><p><a class="link popup-close text-uppercase fw-500 text-parrot" href="#">Close</a></p><div id="headattach_'+i+'"></div></div></div>'); 
+              visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Headcounts</div>';
               var head_attachment = base_url+fd_attach_val;
               visitdetails+='<a class="button button-fill color-gray popup-open font-9 txtover-init w-100" href="#" data-popup=".popup-hcnt_'+i+'">Attachment</a>';
-              var hd_attach='<img src="'+head_attachment+'" height=325 width=325 />';  
-            }else if(fd_attach_val==''){  
-              visitdetails+='';
-              var hd_attach='';   
-            }   
-          }     
-          visitdetails+='</li>';   
-          $("#headattach_"+i).html(hd_attach);  
+              var hd_attach='<img src="'+head_attachment+'" height=325 width=325 />';
             
-            for(var j=0;j<split_fvreq.length;j++){ 
-              visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><div class="font-12">'+split_pos[j]+'</div></div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Total Strength</div><div class="item-cell text-grey font-14">'+split_fvreq[j]+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Present</div><div class="item-cell text-grey font-14">'+split_fvpres[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Absent</div><div class="item-cell text-grey font-14">'+split_abs[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">New</div><div class="item-cell text-grey font-14">'+split_new[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Vacant</div><div class="item-cell text-grey font-14">'+split_vac[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">OT</div><div class="item-cell text-grey font-14">'+split_ot[j]+'</div></div></div></li> <li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+split_remhead[j]+'</div></div></div></li>';  
-            }
+          }
+          visitdetails+='</li>'; 
+          //var divID = $(".divID").attr("id");
+          //alert(divID);
+          //if(hattach==i){  
+            $("#headattach_"+i).html(hd_attach);
+          //}
+          //hattach++;
+          for(var j=0;j<split_fvreq.length;j++){ 
+            visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><div class="font-12 text-blue">'+split_pos[j]+'</div></div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Total Strength</div><div class="item-cell text-grey font-14">'+split_fvreq[j]+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Present</div><div class="item-cell text-grey font-14">'+split_fvpres[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Absent</div><div class="item-cell text-grey font-14">'+split_abs[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">New</div><div class="item-cell text-grey font-14">'+split_new[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Vacant</div><div class="item-cell text-grey font-14">'+split_vac[j]+'</div></div></div></li> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">OT</div><div class="item-cell text-grey font-14">'+split_ot[j]+'</div></div></div></li> <li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Remarks</div><div class="item-cell text-grey font-14">'+split_remhead[j]+'</div></div></div></li>';  
+          }
             //alert(present.length + "------"+split_presnt.length);   
             if(fv_presentation!=''){
               visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell redtxt font-14 fw-600 ">Presentation</div></li>';
@@ -3108,7 +3262,9 @@ function openFieldVisit(csd_id,comp_name){
                 var ap_id = present[b].ap_id;  
                 var ap_name = present[b].ap_name; 
                 if(ap_id==split_presnt[a]){   
-                  visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600" ><label class="item-checkbox item-content text-left label-width" ><input type="checkbox" name="presantation[]" value="'+ap_id+'" checked><i class="icon icon-checkbox mr-5"></i><span class="">'+ap_name+'</span></label></div><div class="item-cell text-grey font-14">'+split_ptxt[b]+'</div></div></div></li>';
+                  //visitdetails+='<li class="item-link item-content tr-border"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600" ><label class="item-checkbox item-content text-left label-width" ><input type="checkbox" name="presantation[]" value="'+ap_id+'" checked><i class="icon icon-checkbox mr-5"></i><span class="">'+ap_name+'</span></label></div><div class="item-cell text-grey font-14">'+split_ptxt[b]+'</div></div></div></li>';
+
+                  visitdetails+='<li class="item-link item-content tr-border"><span class="fw-600 text-blue">'+ap_name+'</span><div class="item-cell text-grey font-14">'+split_ptxt[b]+'</div></li>';
                 }                
               }
             } 
@@ -3119,14 +3275,15 @@ function openFieldVisit(csd_id,comp_name){
                   var apr_id = problem[z].apr_id;
                   var apr_name = problem[z].apr_name;
                   if(apr_id==split_fvprob[y]){  
-                    visitdetails+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><label class="item-checkbox item-content text-left label-width"><input type="checkbox" name="personal_probs[]" value="'+apr_id+'" checked><i class="icon icon-checkbox mr-5"></i>'+apr_name+'</label></div><div class="item-cell text-grey font-14">'+split_prtxt[z]+'</div></div></div></li>';
+                    //visitdetails+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600"><label class="item-checkbox item-content text-left label-width"><input type="checkbox" name="personal_probs[]" value="'+apr_id+'" checked><i class="icon icon-checkbox mr-5"></i>'+apr_name+'</label></div><div class="item-cell text-grey font-14">'+split_prtxt[z]+'</div></div></div></li>';
+                    visitdetails+='<li class="item-link item-content"><span class="fw-600 text-blue">'+apr_name+'</span><div class="item-cell text-grey font-14">'+split_prtxt[z]+'</div></li>';
                   }
                 }
               }
             }
             visitdetails+='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Observation During Patrolling</div><div class="item-cell text-grey font-14">'+fv_patrollling+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">New Joinee Documents Collected</div><div class="item-cell text-grey font-14">'+fv_newjoinee+'</div></div></div></li>';
 
-          visitdetails+=' </ul></div> </div></div>';
+          visitdetails+=' </ul></div>  </div></div></li></div></div>  </div></div>';
           k++;
         }
       } 
@@ -3144,7 +3301,9 @@ function Add_FieldVisit(csd_id,comp_name){
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   var vst='';
-  $.ajax({ 
+  var unit = '';
+  var unitdetDiv='';
+  $.ajax({  
     type:'POST', 
     url:base_url+'liveappcontroller/addVisit',
     data:{'uid':session_uid,'session_ulevel':session_ulevel,'csd_id':csd_id}, 
@@ -3154,6 +3313,8 @@ function Add_FieldVisit(csd_id,comp_name){
       var visitsel = $.parseJSON(visit_res);
       var visit = visitsel.visit;
       var company = visitsel.company;
+      var deput = visitsel.deputation;
+      //alert(deput);
       var presnt = visitsel.present;
       var problem = visitsel.problem;
       var headcnts = company[0].csd_head_cnt;
@@ -3175,13 +3336,81 @@ function Add_FieldVisit(csd_id,comp_name){
       }
       $("#visit_purpos").html(vst);
       $(".headcnts").html("("+headcnts+")");
+      unit='<option value="">---SELECT---</option>';
+      for(var u=0;u<deput.length;u++){
+        var dp_id = deput[u].dp_id;
+        var dp_unit_name = deput[u].dp_unit_name;
+        var dp_unit_refrance = deput[u].dp_unit_refrance;
+        var dp_headcount = deput[u].dp_headcount;
+        var dp_position = deput[u].dp_position;
+        var sklone = dp_position.split("|");
+        var dp_day_shift = deput[u].dp_day_shift;
+        var dp_night_shift = deput[u].dp_night_shift;
+        var dp_shiftTime = deput[u].dp_shiftTime;
+        var dp_shift = deput[u].dp_shift;
+        var dp_shiftTime_2 = deput[u].dp_shiftTime_2;
+        var dp_shift_2 = deput[u].dp_shift_2;
+        var dp_shiftTime_3 = deput[u].dp_shiftTime_3;
+        var dp_shift_3 = deput[u].dp_shift_3;
+        var dp_shiftTime_4 = deput[u].dp_shiftTime_4;
+        var dp_shift_4 = deput[u].dp_shift_4;
+
+        unit+='<option value='+dp_id+'>'+dp_unit_name+'</option>';
+        //var unit_id = $("#unit_id").val();
+        var unit_id = $("#unit_id").val(); 
+        //alert(unit_id+"---"+dp_id);
+        if(unit_id == dp_id){
+          var show = 'display-block';
+        }else{
+          var show = 'display-none';
+        }
+        if(dp_day_shift!=''){
+          var day_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Day Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_day_shift+'</div></div></div></li></ul></div></li>';
+        }else{
+          var day_shift = '';
+        }
+        if(dp_night_shift!=''){
+          var night_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Night Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_night_shift+'</div></div></div></li></ul></div></li>';
+        }else{
+          var night_shift = '';
+        }
+        if(dp_shiftTime!=''){
+          var shift_1 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 1</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_1 = '';
+        }
+
+        if(dp_shiftTime_2!=''){
+          var shift_2 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 2</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_2+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_2+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_2 = '';
+        }
+
+        if(dp_shiftTime_3!=''){
+          var shift_3 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 3</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_3+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_3+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_3 = '';
+        }
+
+        if(dp_shiftTime_4!=''){
+          var shift_4 = '<li class="item-link item-content tr-border text-blue fw-500">General</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_4+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_4+'</div></div></div></li></ul></div></li>';
+        }else{
+          var shift_4 = '';
+        }
+
+       // unitdetDiv+='<div id="dp_'+dp_id+'" class="'+show+'"><div class="block" id="'+dp_id+'"><input type="hidden" name="dpid[]" value="'+dp_id+'" class="dpid" /><li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content light-orange  elevation-1" style="height: auto;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 grey-txt fw-500 text-uppercase">Unit details</div></div></a></div><div class="accordion-item-content nobgclr elevation-5 "><ul><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Reference</div><div class="item-cell text-grey font-12 ml-0">'+dp_unit_refrance+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Headcount</div><div class="item-cell text-grey font-12 ml-0">'+dp_headcount+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation</div><div class="item-cell text-grey font-12 ml-0">'+dp_position+'</div></div></div></li>'+day_shift+night_shift+shift_1+shift_2+shift_3+shift_4+'</ul></div></li></div></div>';
+          //$(".colors").attr('id',dp_id);  
+        unitdetDiv+='<div id="dp_'+dp_id+'" class="display-none"><input type="hidden" id="hidd_dpid" name="dpid[]" value="'+dp_id+'" class="dpid" /><div class="block" id="'+dp_id+'"><li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content light-orange  elevation-1" style="height: auto;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 grey-txt fw-500 text-uppercase">Unit details</div></div></a></div><div class="accordion-item-content nobgclr elevation-5 "><ul><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Reference</div><div class="item-cell text-grey font-12 ml-0">'+dp_unit_refrance+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Headcount</div><div class="item-cell text-grey font-12 ml-0">'+dp_headcount+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation</div><div class="item-cell text-grey font-12 ml-0">'+dp_position+'</div></div></div></li>'+day_shift+night_shift+shift_1+shift_2+shift_3+shift_4+'</ul></div></li></div></div>';
+      }
+      $("#unitdetDiv").html(unitdetDiv);
+      $("#unit_main").html(unit);
       if(positn!=''){
         var split_pos = positn.split("|");
         var k=1;
         var acc_title = '';
         var pos_string = '';
         var req_val = '';
-        var posin = '';
+        var posin = ''; 
         for(var j=0;j<split_pos.length;j++){
           acc_title=split_pos[j];
           pos_string = acc_title.split("-->");
@@ -3294,8 +3523,24 @@ function Add_FieldVisit(csd_id,comp_name){
     coll_docs+='<li><div class="item-content item-input"><div class="item-inner"><div class="item-input-wrap"><div class="row mt-10"><div class="col-33"><button type="button" class="col button btn-goutline button-small button-outline  fw-500 float-left" name="back1" id="back1" onclick="gobackDiv5()">Previous</button></div><div class="col-33"><button type="button" class="col button button form-btn text-white button-outline float-right" name="save" id="save" onclick="saveDailyActivity()">submit</button></div></div></div></div></div></li>';
     $("#collect_docs").html(coll_docs);
     app.preloader.hide();  
-    }
+    } 
   });
+}  
+// ********************************************************************************************* //
+function show_unitdetail(unitval){
+  $("#unit_id").val(unitval);
+  var unit_id = $("#unit_id").val(); 
+  var hidd_dpid = document.getElementsByClassName('dpid');
+  for (var i = 0; i < hidd_dpid.length; i++){
+    var ids = hidd_dpid[i].value;
+    if(ids == unit_id){
+      $("#dp_"+ids).removeClass("display-none");
+      $("#dp_"+ids).addClass("display-block");
+    }else{ 
+      $("#dp_"+ids).addClass("display-none");  
+      $("#dp_"+ids).removeClass("display-block");  
+    }
+  }
 }
 // ********************************************************************************************* //
 function capturePhoto_activityVisit() { 
@@ -3334,12 +3579,6 @@ function onPhotoURISuccVisit(imageURI) {
   galleryImage.src = imageURI;
 }
 // ********************************************************************************************* //
-
-
-
-
-
-
 function capturePhoto_activity() { 
   //alert("capturePhoto_activity");
   navigator.camera.getPicture(onPhotoDataSucc, onFail, {
@@ -3395,18 +3634,19 @@ function saveDailyActivity(){
       var res = $.parseJSON(save_result);
       var res_fdid = res.fd_id; 
       var res_fvid = res.fv_id;  
-      //alert("res_fdid = "+res_fdid+"^^^^res_fvid="+res_fvid);  
+      //alert("res_fdid = "+res_fdid+"^^^^res_fvid="+res_fvid); 
       /*upload_doc_activity(save_result,old_doc_act);
       upload_doc_activityVisit(save_result,old_doc_visit);*/
       upload_doc_activity(res_fdid,old_doc_act);
       upload_doc_activityVisit(res_fvid,old_doc_visit);
-      mainView.router.navigate("/field_visit/"); 
+       
     }
   });
+  mainView.router.navigate("/field_visit/");
   app.preloader.hide();
 }
-function upload_doc_activityVisit(insert_id,old_doc_visit){ 
-  //alert("Upload function "+insert_id);
+function upload_doc_activityVisit(insertfd_id,old_doc_visit){ 
+  //alert("Upload function visit attach "+insertfd_id);
   var session_uid = window.localStorage.getItem("session_uid");
   var img = document.getElementById('image_activity_visit'); 
   //app.dialog.preloader('Uploading....');
@@ -3426,10 +3666,12 @@ function upload_doc_activityVisit(insert_id,old_doc_visit){
   var imgfilename = params.name; 
   //alert("imgfilename :: "+imgfilename);
   var split_imgfilename = imgfilename.split("?");
-  var actual_imgname = split_imgfilename[0];
   var ft = new FileTransfer(); 
-  //var uploadControllerURL = base_url+"liveappcontroller/photoupload_activityVisit/"+session_uid+"/"+insert_id+"/"+old_doc_visit+"/"+imgfilename; 
-  var uploadControllerURL = base_url+"liveappcontroller/photoupload_activityVisit/"+session_uid+"/"+insert_id+"/"+old_doc_visit+"/"+actual_imgname;  
+  var actual_imgname = split_imgfilename[0];
+  //var img_filename = encodeURIComponent(actual_imgname.trim());
+  var img_filename = actual_imgname.split('%20').join('_');
+  var uploadControllerURL = base_url+"liveappcontroller/photoupload_activityVisit/"+session_uid+"/"+insertfd_id+"/"+old_doc_visit+"/"+img_filename;
+
   //alert(uploadControllerURL);
   ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
 }
@@ -3452,11 +3694,15 @@ function upload_doc_activity(insert_id,old_doc){
   params.fullpath =imageURI;
   params.name = options.fileName;
   var imgfilename = params.name; 
+  //var imgfilename = params.name.replace(/\s+/g, "_"); 
   //alert("imgfilename :: "+imgfilename);
   var split_imgfilename = imgfilename.split("?");
-  var actual_imgname = split_imgfilename[0];
   var ft = new FileTransfer();
-  var uploadControllerURL = base_url+"liveappcontroller/photoupload_activity/"+session_uid+"/"+insert_id+"/"+old_doc+"/"+imgfilename; 
+  //actual_imgname = actual_imgname.replace(/\s+/g, "-");
+  //alert("Upload function headcnt attach "+actual_imgname);
+  var actual_imgname1 = split_imgfilename[0];
+  var img_filename1 = actual_imgname1.split('%20').join('_');
+  var uploadControllerURL = base_url+"liveappcontroller/photoupload_activity/"+session_uid+"/"+insert_id+"/"+old_doc+"/"+img_filename1; 
   //alert(uploadControllerURL);
   ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
 }
@@ -3531,10 +3777,10 @@ function getCandDocs(cand_id,rowid){
   });
 } 
 function selectOnlyThis(id) { 
-    for (var i = 1;i <= 2; i++){
-        document.getElementById(i).checked = false;
-    }
-    document.getElementById(id).checked = true;
+  for (var i = 1;i <= 2; i++){
+    document.getElementById(i).checked = false;
+  }
+  document.getElementById(id).checked = true;
 }  
 /*
 function onlyone_chk(obj){    
@@ -3590,12 +3836,20 @@ function getReqfields1(){
   //app.preloader.show();
   var name = $("#name").val();
   var visit_purpos = $("#visit_purpos").val();
+  var unit_main = $("#unit_main").val();
+  var visit_type = $("#visit_type").val();
   //alert(name+"****"+visit_purpos);
-  if(name==''){
+  if(unit_main==''){
+    app.dialog.alert("Select unit name.");
+    return false;
+  }else if(name==''){
     app.dialog.alert("Name should not be empty.");
     return false;
   }else if(visit_purpos==''){
     app.dialog.alert("Visit Purpose is required.");
+    return false;
+  }else if(visit_type==''){
+    app.dialog.alert("Visit type is required.");
     return false;
   }else{
     $("#wiz-1").addClass("display-none");
@@ -4084,7 +4338,12 @@ function getCandisel(cs_id,comp_name){
   var join_yr='';
   join_yr+='<option value=""></option>';
   for(var m=1950;m<=add_years;m++){
-    join_yr+='<option value="'+m+'">'+m+'</option>';
+    if(curr_year==m){
+      var yr_sel = 'selected';
+    }else{
+      var yr_sel = '';
+    }
+    join_yr+='<option value="'+m+'" '+yr_sel+'>'+m+'</option>';
   }
   $.ajax({ 
     type:'POST', 
@@ -5050,40 +5309,41 @@ function add_complain(){
   }
 }
 $$(document).on('page:init', '.page[data-name="add_person"]', function (e) {
-  checkConnection();
-  app.preloader.show();
+  checkConnection();  
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   var session_department = window.localStorage.getItem("session_department");
-  $.ajax({ 
-    type:'POST', 
-    url:base_url+'liveappcontroller/add_person',
-    data:{'uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
-    success:function(dropres){
-      var json_res = $.parseJSON(dropres);
-      var compny = json_res.cmpny;
-      var design = json_res.designation;
-      //console.log(design);
-      var comps='';
-      var designation='';
-      comps+='<option value="">---SELECT---</option>';
-      for(var k=0;k<compny.length;k++){
-        var csid = compny[k].cs_id;
-        var cs_invoice_name = compny[k].cs_invoice_name;
-        comps+='<option value='+csid+'>'+cs_invoice_name+'</option>';
-      }
-      $("#company_name").html(comps);      
-      designation+='<option value="">---SELECT---</option>';
-      for(var h=0;h<design.length;h++){
-        var d_id = design[h].d_id;
-        var d_name = design[h].d_name;
-        designation+='<option value='+d_id+'>'+d_name+'</option>';
-      }
-      designation+='<option value="other_opt">Other</option>';
-      $("#contact_designation").html(designation); 
-      app.preloader.hide();
-    } 
-  });  
+  
+    $.ajax({ 
+      type:'POST', 
+      url:base_url+'liveappcontroller/add_person',
+      data:{'uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
+      success:function(dropres){
+        app.preloader.show();
+        var json_res = $.parseJSON(dropres);
+        var compny = json_res.cmpny;
+        var design = json_res.designation;
+        //console.log(design);
+        var comps='';
+        var designation='';
+        comps+='<option value="">---SELECT---</option>';
+        for(var k=0;k<compny.length;k++){
+          var csid = compny[k].cs_id;
+          var cs_invoice_name = compny[k].cs_invoice_name;
+          comps+='<option value='+csid+'>'+cs_invoice_name+'</option>';
+        }
+        $("#company_name").html(comps);      
+        designation+='<option value="">---SELECT---</option>';
+        for(var h=0;h<design.length;h++){
+          var d_id = design[h].d_id;
+          var d_name = design[h].d_name;
+          designation+='<option value='+d_id+'>'+d_name+'</option>';
+        }
+        designation+='<option value="other_opt">Other</option>';
+        $("#contact_designation").html(designation); 
+        app.preloader.hide();
+      } 
+    }); 
 });
 function getDesign(sel_design){
   if(sel_design=='other_opt'){
@@ -5096,16 +5356,29 @@ function getDesign(sel_design){
 }
 function add_person(){
   checkConnection();
-  app.preloader.show();
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   var add_person_from = $(".add_person").serialize();
+  var cmpny = $("#company_name").val();
+  var contact_person = $("#contact_person").val();
+  var contact_phone = $("#contact_phone").val();
+  var contact_designation = $("#contact_designation").val();
+  if(cmpny==''){
+    app.dialog.alert("Select Company");
+  }else if(contact_person==''){
+    app.dialog.alert("Select Contact Pserson");
+  }else if(contact_phone==''){
+    app.dialog.alert("Select Contact Phone");
+  }else if(contact_designation==''){
+    app.dialog.alert("Select Designation");
+  }else{
   //console.log(add_person_from); 
-  $.ajax({
+  $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/addPerson',
     data:add_person_from+"&session_uid="+session_uid,
     success:function(prsn_ins){
+      app.preloader.show();
       //console.log(prsn_ins); 
       app.dialog.alert("Person added successfully!");
       app.preloader.hide();
@@ -5131,7 +5404,8 @@ function add_person(){
       }
       mainView.router.navigate("/complain_list/");*/    
     }  
-   });      
+   });
+   }     
 }
 
 $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (e) {
@@ -5931,6 +6205,7 @@ function Traveltype(sel_ttype){
     $('.for_outstation_detDiv').addClass("display-none");
     $(".add_outstationdet").removeClass("display-block");
     $('.add_outstationdet').addClass("display-none");
+    $(".tmode option[value='Flight']").prop("disabled",true);
   }else{
     $('.for_local').removeClass("display-block");
     $('.for_local').addClass("display-none");
@@ -5940,6 +6215,7 @@ function Traveltype(sel_ttype){
     $('.for_outstation_detDiv').addClass("display-block");
     $('.add_outstationdet').removeClass("display-none");
     $('.add_outstationdet').addClass("display-block");
+    $(".tmode option[value='Flight']").prop("disabled",false);
     var exp_from_days='';
     exp_from_days='<option value=""></option>';
     for(var k=1;k<=31;k++){
@@ -6588,7 +6864,6 @@ function searchExpense(){
   });
 }
 // -------------------------------------- SEARCH PROVISIONAL REG ------------------------------- //
-
 function searchProreg(){
   checkConnection();
   chkStatusAndPwd();

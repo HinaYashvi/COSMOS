@@ -34,6 +34,21 @@
       <input type="hidden" name="hidd_cs_id" id="hidd_cs_id"-->
       <div id="wiz-1" class="wiz-1">
         <ul>
+
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">Unit - इकाई<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <select name="unit" id="unit_main" class="form-txtbox form-label p-2" onchange="show_unitdetail(this.value)"></select>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li id="unitdetDiv"></li>
+          <input type="hidden" name="unit_id" id="unit_id">
+
           <li>
             <div class="item-content item-input">
               <div class="item-inner">
@@ -100,6 +115,34 @@
               </div>
             </div>
           </li>
+
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">Visit Type - मुलाक़ात का प्रकार<sup class="redtxt fw-600 ml-1 font-12">*</sup></div>
+                <div class="item-input-wrap">
+                  <select name="visit_type" id="visit_type" class="form-txtbox form-label p-2">
+                    <option value="">---SELECT---</option>              
+                    <option value="Day Visit">Day Visit - दिन की मुलाक़ात</option>              
+                    <option value="Night Visit">Night Visit - रात की मुलाक़ात</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <div class="item-content item-input">
+              <div class="item-inner">
+                <div class="item-title item-label form-label">Actual Vacant - वास्तविक रिक्त स्थान</div>
+                <div class="item-input-wrap">
+                  <input type="text" name="fv_actual_vacant" class="form-txtbox p-2" id="fv_actual_vacant" >
+                </div>
+              </div>
+            </div>
+          </li>
+
+          
 
           <li>
             <div class="item-content item-input">

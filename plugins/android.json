@@ -19,6 +19,9 @@
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
     },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.phonegap.cosmosfo"
+    },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
     },
@@ -41,9 +44,6 @@
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.phonegap.cosmosfo"
-    },
-    "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.phonegap.cosmosfo"
     }
   },
