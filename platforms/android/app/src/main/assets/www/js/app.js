@@ -2088,7 +2088,7 @@ function int_statusBtn(cand_id,rowid){
     data:{'cand_id':cand_id},
     success:function(res){
         if(res==0){
-          st_int='<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';
+          st_int='<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i></button>';
           $("#btn_"+rowid).html(st_int);
         }else{
           //st_int='<button class="col button color-gray button-small button-outline font-8" onclick="viewStatus('+cand_id+')"><i class="fa fa-eye font-12 mr-5"></i> Status</button>';
