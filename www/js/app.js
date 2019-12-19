@@ -884,7 +884,7 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
           var l_id = json_list[i].l_id;    
           var nocon = cont_no[i][0];
           if(nocon!=''){
-            var cont = '<span class="fw-600"><i class="f7-icons font-15 fw-600">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
+            var cont = '<span class=""><i class="f7-icons font-15">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
           }else{
             var cont = '<span class="redtxt">No Contact Found.</span>';
           }
@@ -894,7 +894,7 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
             var cont = '<span class="text-muted">No Contact Found.</span>';
           }*/
           
-          dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-500 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
+          dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-600 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
           
           var verticles = json_vertlist[i];
           var tot = tot_vert[i];
@@ -903,8 +903,8 @@ $$(document).on('page:init', '.page[data-name="dpo_data"]', function (e) {
             //console.log( key + ": " + value );
             vert+=key+" "+"("+value+") "; 
           });   
-          dpolist+='<br/><i class="f7-icons font-12">layers_fill</i>&nbsp;<span class="font-12 fw-600">'+vert+'</span><br/></td>';
-          dpolist+='<td onclick="viewDPO('+cs_id+')" class="font-16"><i class="fa fa-eye font-15 "></i><!--span class="font-14 fw-600"> - ('+tot+')</span--></td></tr>';
+          dpolist+='<br/><i class="f7-icons font-12">layers_fill</i>&nbsp;<span class="font-12">'+vert+'</span><br/></td>';
+          dpolist+='<td onclick="viewDPO('+cs_id+')" class="font-16"><i class="fa fa-eye font-15 "></i><!--span class="font-14"> - ('+tot+')</span--></td></tr>';
           //$("#dpo_list").html(dpolist); 
           j++;
         }
@@ -2052,6 +2052,7 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
       if(json_list.length==0){
          prolist+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
       }else{
+        //$("#provisional_list").html(''); 
         for(var i=0;i<json_list.length;i++){
           var cand_id = json_list[i].cand_id; 
           var cand_fname = json_list[i].cand_fname;
@@ -2061,7 +2062,7 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
           if(cand_mobile!=''){
             var cont = '<span class=""><i class="f7-icons font-14">phone_fill</i>&nbsp;:&nbsp'+cand_mobile+'</span>';
           }else{
-            var cont = '<span class="">No Contact Found.</span>';
+            var cont = '<span class="redtxt">No Contact Found.</span>';
           }
           if(cand_email!=''){
             var email = '<br/><span class=" "><i class="f7-icons font-14">envelope_fill</i>&nbsp;:&nbsp<span class="text-lowercase">'+cand_email+'</span></span><br/>';
@@ -2069,13 +2070,12 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
             var email = '';
           }
           //prolist+='<tr class="tr-border" id="pro_tr'+i+'"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+i+'"></td></tr>';
-
+          //int_statusBtn(cand_id,i);
           prolist+='<tr class="tr-border" id="pro_tr'+i+'"><td class="text-uppercase fw-600 font-12"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+''+email+'<div id="btn_'+i+'"></div></td></tr>';
-
           int_statusBtn(cand_id,i);
-          //$("#provisional_list").html(prolist); 
           j++;
         }
+
       }
       $("#provisional_list").html(prolist); 
       app.preloader.hide();
@@ -2083,7 +2083,7 @@ $$(document).on('page:init', '.page[data-name="pro_registrations"]', function (e
   });  
   
 });
-function int_statusBtn(cand_id,rowid){
+function int_statusBtn(cand_id,rowid){  
   app.preloader.show();
   $.ajax({ 
     type:'POST', 
@@ -2093,10 +2093,10 @@ function int_statusBtn(cand_id,rowid){
         if(res==0){
           //st_int='<button class="col button btn-goutline button-small button-outline font-8 mb-2 mt-5 w-auto" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i> Interview</button>';
           st_int='<button class="col button button-small button-outline font-8 mb-2 mt-5 w-auto form-btn text-white" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i> Interview</button>';          
-          $("#btn_"+rowid).html(st_int);
+          $("#btn_"+rowid).html(st_int);          
         }else{
           //st_int='<button class="col button color-gray button-small button-outline font-8" onclick="viewStatus('+cand_id+')"><i class="fa fa-eye font-12 mr-5"></i> Status</button>';
-          $("#pro_tr"+rowid).remove();
+          $("#pro_tr"+rowid).remove();          
         }
         
         app.preloader.hide();
@@ -2423,7 +2423,7 @@ $$(document).on('page:init', '.page[data-name="newbusiness_dev"]', function (e) 
           var imp_triangle = '<div id="triangle-topleft-comp"><span class="impfont fw-700 r-1">Comp</span></div>';
         }
         
-        list+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#" onclick="showBusinessdet('+bd_id+')">'+bd_company+'</a><br/>'+ind+'</td><td onclick="editBusinessData('+bd_id+','+"'"+bd_type+"'"+')"><i class="fa fa-pencil-square-o font-16 text-muted edit-icon"></i>'+imp_triangle+'</td><!--td><i class="fa fa-eye font-16 text-muted orange-txt"></i></td--></tr>';
+        list+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#" onclick="showBusinessdet('+bd_id+')"><span class="fw-600">'+bd_company+'</span></a><br/>'+ind+'</td><td onclick="editBusinessData('+bd_id+','+"'"+bd_type+"'"+')"><i class="fa fa-pencil-square-o font-16 text-muted edit-icon"></i>'+imp_triangle+'</td><!--td><i class="fa fa-eye font-16 text-muted orange-txt"></i></td--></tr>';
         
         $("#business_list").html(list); 
         app.preloader.hide();
@@ -2736,7 +2736,7 @@ $$(document).on('page:init', '.page[data-name="feedback"]', function (e) {
           var cs_invoice_name = feed_list[i].cs_invoice_name;
           var fb_date = feed_list[i].fb_date;
           var fb_contact_person = feed_list[i].fb_contact_person;
-          feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="fw-500"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
+          feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-600" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="fw-500"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
           //$("#feedback_list").html(feedDiv);
         }
       }
@@ -2955,7 +2955,7 @@ $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) {
         }else{
           var cont = '<span class="text-muted">No Contact Found.</span>';
         }*/
-        fieldDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="font-12 fw-600">'+cont+'</span><td id="watch_'+i+'"></td></tr>';
+        fieldDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-600"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="font-12 fw-600">'+cont+'</span><td id="watch_'+i+'"></td></tr>';
         viewDetails(cs_id,l_id,i,cs_invoice_name);
         $("#fieldvisit_list").html(fieldDiv); 
       }
@@ -3018,13 +3018,13 @@ function viewFieldVisit(cs_id,comp_name){
           }else{
             var cls = ''; 
           }           
-          reslist+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="grey-txt fw-600">'+cn_verti+' <span class="text-blue">('+csd_head_cnt+')</span></span><br/><i class="f7-icons font-10 text-muted">calendar_fill</i> <span class="grey-txt font-10">'+csd_create_date+'</span></div><div class="item-cell orange-txt text-center font-8 fw-500">';
+          reslist+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell font-10 fw-600"><span class="fw-600">'+cn_verti+' <span class="text-blue">('+csd_head_cnt+')</span></span><br/><i class="f7-icons font-10 grey-txt">calendar_fill</i> <span class="grey-txt font-10">'+csd_create_date+'</span></div><div class="item-cell orange-txt text-center font-8 fw-500">';
           var position = [];           
           var split_pos = csd_head_position.split("|");
           for(var k=0;k<split_pos.length;k++){
             var pers_nw = split_pos[k];                
             position = pers_nw + "<br/>";            
-            reslist+=position;
+            reslist+='<span class="fw-600">'+position+'</span>';
           }
           reslist+='</div><div class="item-cell"><button class="col button button-small btn-goutline text-uppercase font-9 mt-5 float-left" onclick="Add_FieldVisit('+csd_id+','+"'"+comp_name+"'"+')"><i class="f7-icons font-12">plus</i></button><span id="view_'+i+'"></span></div></div></div></a></li>';
             showViewIcon(csd_id,comp_name,i);
@@ -3168,42 +3168,66 @@ function openFieldVisit(csd_id,comp_name){
           var fv_patrollling = result[i].fv_patrollling;
           var fv_newjoinee = result[i].fv_newjoinee;
  
-        if(dp_day_shift!=''){
-          var day_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Day Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_day_shift+'</div></div></div></li></ul></div></li>';
-        }else{
-          var day_shift = '';
-        }
-        if(dp_night_shift!=''){
-          var night_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Night Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_night_shift+'</div></div></div></li></ul></div></li>';
-        }else{
-          var night_shift = '';
-        }
-        if(dp_shiftTime!=''){
-          var shift_1 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 1</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift+'</div></div></div></li></ul></div></li>';
-        }else{
-          var shift_1 = '';
-        }
+          if(dp_day_shift!='' && dp_day_shift!=null){
+            var day_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Day Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_day_shift+'</div></div>';
+          }else{
+            var day_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Day Shift</div><div class="item-cell text-grey font-12 ml-0">---</div></div>';
+          }
+          if(dp_night_shift!='' && dp_night_shift!=null){
+            var night_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Night Shift</div><div class="item-cell text-grey font-12 ml-0">'+dp_night_shift+'</div></div>';
+          }else{
+            var night_shift = '<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Night Shift</div><div class="item-cell text-grey font-12 ml-0">---</div></div>';
+          }
+          if(dp_shiftTime!='' && dp_shiftTime!=null){
+            var shift_1 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 1</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift+'</div></div>';
+          }else{
+            var shift_1 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 1</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">---</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">---</div></div>';
+          }
 
-        if(dp_shiftTime_2!=''){
-          var shift_2 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 2</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_2+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_2+'</div></div></div></li></ul></div></li>';
-        }else{
-          var shift_2 = '';
-        }
+          if(dp_shiftTime_2!='' && dp_shiftTime_2!=null){
+            var shift_2 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 2</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_2+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_2+'</div></div>';
+          }else{
+            var shift_2 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 2</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">---</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">---</div></div>';
+          }
 
-        if(dp_shiftTime_3!=''){
-          var shift_3 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 3</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_3+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_3+'</div></div></div></li></ul></div></li>';
-        }else{
-          var shift_3 = '';
-        }
+          if(dp_shiftTime_3!='' && dp_shiftTime_3!=null){
+            var shift_3 = '<li class="item-link item-content tr-border text-blue fw-500">Shift 3</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_3+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_3+'</div></div>';
+          }else{
+            var shift_3 = '';
+          }
 
-        if(dp_shiftTime_4!=''){
-          var shift_4 = '<li class="item-link item-content tr-border text-blue fw-500">General</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_4+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_4+'</div></div></div></li></ul></div></li>';
-        }else{
-          var shift_4 = '';
-        }
+          if(dp_shiftTime_4!='' && dp_shiftTime_4!=null){
+            var shift_4 = '<li class="item-link item-content tr-border text-blue fw-500">General</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">'+dp_shiftTime_4+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">'+dp_shift_4+'</div></div>';
+          }else{
+            var shift_4 = '<li class="item-link item-content tr-border text-blue fw-500">General</li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Time</div><div class="item-cell text-grey font-12 ml-0">---</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person</div><div class="item-cell text-grey font-12 ml-0">---</div></div>';
+          }
+          
+          if(dp_unit_refrance!='' && dp_unit_refrance!=null){
+            dp_unit_refrance='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Reference</div><div class="item-cell text-grey font-12 ml-0">'+dp_unit_refrance+'</div></div></div></li>';
+          }else{
+            dp_unit_refrance='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Reference</div><div class="item-cell text-grey font-12 ml-0">---</div></div></div></li>';
+          }
+
+          if(dp_unit_name!='' && dp_unit_name!=null){
+            dp_unit_name='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Name</div><div class="item-cell text-grey font-14">'+dp_unit_name+'</div></div></div></li>';
+          }else{
+            dp_unit_name='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Name</div><div class="item-cell text-grey font-14">---</div></div></div></li>';
+          }
+
+          if(dp_headcount!='' && dp_headcount!=null){
+            dp_headcount='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Headcount</div><div class="item-cell text-grey font-12 ml-0">'+dp_headcount+'</div></div></div></li>';
+          }else{
+            dp_headcount='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Headcount</div><div class="item-cell text-grey font-12 ml-0">---</div></div></div></li>';
+          }
+
+          if(dp_position!='' && dp_position!=null){
+            dp_position='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation</div><div class="item-cell text-grey font-12 ml-0">'+dp_position+'</div></div></div></li>';
+          }else{
+            dp_position='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation</div><div class="item-cell text-grey font-12 ml-0">---</div></div></div></li>';
+          }
 
           //<div class="block">Headcount<span class="ml-1 redtxt fw-500 headcnts">(3)</span></div>//
-          visitdetails+='<div class="light-orange mb-5 divID" id="'+i+'"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="col-66"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">Visit - '+len+'<br/><span class="font-10 redtxt fw-500">('+createby+')</span></div></div></div><div class="col-33"><span class="float-right mr-10 grey-txt font-12 fw-500">'+fv_dateTime+'</span></div></a><div class="accordion-item-content nobgclr elevation-10" style="height: auto;"><ul class="block p-2"><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Name</div><div class="item-cell text-grey font-14">'+dp_unit_name+'</div></div></div></li>  <div><div class="" ><li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content elevation-1" style="height: auto;background-color:#cdefff;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 text-blue fw-500 text-uppercase">Unit details</div></div></div></a><div class="accordion-item-content nobgclr elevation-5 "><ul><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Unit Reference</div><div class="item-cell text-grey font-12 ml-0">'+dp_unit_refrance+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Headcount</div><div class="item-cell text-grey font-12 ml-0">'+dp_headcount+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation</div><div class="item-cell text-grey font-12 ml-0">'+dp_position+'</div></div></div></li>'+day_shift+night_shift+shift_1+shift_2+shift_3+shift_4+'</ul> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Name</div><div class="item-cell text-grey font-14">'+fv_person+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Visit Purpose</div><div class="item-cell text-grey font-14">';
+          visitdetails+='<div class="light-orange mb-5 divID" id="'+i+'"><div class="accordion-item accordion-item-opened"><a href="#" class="item-content item-link"><div class="col-66"><div class="item-inner"><div class="item-title grey-txt font-12 fw-500">Visit - '+len+'<br/><span class="font-10 redtxt fw-500">('+createby+')</span></div></div></div><div class="col-33"><span class="float-right mr-10 grey-txt font-12 fw-500">'+fv_dateTime+'</span></div></a><div class="accordion-item-content nobgclr elevation-10" style="height: auto;"><ul class="block p-2">'+dp_unit_name+'  <div><div class="" ><li class="accordion-item light-orange accordion-item-opened mb-5"><div class="accordion-item-content elevation-1" style="height: auto;background-color:#cdefff;"><a class="item-content item-link grey-txt fw-500" href="#"><div class="item-inner"><div class="item-title font-12 col-50 text-blue fw-500 text-uppercase">Unit details</div></div></div></a><div class="accordion-item-content nobgclr elevation-5 "><ul>'+dp_unit_refrance+dp_headcount+dp_position+day_shift+night_shift+shift_1+shift_2+shift_3+shift_4+'</ul> <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Name</div><div class="item-cell text-grey font-14">'+fv_person+'</div></div></div></li>  <li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Person Visit Purpose</div><div class="item-cell text-grey font-14">';
           len--;
 
           if(vp!='10'){ 
@@ -4048,7 +4072,7 @@ $$(document).on('page:init', '.page[data-name="interview_list"]', function (e) {
           }else{
             var cls = '';
           } 
-          intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cnt_'+k+'"></span></td></tr>';        
+          intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-600"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="black-badge fw-600" id="cnt_'+k+'"></span></td></tr>';        
           getintCounts(cs_id,k);       
           //$("#intervw_info").html(intrvw_info);
                  
@@ -4060,12 +4084,15 @@ $$(document).on('page:init', '.page[data-name="interview_list"]', function (e) {
   });
 }); 
 function getintCounts(cs_id,rowid){
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
   app.preloader.hide(); 
   var int_cnt='';
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/interviewStatus',
-    data:{'cs_id':cs_id}, 
+    data:{'cs_id':cs_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
     success:function(intervw_status){
       var json_status = $.parseJSON(intervw_status);
       //console.log(json_status);
@@ -4083,6 +4110,9 @@ function getintCounts(cs_id,rowid){
   });
 }
 function getInterview(cs_id,comp_name){
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
   checkConnection();
   chkStatusAndPwd();
   mainView.router.navigate("/comp_interviews/");
@@ -4090,9 +4120,9 @@ function getInterview(cs_id,comp_name){
   var int_cnt='';
   var list = '';
   $.ajax({ 
-    type:'POST',   
+    type:'POST',    
     url:base_url+'liveappcontroller/interviewStatus',
-    data:{'cs_id':cs_id}, 
+    data:{'cs_id':cs_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
     success:function(intervw_status){
       var json_status = $.parseJSON(intervw_status);
       var status_list = json_status.int_status;
@@ -4147,7 +4177,7 @@ function getInterview(cs_id,comp_name){
               var cls = ''; 
             }
             //list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">Int. Dt: '+cn_intdt_tm+'<br><span class="badge color-blue font-10">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button color-orange button-outline text-uppercase font-8 popup-open" data-popup=".popup-status" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
-            list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell orange-txt font-10 fw-500"><span class="text-muted-light"></span>'+cn_nm+ positn+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10">'+cn_intdt_tm+'<br><span class="badge color-blue font-9">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-8" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
+            list+='<li class='+cls+'><a href="#" class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell font-10 fw-600"><span class="text-muted-light"></span>'+cn_nm+ positn+'<br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></div><div class="item-cell orange-txt text-center"><span class="font-10 fw-500">'+cn_intdt_tm+'<br><span class="badge color-blue font-9">'+cn_int_status+'</span></span></div><div class="item-cell"><button class="col button button btn-goutline button-outline text-uppercase font-8" onclick="getStatus('+cs_id+','+cand_cmp_id+','+"'"+comp_name+"'"+')">Status Update</button></div></div></div></a></li>';
             //onclick="openStatusAlert('+cs_id+')"
             
           }         
@@ -4279,7 +4309,7 @@ $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) {
           }else{
             var cls = '';
           } 
-          selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntcandi_'+k+'"></span></td></tr>';    
+          selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-600"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="black-badge fw-600" id="cntcandi_'+k+'"></span></td></tr>';    
           getCandiintCounts(cs_id,k);       
           //$("#selected_info").html(selcan_info);
           //app.preloader.hide();         
@@ -4287,16 +4317,19 @@ $$(document).on('page:init', '.page[data-name="selected_candi"]', function (e) {
       }
       $("#selected_info").html(selcan_info);
       app.preloader.hide();      
-    }
+    } 
   });
 }); 
 function getCandiintCounts(cs_id,rowid){
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
   app.preloader.hide(); 
   var int_cnt='';
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/candselStatus',
-    data:{'cs_id':cs_id}, 
+    data:{'cs_id':cs_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
     success:function(sel_status){
       var json_cstatus = $.parseJSON(sel_status);
       //console.log(json_status);
@@ -4315,6 +4348,9 @@ function getCandiintCounts(cs_id,rowid){
 function getCandisel(cs_id,comp_name){
   checkConnection();
   chkStatusAndPwd();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department"); 
   mainView.router.navigate("/sel_candidates/");
   app.preloader.show(); 
   var int_cnt='';
@@ -4352,7 +4388,7 @@ function getCandisel(cs_id,comp_name){
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/candselStatus',
-    data:{'cs_id':cs_id}, 
+    data:{'cs_id':cs_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
     success:function(clist_status){
       $("#hidd_cs_id").val(cs_id);
       $("#hidd_compnm").val(comp_name);
@@ -4392,7 +4428,7 @@ function getCandisel(cs_id,comp_name){
             }
           //  sel_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></td><td class="text-center"><button class="col button button color-orange button-outline text-uppercase font-8 popup-open" data-popup=".popup-joindt" onclick="getdatePopup('+cand_cmp_id+')">Enter Date</button></td></tr>';    
 
-          sel_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+ positn+'</a><br/><span class="grey-txt font-10">Reg No: '+reg_num+'</span></td><td class="text-center"><button class="col button button btn-goutline button-outline text-uppercase font-8 popup-open" data-popup=".popup-joindt" onclick="getdatePopup('+cand_cmp_id+')">Enter Date</button></td></tr>';    
+          sel_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-600"><a class="" href="#">'+cn_nm+ positn+'</a><br/><span class="grey-txt font-10">Reg No: '+reg_num+'</span></td><td class="text-center"><button class="col button button btn-goutline button-outline text-uppercase font-8 popup-open" data-popup=".popup-joindt" onclick="getdatePopup('+cand_cmp_id+')">Enter Date</button></td></tr>';    
           }         
         }      
       sel_dets+='</ul></div>';
@@ -4453,7 +4489,7 @@ $$(document).on('page:init', '.page[data-name="employee_list"]', function (e) {
           }else{
             var cls = '';
           } 
-          emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntemp_'+k+'"></span></td></tr>';              
+          emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-600"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="black-badge fw-600" id="cntemp_'+k+'"></span></td></tr>';              
           getempcnts(cs_id,k);
           //$("#emp_info").html(emp_info);
           //app.preloader.hide();         
@@ -4466,11 +4502,14 @@ $$(document).on('page:init', '.page[data-name="employee_list"]', function (e) {
 }); 
 function getempcnts(cs_id,rowid){
   app.preloader.hide(); 
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department");
   var int_cnt='';
   $.ajax({ 
     type:'POST',  
-    url:base_url+'liveappcontroller/totEmps',
-    data:{'cs_id':cs_id}, 
+    url:base_url+'liveappcontroller/totEmps', 
+    data:{'cs_id':cs_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
     success:function(emps){
       var json_emps = $.parseJSON(emps);
       //console.log(json_status);
@@ -4490,13 +4529,16 @@ function getEmps(cs_id,comp_name){
   checkConnection();
   chkStatusAndPwd();
   mainView.router.navigate("/employees/");
-  app.preloader.show(); 
+  app.preloader.show();
+  var session_uid = window.localStorage.getItem("session_uid");
+  var session_ulevel = window.localStorage.getItem("session_ulevel");
+  var session_department = window.localStorage.getItem("session_department"); 
   var int_cnt='';
   var emp_dets = '';
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/totEmps',
-    data:{'cs_id':cs_id}, 
+    data:{'cs_id':cs_id,'session_uid':session_uid,'session_ulevel':session_ulevel,'session_department':session_department}, 
     success:function(empslist){
       $("#hidd_csid").val(cs_id);
       $("#hidd_comp").val(comp_name);
@@ -4543,7 +4585,7 @@ function getEmps(cs_id,comp_name){
               var cls = ''; 
             }
            // emp_dets+='<tr class="tr-border"><td class="text-capitalize font-10 fw-500"><a class="" href="#">'+cn_nm+'</a><br/><span class="grey-txt font-10">DOB: '+cn_dob+'</span><br/><i class="f7-icons font-10 text-muted">phone_fill</i> <span class="grey-txt font-10">'+cn_mob+'</span></td><td class="text-center grey-txt font-12 font-500">'+int_joineedate+'</td></tr>';
-            emp_dets+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+cn_nm+ positn+'</a><br/><span class="grey-txt font-10">Reg No: '+reg_num+'</span><br/></td><td class="text-center grey-txt font-12 font-500">'+int_joineedate+'</td></tr>';    
+            emp_dets+='<tr class="tr-border"><td class="text-capitalize font-12 fw-600"><a class="" href="#">'+cn_nm+ positn+'</a><br/><span class="grey-txt font-10">Reg No: '+reg_num+'</span><br/></td><td class="text-center grey-txt font-12 fw-600">'+int_joineedate+'</td></tr>';    
           }         
         }      
       emp_dets+='</ul></div>';
@@ -4789,7 +4831,7 @@ $$(document).on('page:init', '.page[data-name="complain_list"]', function (e) {
         var cm_user = comp_list[k].cm_user;
         var cm_create_on = comp_list[k].cm_create_on;  
 
-        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+','+"'"+cm_create_on+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a><br/><span class="font-11"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>';  
+        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+','+"'"+cm_create_on+"'"+')"><td class="text-uppercase font-12 fw-600"><a class="" href="#">'+comp_name+'</a><br/><span class="font-11"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>';  
 
         /*comp_info+='<div class="list"><ul>';
         if(k%2==0){
@@ -5546,7 +5588,7 @@ $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (
           }else{
             add_from='';  
           } 
-          rep_tr+='<tr><td class="text-uppercase fw-500 font-10"><a href="#">'+csd_invoice_name+'</a><br/><i class="f7-icons font-10 mr-5">calendar_fill</i><span class="font-12">'+fv_dateTime+'</span></td>'+add_from+'</tr>';              
+          rep_tr+='<tr><td class="text-uppercase fw-600 font-10"><a href="#">'+csd_invoice_name+'</a><br/><i class="f7-icons font-10 mr-5">calendar_fill</i><span class="font-12">'+fv_dateTime+'</span></td>'+add_from+'</tr>';              
         } 
         $("#tot_data").html(tot_data); 
         $("#report_list").html(rep_tr); 
@@ -5611,12 +5653,12 @@ function inbetween_fieldvisit(){
           if(session_ulevel == 1 || session_ulevel == 2 || session_ulevel == 3){
             $(".add_from").removeClass("display-none");
             $(".add_from").addClass("display-block");
-            add_from+='<td class="font-10">'+created_name+'<strong>['+fv_from+']</strong></td>';
+            add_from+='<td class="font-10">'+created_name+' <strong>['+fv_from+']</strong></td>';
           }else{
             add_from='';  
           } 
           
-          rep_tr+='<tr><td class="text-uppercase fw-500 font-10"><a href="#">'+csd_invoice_name+'</a><br/><i class="f7-icons font-10 mr-5">calendar_fill</i><span class="font-12">'+fv_dateTime+'</span></td>'+add_from+'</tr>';              
+          rep_tr+='<tr><td class="text-uppercase fw-600 font-10"><a href="#">'+csd_invoice_name+'</a><br/><i class="f7-icons font-10 mr-5">calendar_fill</i><span class="font-12">'+fv_dateTime+'</span></td>'+add_from+'</tr>';                      
         } 
         $("#tot_data").html(tot_data);  
         $("#report_list").html(rep_tr); 
@@ -5799,13 +5841,13 @@ function interviewDetails(cand_id){
           }else{ 
             var stus='';      
           }
-          if(calledBY!=undefined && calledBY!=null){   
-            var caldby='<br/><span class="text-uppercase font-10 fw-500 mt-5">created by : &nbsp;</span><span class="badge color-blue font-9 fw-600 mb-1">'+calledBY+'</span>';  
+          if(calledBY!=undefined && calledBY!=null){    
+            var caldby='<br/><span class="text-uppercase font-10 fw-500 mt-5">created by : &nbsp;</span><span class="black-badge font-9 mb-1 fw-600">'+calledBY+'</span>';  
           }else{ 
             var caldby='';          
           }
 
-          tabledata+='<tr><td class="text-uppercase font-10 fw-500">'+j+'</td><td class="text-uppercase font-10 fw-500">'+company_name+desig+stus+caldby+'</td></tr>';    
+          tabledata+='<tr><td class="text-uppercase font-10 fw-500">'+j+'</td><td class="text-uppercase font-11"><span class="fw-600 text-blue">'+company_name+'</span>'+desig+stus+caldby+'</td></tr>';    
           $("#intdetails").html(tabledata);                  
           app.preloader.hide();
           j++;
@@ -6839,7 +6881,7 @@ function searchExpense(){
             }   
           }  
           if(ex_km!=''){                   
-            var km='<br/><span class="text-muted">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';    
+            var km='<br/><span class="">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';    
           }else{            
             var km='';                 
           }     
@@ -6859,7 +6901,8 @@ function searchExpense(){
           }else if(ex_travel_mode=='Flight'){
             var t_mode = '<img src="img/icons/air-freight (1).svg" class="wh-16"/>';    
           }
-          exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 text-muted font-11">'+ex_date_from+'</span><br/><span class="font-11">'+ex_oth+'</span>'+chk+'</td></tr>';        
+          exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11">'+ex_date_from+'</span><br/><span class="font-11 fw-600">'+ex_oth+'</span>'+chk+'</td></tr>';  
+
           $("#exp_list").html(exp_data);     
           app.preloader.hide();                     
         }
@@ -6875,6 +6918,7 @@ function searchProreg(){
   var session_uid = window.localStorage.getItem("session_uid");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
   var search_pro = $("#search_pro").val();
+  
   $.ajax({
     type:'POST', 
     url:base_url+'liveappcontroller/searchregPRO',
@@ -6885,37 +6929,43 @@ function searchProreg(){
       //console.log(list_search.length); 
       var st_int='';
       var j=1; 
-      var search_data='';
+      //var search_data='';
       $("#searchdata").removeClass("display-none");
       $("#searchdata").addClass("display-block");
       //alert("****"+list_search.length); 
       if(list_search.length == 0){
+        var search_data='';
         search_data+='<tr class=""><td class="text-uppercase fw-600 text-grey font-14">No Data Available.</td></tr>';
         $(".searchcnts").html("Total 0 result(s) found.");
       }else{
         var i=1;
+        $("#provisional_list").html('');
         for(var m=0;m<list_search.length;m++){
+          var search_data='';
           var cand_id = list_search[m].cand_id; 
           var cand_fname = list_search[m].cand_fname;
           var cand_mobile = list_search[m].cand_mobile;
           var cand_email = list_search[m].cand_email;  
           var created_by = list_search[m].createname;
           if(cand_mobile!=''){
-            var cont = '<span class="text-muted"><i class="f7-icons font-14">phone_fill</i>&nbsp;:&nbsp'+cand_mobile+'</span>';
+            var cont = '<span class=""><i class="f7-icons font-14">phone_fill</i>&nbsp;:&nbsp'+cand_mobile+'</span>';
           }else{
-            var cont = '<span class="text-muted">No Contact Found.</span>';
+            var cont = '<span class="redtxt">No Contact Found.</span>';
           }
           if(cand_email!=''){
-            var email = '<span class="text-muted"><i class="f7-icons font-14">envelope_fill</i>&nbsp;:&nbsp'+cand_email+'</span>';
+            var email = '<span class=""><i class="f7-icons font-14">envelope_fill</i>&nbsp;:&nbsp<span class="text-lowercase">'+cand_email+'</span></span>';
           }else{
             var email = '';
           }
-          search_data+='<tr class="tr-border" id="pro_tr'+m+'"><td class="text-uppercase fw-600 font-10"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/><span class="text-lowercase">'+email+'</span></td><td id="btn_'+m+'"></td></tr>';
-          int_statusBtn(cand_id,m);
+          
+          search_data+='<tr class="tr-border" id="pro_tr'+m+'"><td class="text-uppercase fw-600 font-12"><a class="" href="#">'+cand_fname+'</a><br/>'+cont+'<br/>'+email+'<div id="btn_'+m+'"></div></td></tr>';          
           $(".searchcnts").html("Total "+list_search.length+" result(s) found.");
+          $("#provisional_list").append(search_data);
+          int_statusBtn(cand_id,m);
         }
+
       }
-      $("#provisional_list").html(search_data); 
+      //$("#provisional_list").append(search_data); 
       app.preloader.hide();
     }
   }); 
@@ -6952,11 +7002,11 @@ function searchDPO(){
           var l_id = json_list[i].l_id;    
           var nocon = cont_no[i][0];
           if(nocon!=''){
-            var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
+            var cont = '<span class="fw-600"><i class="f7-icons font-15 fw-600">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
           }else{
-            var cont = '<span class="text-muted">No Contact Found.</span>';
+            var cont = '<span class="redtxt">No Contact Found.</span>';
           }
-          dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-500 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
+          dpolist+='<tr class="tr-border"><!--td>'+j+'</td--><td class="text-uppercase fw-600 font-12"><a class="" href="#" onclick="viewDPO('+cs_id+')">'+company+'</a><br/>'+cont;
           
           var verticles = json_vertlist[i];
           var tot = tot_vert[i];
@@ -6965,8 +7015,8 @@ function searchDPO(){
             //console.log( key + ": " + value );
             vert+=key+" "+"("+value+") "; 
           });   
-          dpolist+='<br/><i class="f7-icons font-10 text-muted fw-600">layers_fill</i>&nbsp;<span class="text-muted font-10 fw-600">'+vert+'</span><br/></td>';
-          dpolist+='<td onclick="viewDPO('+cs_id+')" class="text-muted font-16"><i class="fa fa-eye font-14 text-muted"></i><span class="font-10 fw-600"> - ('+tot+')</span></td></tr>';
+          dpolist+='<br/><i class="f7-icons font-12">layers_fill</i>&nbsp;<span class="font-12 fw-600">'+vert+'</span><br/></td>';
+          dpolist+='<td onclick="viewDPO('+cs_id+')" class="font-16"><i class="fa fa-eye font-15"></i><span class="font-14 fw-600"> - ('+tot+')</span></td></tr>';
           //$("#dpo_list").html(dpolist); 
           j++;
         }
@@ -7007,7 +7057,7 @@ function searchintPlace(){
           }else{
             var cls = '';
           } 
-          intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cnt_'+k+'"></span></td></tr>';        
+          intrvw_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="getInterview('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-600"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="black-badge fw-600" id="cnt_'+k+'"></span></td></tr>';        
           getintCounts(cs_id,k);       
           //$("#intervw_info").html(intrvw_info);
                  
@@ -7048,7 +7098,7 @@ function searchselcandi(){
           }else{
             var cls = '';
           } 
-          selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntcandi_'+k+'"></span></td></tr>';    
+          selcan_info+='<tr class="tr-border" id="candi_'+k+'" onclick="getCandisel('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-capitalize font-12 fw-600"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="black-badge fw-600" id="cntcandi_'+k+'"></span></td></tr>';    
           getCandiintCounts(cs_id,k);       
           //$("#selected_info").html(selcan_info);
           //app.preloader.hide();         
@@ -7089,7 +7139,7 @@ function searchEmp(){
           }else{
             var cls = '';
           } 
-          emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="badge" id="cntemp_'+k+'"></span></td></tr>';              
+          emp_info+='<tr class="tr-border" onclick="getEmps('+cs_id+','+"'"+comp_name+"'"+')"><td class="text-uppercase font-12 fw-600"><a class="" href="#">'+comp_name+'</a></td><td class="text-center"><span class="black-badge fw-600" id="cntemp_'+k+'"></span></td></tr>';              
           getempcnts(cs_id,k);
           //$("#emp_info").html(emp_info);
           //app.preloader.hide();         
@@ -7136,9 +7186,9 @@ function searchDailyAct(){
           var nocon = cont_no[i][0];  
           //console.log("CONTACT "+nocon);          
           if(nocon!=''){
-            var cont= '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
+            var cont= '<span class=""><i class="f7-icons font-15 fw-600">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
           }else{ 
-            var cont= '<span class="text-muted">No Contact Found.</span>';
+            var cont= '<span class="redtxt">No Contact Found.</span>';
           }  
 
           /*if(contact!=''){
@@ -7146,7 +7196,7 @@ function searchDailyAct(){
           }else{
             var cont = '<span class="text-muted">No Contact Found.</span>';
           }*/
-          fieldDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+cont+'</span><td id="watch_'+i+'"></td></tr>';
+          fieldDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-600"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="font-12 fw-600">'+cont+'</span><td id="watch_'+i+'"></td></tr>';
           viewDetails(cs_id,l_id,i,cs_invoice_name);
           $("#fieldvisit_list").html(fieldDiv); 
           j++;
@@ -7183,7 +7233,8 @@ function searchCmpln(){
         var createname = comp_list[k].createname;
         var cm_user = comp_list[k].cm_user;
         var cm_create_on = comp_list[k].cm_create_on;
-        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+','+"'"+cm_create_on+"'"+')"><td class="text-uppercase font-12 fw-500"><a class="" href="#">'+comp_name+'</a><br/><span class="text-grey font-10"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>';             
+        comp_info+='<tr class="tr-border" id="comp_tr_'+k+'" onclick="showComplain('+cm_id+','+"'"+comp_name+"'"+','+cm_company+','+"'"+cm_contact_person+"'"+','+"'"+createname+"'"+','+"'"+cm_user+"'"+','+"'"+cm_create_on+"'"+')"><td class="text-uppercase font-12 fw-600"><a class="" href="#">'+comp_name+'</a><br/><span class="font-11"><i class="fa fa-calendar mr-5"></i>'+cm_create_on+'</span></td><td class="text-center" ><i class="fa fa-eye font-14 text-grey"></i></td></tr>';        
+
         $("#complain_list").html(comp_info);
         app.preloader.hide();         
       }
@@ -7215,7 +7266,7 @@ function searchFB(){
           var cs_invoice_name = feed_list[i].cs_invoice_name;
           var fb_date = feed_list[i].fb_date;
           var fb_contact_person = feed_list[i].fb_contact_person;
-          feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="text-muted font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="text-muted"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="text-muted font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16 text-muted"></i--></td></tr>';
+          feedDiv+='<tr class="tr-border"><td class="text-capitalize font-12 fw-600" onclick="showFeedback('+fb_id+')"><a class="" href="#">'+cs_invoice_name+'</a><br/><span class="font-12 fw-600">'+fb_contact_person+'</span></span></td><td><span class="fw-500"><!--i class="f7-icons font-14 mr-5">calendar_fill</i--><span class="font-12">'+fb_date+'</span><!--i class="fa fa-eye font-16"></i--></td></tr>';
           //$("#feedback_list").html(feedDiv);
         }
       }
@@ -7248,7 +7299,7 @@ function searchNewBC(){
         var bd_type = json_buslist[i].bd_type;
         //console.log("***"+bd_type);
         if(bd_industry!=''){
-          var ind='<span class="text-muted font-12"><span class="fw-500">Industry:</span> '+bd_industry+'</span>';
+          var ind='<span class="font-12"><span class="fw-500">Industry:</span> '+bd_industry+'</span>';
         }else{
           var ind='';
         }
@@ -7259,7 +7310,7 @@ function searchNewBC(){
           var imp_triangle = '<div id="triangle-topleft-comp"><span class="impfont fw-700 r-1">Comp</span></div>';
         }
         
-        list+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#" onclick="showBusinessdet('+bd_id+')">'+bd_company+'</a><br/>'+ind+'</td><td onclick="editBusinessData('+bd_id+','+"'"+bd_type+"'"+')"><i class="fa fa-pencil-square-o font-16 text-muted edit-icon"></i>'+imp_triangle+'</td><!--td><i class="fa fa-eye font-16 text-muted orange-txt"></i></td--></tr>';
+        list+='<tr class="tr-border"><td class="text-capitalize font-12 fw-500"><a class="" href="#" onclick="showBusinessdet('+bd_id+')"><span class="fw-600">'+bd_company+'</span></a><br/>'+ind+'</td><td onclick="editBusinessData('+bd_id+','+"'"+bd_type+"'"+')"><i class="fa fa-pencil-square-o font-16 text-muted edit-icon"></i>'+imp_triangle+'</td><!--td><i class="fa fa-eye font-16 text-muted orange-txt"></i></td--></tr>';
         
         $("#business_list").html(list); 
         app.preloader.hide();

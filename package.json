@@ -4,8 +4,8 @@
   "displayName": "COSMOS-FO",
   "cordova": {
     "platforms": [
-      "browser",
-      "android"
+      "android",
+      "browser"
     ],
     "plugins": {
       "cordova-plugin-battery-status": {},

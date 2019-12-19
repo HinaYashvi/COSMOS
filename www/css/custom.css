@@ -639,6 +639,26 @@ label.item-checkbox input[type="checkbox"]:checked ~ .icon-checkbox,.checkbox in
 .done-chk{
   color: #34b7f1;
 }
+.black-badge{ 
+  display: inline-flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    color: #fff;
+    background: #000;
+    position: relative;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: var(--f7-badge-font-weight);
+    border-radius: var(--f7-badge-size);
+    padding: var(--f7-badge-padding);
+    height: var(--f7-badge-size);
+    min-width: var(--f7-badge-size);
+}
+.fw-normal{
+  font-weight: normal!important;
+}
 /* ---------------------- ROTATE STAR -------------------- */
 .gly-spin {
   -webkit-animation: spin 5s infinite linear;
