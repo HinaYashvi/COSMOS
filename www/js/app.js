@@ -2155,7 +2155,7 @@ function add_interview(cand_id){
       var positblue='';
       var positwhite='';
       var stsint='';
-      console.log(comps_list.length);
+      //console.log(comps_list.length);
       comp+='<option value="">---SELECT---</option>';
       for(var i=0;i<comps_list.length;i++){
         var compid = comps_list[i].cs_id;
@@ -2205,11 +2205,24 @@ function customerDesignations(sel_cmp){
     success:function(pos_result){
       var pos = $.parseJSON(pos_result);
       var posti = pos.posti;
+      var res_one = pos.res_one; 
+      console.log(res_one); 
+
       posit+='<option value="">---SELECT---</option>';
       for(var i=0;i<posti.length;i++){
-        var vd_id = posti[i].vd_id;
-        var vd_designation = posti[i].designation;
-        posit+='<option value='+vd_id+'>'+vd_designation+'</option>';
+        var split_id = res_one[i].split("-");
+      console.log(split_id);
+      var spli_id = split_id[1];
+        if(posti[i][0]!=undefined){
+          //var split_id = res_one.split("-");
+          //var spli_id = split_id[1];
+          var vd_id = posti[i][0]['vd_id'];
+          var vd_designation = posti[i][0]['designation'];
+          posit+='<option value='+vd_id+'-'+spli_id+'>'+vd_designation+'</option>';
+        }
+        //var vd_id = posti[i].vd_id;
+        //var vd_designation = posti[i].designation;
+        //posit+='<option value='+vd_id+'>'+vd_designation+'</option>';
       }
       $("#position").html(posit);
     }
@@ -2219,7 +2232,7 @@ function addInterview(){
   app.preloader.show();
   var add_int = $(".add_int").serialize();
   var session_uid = window.localStorage.getItem("session_uid");
-  console.log(add_int);
+  //console.log(add_int);
   $.ajax({
     type:'POST', 
     url:base_url+'liveappcontroller/addinterview',
