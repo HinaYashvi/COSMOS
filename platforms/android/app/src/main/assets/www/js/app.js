@@ -2132,9 +2132,12 @@ function add_interview(cand_id){
   var add_years = curr_year + parseInt(2);
   var dt_yr='';
   dt_yr+='<option value=""></option>';
-  for(var m=1950;m<=add_years;m++){
+  /*for(var m=1950;m<=add_years;m++){
     dt_yr+='<option value="'+m+'">'+m+'</option>';
-  } 
+  } */
+  for(var m=add_years;m>=1950;m--){
+    dt_yr+='<option value="'+m+'">'+m+'</option>';
+  }
 
   app.preloader.show();
   $.ajax({ 
@@ -2229,27 +2232,50 @@ function customerDesignations(sel_cmp){
   });
 }
 function addInterview(){
-  app.preloader.show();
+  
   var add_int = $(".add_int").serialize();
   var session_uid = window.localStorage.getItem("session_uid");
-  //console.log(add_int);
-  $.ajax({
-    type:'POST', 
-    url:base_url+'liveappcontroller/addinterview',
-    data:add_int+"&session_uid="+session_uid,
-    success:function(int_result){
-      //console.log(int_result);
-      var toastIcon = app.toast.create({
-        icon: app.theme === 'ios' ? '<i class="f7-icons">check_round</i>' : '<i class="f7-icons">check_round</i>',
-        text: 'Interview added successfully.',
-        position: 'center',
-        closeTimeout: 2000,
-      });
-      app.preloader.hide();
-      toastIcon.open();
-      mainView.router.navigate("/pro_registrations/");
-    }
-  });
+
+  var company = $("#company").val();
+  var position = $("#position").val();
+  var int_status = $("#int_status").val();
+  var dt_day = $("#dt_day").val();
+  var dt_mnth = $("#dt_mnth").val();
+  var dt_yr = $("#dt_yr").val();
+
+  if(company==''){
+    app.dialog.alert("Please select company");
+  }else if(position==''){
+    app.dialog.alert("Please select position");
+  }else if(int_status==''){
+    app.dialog.alert("Please select interview status");
+  }else if(dt_day==''){
+    app.dialog.alert("Select interview day");
+  }else if(dt_mnth==''){
+    app.dialog.alert("Select interview month");
+  }else if(dt_yr==''){
+    app.dialog.alert("Select interview year");
+  }else{
+    app.preloader.show();
+    //console.log(add_int);
+    $.ajax({
+      type:'POST', 
+      url:base_url+'liveappcontroller/addinterview',
+      data:add_int+"&session_uid="+session_uid,
+      success:function(int_result){
+        //console.log(int_result);
+        var toastIcon = app.toast.create({
+          icon: app.theme === 'ios' ? '<i class="f7-icons">check_round</i>' : '<i class="f7-icons">check_round</i>',
+          text: 'Interview added successfully.',
+          position: 'center',
+          closeTimeout: 2000,
+        });
+        app.preloader.hide();
+        toastIcon.open();
+        mainView.router.navigate("/pro_registrations/");
+      }
+    });
+  }
 }
 function viewStatus(cand_id){  
   app.preloader.show();
@@ -2588,7 +2614,10 @@ $$(document).on('page:init', '.page[data-name="add_development"]', function (e) 
   var add_years = curr_year + parseInt(2);
   var start_yr='';
   start_yr+='<option value=""></option>';
-  for(var m=1950;m<=add_years;m++){
+  /*for(var m=1950;m<=add_years;m++){
+    start_yr+='<option value="'+m+'">'+m+'</option>';
+  }*/
+  for(var m=add_years;m>=1950;m--){
     start_yr+='<option value="'+m+'">'+m+'</option>';
   }
   $("#start_day").html(start_day); 
@@ -2773,7 +2802,7 @@ function showFeedback(fb_id){
     success:function(fb_res){  
       var json_fb_res = $.parseJSON(fb_res);
       var json_fb = json_fb_res.f_dets;        
-      //console.log(json_fb_res);
+      //console.log(json_fb+"-----");
       var comp_name = json_fb[0].cs_invoice_name; 
       var site_add = json_fb[0].fb_address; 
       var cont_person = json_fb[0].fb_contact_person; 
@@ -2857,6 +2886,11 @@ function showFeedback(fb_id){
         var perform = 'Satisfactory';
       }else if(cmt_performance==4){
         var perform = 'Average';
+      }
+      if(comp_name!=null || comp_name!=undefined){
+        comp_name=comp_name;
+      }else{
+        comp_name='';
       }
 
       var feeddetDiv='<li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Name Of Company - कंपनी का नाम</div><div class="item-cell text-grey font-14">'+comp_name+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Site Address - साइट का पता</div><div class="item-cell text-grey font-14">'+site_add+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Contact Person - संपर्क व्यक्ति</div><div class="item-cell text-grey font-14">'+cont_person+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Designation - ओहदा</div><div class="item-cell text-grey font-14">'+per_desig+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Service Quality - (सेवा की गुणवत्ता)</div><div class="item-cell text-grey font-14">'+ser+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Response Time - (जवाब देने का समय)</div><div class="item-cell text-grey font-14">'+resp+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Behaviour of person Deputed - (व्यक्ति का व्यवहार निर्भर)</div><div class="item-cell text-grey font-14">'+behave+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Complaint Handling - (शिकायत देखभाल)</div><div class="item-cell text-grey font-14">'+cmpln+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Price - (क़ीमत)</div><div class="item-cell text-grey font-14">'+prc+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Documentation - (प्रलेखन)</div><div class="item-cell text-grey font-14">'+doc+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Overall Performance - (सम्पूर्ण प्रदर्शन)</div><div class="item-cell text-grey font-14">'+perform+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Any other suggetions for improvment - सुधार के लिए कोई अन्य सुझाव</div><div class="item-cell text-grey font-14">'+fb_suggetion+'</div></div></div></li><li class="item-link item-content"><div class="item-inner item-cell"><div class="item-row"><div class="item-cell grey-txt font-14 fw-600">Feedback Form Copy - फीडबैक फॉर्म कॉपी</div><div class="item-cell text-grey font-14"><a class="link external orange-txt text-uppercase linkspace poweredby font-10" href="'+base_url+feedback_attach+'" target="_system">'+feedback_attach+'</a></div></div></div></li>';
@@ -4393,7 +4427,15 @@ function getCandisel(cs_id,comp_name){
   var add_years = curr_year + parseInt(2);
   var join_yr='';
   join_yr+='<option value=""></option>';
-  for(var m=1950;m<=add_years;m++){
+  /*for(var m=1950;m<=add_years;m++){
+    if(curr_year==m){
+      var yr_sel = 'selected';
+    }else{
+      var yr_sel = '';
+    }
+    join_yr+='<option value="'+m+'" '+yr_sel+'>'+m+'</option>';
+  }*/
+  for(var m=add_years;m>=1950;m--){
     if(curr_year==m){
       var yr_sel = 'selected';
     }else{
@@ -4401,6 +4443,7 @@ function getCandisel(cs_id,comp_name){
     }
     join_yr+='<option value="'+m+'" '+yr_sel+'>'+m+'</option>';
   }
+
   $.ajax({ 
     type:'POST', 
     url:base_url+'liveappcontroller/candselStatus',
@@ -5531,7 +5574,7 @@ $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (
   var to_yr='';
   from_yr+='<option value="">FROM YEAR</option>';
   to_yr+='<option value="">TO YEAR</option>'; 
-  for(var m=1950;m<=add_years;m++){
+  /*for(var m=1950;m<=add_years;m++){
     if(d.getFullYear() == m){
       var sel_year = 'selected';
     }else{
@@ -5539,7 +5582,16 @@ $$(document).on('page:init', '.page[data-name="daily_visit_report"]', function (
     }
     from_yr+='<option value="'+m+'" '+sel_year+'>'+m+'</option>';
     to_yr+='<option value="'+m+'" '+sel_year+'>'+m+'</option>';
-  }    
+  } */
+  for(var m=add_years;m>=1950;m--){
+    if(d.getFullYear() == m){
+      var sel_year = 'selected';
+    }else{
+      var sel_year = '';
+    }
+    from_yr+='<option value="'+m+'" '+sel_year+'>'+m+'</option>';
+    to_yr+='<option value="'+m+'" '+sel_year+'>'+m+'</option>';
+  } 
   $("#from_yr").html(from_yr);
   $("#to_yr").html(to_yr);  
 
