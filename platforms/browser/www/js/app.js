@@ -2379,8 +2379,9 @@ function candidate_register(){
     return false;
   }else{      
     var register_form = $(".register_me").serialize();
-    var session_uid = window.localStorage.getItem("session_uid");     
-    $.ajax({
+    var session_uid = window.localStorage.getItem("session_uid");    
+    app.preloader.show(); 
+    $.ajax({       
       type:'POST', 
       url:base_url+'liveappcontroller/registerCandidate',
       data:register_form+"&session_uid="+session_uid,
@@ -2388,7 +2389,9 @@ function candidate_register(){
         //app.preloader.show(); 
         //app.dialog.alert(reg_result);
         if(reg_result=='exists'){
-          app.dialog.alert(email+" is already exists.Please try to register with another email address.");
+          //app.dialog.alert(email+" is already exists.Please try to register with another email address.");
+          app.preloader.hide();
+          app.dialog.alert("Already provisionally registerd with COSMOS");
         }else if(reg_result=='registered'){
           //console.log(reg_result);
           var toastIcon = app.toast.create({
