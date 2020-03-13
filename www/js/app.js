@@ -5934,7 +5934,7 @@ function interviewDetails(cand_id){
 
 $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {  
   checkConnection();
-  chkStatusAndPwd();
+  chkStatusAndPwd();   
   app.preloader.show();
   var session_fname = window.localStorage.getItem("session_fname");
   var session_department = window.localStorage.getItem("session_department");
@@ -5972,7 +5972,7 @@ $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {
               var chk='';         
             }     
           }else{
-            var chk='';
+            var chk=''; 
           } 
           if(ex_purpose == 15){
             var ex_oth = ex_other;
