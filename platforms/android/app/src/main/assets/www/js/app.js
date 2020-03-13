@@ -5971,6 +5971,8 @@ $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {
             }else{
               var chk='';         
             }     
+          }else{
+            var chk='';
           } 
           if(ex_purpose == 15){
             var ex_oth = ex_other;
