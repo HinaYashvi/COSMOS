@@ -608,6 +608,65 @@ $$(document).on('page:init', '.page[data-name="provisional_registration"]', func
       timer = setTimeout(validate, 1000);
     }); */   
 });
+function capturePhotoaadhar_activity() {   
+  navigator.camera.getPicture(onPhotoaadharDataSucc, onFail, {
+  quality: 100,
+  targetWidth: 600,
+  targetHeight: 600,
+  destinationType: destinationType.FILE_URI,
+  saveToPhotoAlbum: false,
+  correctOrientation: true,
+  }); 
+}
+function onPhotoaadharDataSucc(imageURI){
+  var cameraImage = document.getElementById('image_aadhar');
+  //alert(cameraImage+"-------"+imageURI);
+  cameraImage.style.display = 'block';
+  cameraImage.src = imageURI;
+}
+function getPhotoaadhar_activity(source){
+  navigator.camera.getPicture(onPhotoaadharURISucc, onFail, {
+    quality: 100,
+    correctOrientation: 1,
+    targetWidth: 600,
+    targetHeight: 600,
+    destinationType: destinationType.FILE_URI,
+    sourceType: source
+  });
+}
+ 
+function onPhotoaadharURISucc(imageURI) {
+  var galleryImage = document.getElementById('image_aadhar');
+  //alert(galleryImage+"^^^^^^"+imageURI);
+  galleryImage.style.display = 'block';
+  galleryImage.src = imageURI;
+}
+function upload_aadharcard(last_ins_id,old_aadhar){
+  checkConnection();  
+  var session_uid = window.localStorage.getItem("session_uid");
+  var img = document.getElementById('image_aadhar'); 
+  var imageURI = img.src;
+  //alert("imageURI "+imageURI);
+  var options = new FileUploadOptions();
+  options.fileKey="file";
+  options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+  options.mimeType="image/jpeg";
+  options.chunkedMode = false;
+  options.headers = {
+     Connection: "close"
+  }; 
+  var params = {};
+  params.fullpath =imageURI;
+  params.name = options.fileName;
+  var imgfilename = params.name; 
+  //alert("imgfilename :: "+imgfilename);
+  var split_imgfilename = imgfilename.split("?");
+  var actual_imgname = split_imgfilename[0];
+  var ft = new FileTransfer();
+  var uploadControllerURL = base_url+"liveappcontroller/aadhar_photoupload/"+session_uid+"/"+last_ins_id+"/"+old_aadhar+"/"+imgfilename; 
+  //alert(uploadControllerURL);
+  ft.upload(imageURI,uploadControllerURL, win, fail, options,true);
+}
 // ----------------------- C H A N G E  P A S S W O R D  M A T C H  P A S S W O R D ------------------- //
 function validate() {
   checkConnection();
@@ -2365,10 +2424,13 @@ function candidate_register(){
   var district = $("#district").val();
   var city = $("#city").val();
   var primary_mobile_number = $("#primary_mobile_number").val();
+  var secondary_mobile_number = $("#secondary_mobile_number").val();
   var dob_dt = $("#dob_dt").val();
   var dob_mnth = $("#dob_mnth").val();
   var dob_yr = $("#dob_yr").val();
   var myInput = $("#myInput").val();
+  var image_aadhar = $("#image_aadhar").attr('src');
+  alert("image_aadhar "+image_aadhar);
   
   if(name==''){
     app.dialog.alert("Name should not be empty");
@@ -2407,19 +2469,25 @@ function candidate_register(){
     var register_form = $(".register_me").serialize();
     var session_uid = window.localStorage.getItem("session_uid");    
     app.preloader.show(); 
+    var old_aadhar='NULL';
     $.ajax({       
       type:'POST', 
       url:base_url+'liveappcontroller/registerCandidate',
       data:register_form+"&session_uid="+session_uid,
       success:function(reg_result){
         //app.preloader.show(); 
-        //app.dialog.alert(reg_result);
+        app.dialog.alert(reg_result);
         if(reg_result=='exists'){
           //app.dialog.alert(email+" is already exists.Please try to register with another email address.");
           app.preloader.hide();
           app.dialog.alert("Already provisionally registerd with COSMOS");
-        }else if(reg_result=='registered'){
+        //}else if(reg_result=='registered'){
+        }else{
           //console.log(reg_result);
+          var split_reg_result = reg_result.split("_");
+          var last_ins_id = split_reg_result[1];
+
+          upload_aadharcard(last_ins_id,old_aadhar);
           var toastIcon = app.toast.create({
             icon: app.theme === 'ios' ? '<i class="f7-icons">check_round</i>' : '<i class="f7-icons">check_round</i>',
             text: 'Registration done successfully.',
@@ -2994,13 +3062,16 @@ $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) {
         var cs_invoice_name = field_list[i].cs_invoice_name;        
         var contact = field_list[i].csd_contact_mobile;
         var nocon = cont_no[i][0];
-        if(nocon!=''){
+        
+        if(nocon!='' && nocon!=undefined){
+          console.log("nocon if"+nocon);
           var cont = '<span class=""><i class="f7-icons font-15 fw-600">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
         }else{
+          console.log("nocon else"+nocon); 
           var cont = '<span class="redtxt">No Contact Found.</span>';
         }
 
-        /*if(contact!=''){
+        /*if(cont!='' || cont!=undefined){
           var cont = '<span class="text-muted"><i class="f7-icons font-14">phone</i>&nbsp;:&nbsp'+contact+'</span>';
         }else{
           var cont = '<span class="text-muted">No Contact Found.</span>';
@@ -4881,6 +4952,11 @@ $$(document).on('page:init', '.page[data-name="complain_list"]', function (e) {
       //console.log(comp_list);
       var comp_info='';
       var int_cnt = '';
+      if(comp_list.length==0){
+        comp_info+='<tr><td class="text-uppercase text-grey fw-600 font-14">No Data available.</td><td></td></tr>';
+        $("#complain_list").html(comp_info);
+        app.preloader.hide();     
+      }else{
       for(var k=0;k<comp_list.length;k++){
         var comp_name= comp_list[k].cs_invoice_name;
         var cm_id = comp_list[k].cm_id; 
@@ -4907,6 +4983,7 @@ $$(document).on('page:init', '.page[data-name="complain_list"]', function (e) {
         $("#complain_list").html(comp_info);
         app.preloader.hide();         
       }
+    }
     }
   });
 }); 
@@ -5853,7 +5930,7 @@ function showCandDetsandIntDets(cand_id){
     }
   });
 }
-function interviewDetails(cand_id){
+function interviewDetails(candidate_id){
   checkConnection();
   chkStatusAndPwd();  
   app.preloader.show();
@@ -5864,7 +5941,7 @@ function interviewDetails(cand_id){
   $.ajax({
     type:'POST', 
     url:base_url+'liveappcontroller/candCompInterviewsall',
-    data:{'cand_id':cand_id},
+    data:{'cand_id':candidate_id},
     success:function(res){      
      var json_parse = $.parseJSON(res); 
      var intercand = json_parse.intercand;  
@@ -5889,7 +5966,7 @@ function interviewDetails(cand_id){
             $("#addintbtnDiv").html(add_intbtn);       
           } else {   
             //console.log("is NOT in array give interview button");  
-            add_intbtn = '<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';      
+            add_intbtn = '<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+candidate_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';      
             $("#addintbtnDiv").html(add_intbtn);  
             //var add_intbtn = 'BUTTN HERE';          
           }        
@@ -5923,7 +6000,7 @@ function interviewDetails(cand_id){
       }else{
         tabledata+='<tr><td class="text-uppercase font-10 fw-500">No Interviews</td></tr>';    
           $("#intdetails").html(tabledata);  
-          add_intbtn = '<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+cand_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';      
+          add_intbtn = '<button class="col button btn-goutline button-small button-outline font-8" onclick="add_interview('+candidate_id+')"><i class="f7-icons font-12 mr-5">plus</i>Interview</button>';      
             $("#addintbtnDiv").html(add_intbtn);   
                   
           app.preloader.hide();   
