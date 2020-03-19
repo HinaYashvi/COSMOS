@@ -3064,10 +3064,10 @@ $$(document).on('page:init', '.page[data-name="field_visit"]', function (e) {
         var nocon = cont_no[i][0];
         
         if(nocon!='' && nocon!=undefined){
-          console.log("nocon if"+nocon);
+          //console.log("nocon if"+nocon);
           var cont = '<span class=""><i class="f7-icons font-15 fw-600">phone</i>&nbsp;:&nbsp'+nocon+'</span>';
         }else{
-          console.log("nocon else"+nocon); 
+          //console.log("nocon else"+nocon); 
           var cont = '<span class="redtxt">No Contact Found.</span>';
         }
 
@@ -7015,6 +7015,8 @@ function searchExpense(){
             }else{
               var chk='';         
             }     
+          }else{
+            var chk=''; 
           } 
           if(ex_purpose == 15){
             var ex_oth = ex_other;
