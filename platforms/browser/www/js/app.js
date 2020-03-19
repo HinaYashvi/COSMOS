@@ -2430,7 +2430,7 @@ function candidate_register(){
   var dob_yr = $("#dob_yr").val();
   var myInput = $("#myInput").val();
   var image_aadhar = $("#image_aadhar").attr('src');
-  alert("image_aadhar "+image_aadhar);
+  //alert("image_aadhar "+image_aadhar);
   
   if(name==''){
     app.dialog.alert("Name should not be empty");
@@ -2464,6 +2464,9 @@ function candidate_register(){
     return false;
   }else if(myInput==''){
     app.dialog.alert("Please select highest qualification");
+    return false;
+  }else if(image_aadhar==''){
+    app.dialog.alert("Please attach aadhar card");
     return false;
   }else{      
     var register_form = $(".register_me").serialize();
@@ -2501,7 +2504,7 @@ function candidate_register(){
           mainView.router.navigate("/pro_registrations/");
         }
       } 
-    });  
+    }); 
   } 
 }
 $$(document).on('page:init', '.page[data-name="newbusiness_dev"]', function (e) { 
