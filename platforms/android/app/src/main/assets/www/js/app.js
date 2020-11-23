@@ -539,13 +539,13 @@ $$(document).on('page:init', '.page[data-name="dashboard"]', function (e) {
   var session_department = window.localStorage.getItem("session_department");
   var session_mobile = window.localStorage.getItem("session_mobile");
   var session_ulevel = window.localStorage.getItem("session_ulevel");
-  if(session_ulevel == 1 || session_ulevel == 2 || session_ulevel == 3){
+  /*if(session_ulevel == 1 || session_ulevel == 2 || session_ulevel == 3){
     $("#daily_visti_rep").removeClass("display-none");
     $("#daily_visti_rep").addClass("display-block");
   }else{
     $("#daily_visti_rep").removeClass("display-block");
     $("#daily_visti_rep").addClass("display-block");
-  }
+  }*/
   $("#userName").html("<span class='text-white'>Name : "+session_fname+"</span>");
   $("#userMo").html("<span class='text-white'>Mobile : "+session_mobile+"</span>"); 
   $("#userDept").html("<span class='text-white'>Department : "+session_department+"</span>");  
@@ -6012,7 +6012,8 @@ function interviewDetails(candidate_id){
   });   
 }
 
-$$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {  
+/*$$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) { 
+  // OLD BEFORE INFINITE SCROLL // 
   checkConnection();
   chkStatusAndPwd();   
   app.preloader.show();
@@ -6088,14 +6089,382 @@ $$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {
           }                  
                             
           //exp_data+='<tr><td class="text-uppercase fw-600 font-10"><a href="#" class="">'+chk+'</a><span class="ml-5">'+exuser+'</span><br/><span class=""><i class="f7-icons font-12 text-parrot ">calendar_fill</i></span><span class="ml-5">'+ex_date_from+'</span><br/>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted font-10"><a href="#" class="">'+ex_oth+'</a></td></tr>'; 
-          exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11">'+ex_date_from+'</span><br/><span class="font-11 fw-600">'+ex_oth+'</span>'+chk+'</td></tr>';        
+          exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+(i+1)+'. '+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11">'+ex_date_from+'</span><br/><span class="font-11 fw-600">'+ex_oth+'</span>'+chk+'</td></tr>';        
           $("#exp_list").html(exp_data);     
           app.preloader.hide();                     
         }
       }    
     }
   });
+});*/
+var allowInfinite = true;
+$$(document).on('page:init', '.page[data-name="expense_mgmt"]', function (e) {  
+  checkConnection();
+  chkStatusAndPwd();   
+  app.preloader.show();  
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+  var html = '';
+  $.ajax({
+    type:'POST', 
+    url:base_url+'liveappcontroller/expense_list',
+    data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid,'limit_from':0,'limit_to':100},
+    success:function(expense_res){ 
+      var parse_exp = $.parseJSON(expense_res);
+      var expense_data = parse_exp.expense;
+      var expense_master = parse_exp.expense_master;
+      var expense_cnt_tot = parse_exp.expense_cnt_tot.length;
+      //alert(expense_cnt_tot);
+      var exp_data = '';
+      if(expense_data.length==0){
+        exp_data = '<tr><td class="text-uppercase text-grey fw-600 font-14">No Data available.</td><td></td></tr>';
+        $("#exp_list").html(exp_data);
+        app.preloader.hide(); 
+      }else{  
+        exp_data+='<div class="light-orange display-block p-5"><div class="row"><div class="col-100 text-uppercase fw-600 font-12"><strong>User Details &amp; Purpose</strong></div><!--div class="col-35 text-center text-uppercase fw-600 font-12"><strong>Purpose</strong></div--></div></div>';
+        
+        for(var i=0;i<expense_data.length;i++){
+          var ex_id = expense_data[i].ex_id;
+          var ex_status = expense_data[i].ex_status;
+          var exuser = expense_data[i].exuser;
+          var ex_travel_mode = expense_data[i].ex_travel_mode;
+          var ex_purpose = expense_data[i].ex_purpose;
+          var ex_other = expense_data[i].ex_other;
+          var ex_date_from = expense_data[i].ex_date_from;
+          var ex_km = expense_data[i].ex_km;
+
+          if(session_ulevel==1 && session_department=='All'){
+            if(ex_status!=''){    
+              var chk ='<div id="triangle-topleft-dev"><span class="impfont fw-700 r-3"><i class="material-icons done_chk_approve font-12" style="transform:rotate(315deg);position: absolute;right:-4px;">done_all</i></span></div>';               
+            }else{
+              var chk='';         
+            }     
+          }else{
+            var chk=''; 
+          } 
+          if(ex_purpose == 15){
+            var ex_oth = ex_other;
+          }else{
+            for(var j= 0 ;j<expense_master.length;j++){
+              var ep_id = expense_master[j].ep_id;
+              var ep_name = expense_master[j].ep_name;
+              if(ex_purpose == ep_id){
+                var ex_oth = ep_name;
+              }  
+            }   
+          }  
+          if(ex_km!=''){                   
+            //var km='<br/><span class="">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';  // OLD //
+            var km='<span class="fw-600">KM:<span class="ml-5 badge font-10">'+ex_km+'</span>';  
+          }else{            
+            var km='';                 
+          }     
+
+          if(ex_travel_mode=='Two Wheeler'){     
+            var t_mode = '<img src="img/icons/motor-sports.svg" class="wh-22"/>';  
+          }else if(ex_travel_mode=='Auto'){
+            var t_mode = '<img src="img/icons/rickshaw.svg" class="wh-20" />'; 
+          }else if(ex_travel_mode=='Four Wheeler'){
+            var t_mode = '<img src="img/icons/car.svg" class="wh-22"/>'; 
+          }else if(ex_travel_mode=='Cab-Taxi'){
+            var t_mode = '<img src="img/icons/taxi.svg" class="wh-20"/>';    
+          }else if(ex_travel_mode=='Bus'){    
+            var t_mode = '<img src="img/icons/bus.svg" class="wh-22"/>';  
+          }else if(ex_travel_mode=='Train'){
+            var t_mode = '<img src="img/icons/train.svg" class="wh-20"/>';
+          }else if(ex_travel_mode=='Flight'){
+            var t_mode = '<img src="img/icons/air-freight (1).svg" class="wh-16"/>';    
+          }                  
+                            
+          //exp_data+='<tr><td class="text-uppercase fw-600 font-10"><a href="#" class="">'+chk+'</a><span class="ml-5">'+exuser+'</span><br/><span class=""><i class="f7-icons font-12 text-parrot ">calendar_fill</i></span><span class="ml-5">'+ex_date_from+'</span><br/>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="text-muted font-10"><a href="#" class="">'+ex_oth+'</a></td></tr>'; 
+          //exp_data+='<tr class="tr-border" onclick="showExpense('+ex_id+')"><td class="text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+(i+1)+'. '+exuser+'</span></a>'+km+'<span class="ml-10">'+t_mode+'</span></span></td><td class="fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11">'+ex_date_from+'</span><br/><span class="font-11 fw-600">'+ex_oth+'</span>'+chk+'</td></tr>';   
+
+          //exp_data+='<li class="tr-border display-block" onclick="showExpense('+ex_id+')"><div class="row"><div class="col-65 text-uppercase fw-600 font-12"><a href="#" class=""><span class="">'+exuser+'</span></a><br/>'+km+'<span class="ml-10">'+t_mode+'</span></div><div class="col-35 text-center fw-500"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11">'+ex_date_from+'</span></div></div></li>';
+
+          //exp_data+='<li class="tr-border display-block" onclick="showExpense('+ex_id+')"><div class=""><div class="item-title"><div class="item-header text-uppercase fw-600 font-12 lh-9p8"><a href="#" class=""><div class="pt-5p">'+exuser+'</div></a></div><span class="">'+km+'<span class="ml-10">'+t_mode+'</span></span></div><div class="item-after">Edit</div></div></li>';
+          $("#list_length").val(expense_cnt_tot);
+          exp_data+='<li class="tr-border display-block" onclick="showExpense('+ex_id+')"><div class="item-inner"><div class=""><div class="lh-9p8 text-uppercase fw-600 font-12"><a href="#" class="">'+exuser+'</a></div>'+km+'<span class="ml-10">'+t_mode+'</span><div class="item-after display-block lh-13p8 pl-0"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11 text-black fw-600">'+ex_date_from+'</span><br/><span class="font-11 text-black fw-600">'+ex_oth+'</span>'+chk+'</div></div></div></li>';
+          $("#exp_list").html(exp_data);     
+          app.preloader.hide();                     
+        }
+        /*$$('.infinite-scroll-content').on('infinite', function() {
+          alert("Remove preloader");
+          var lastItemIndex = $$('.simple-list li').length-1;
+          //alert(lastItemIndex);
+          // Max items to load
+          var maxItems = $("#list_length").val();
+          //alert("maxItems"+maxItems);
+          // Append items per load
+          var itemsPerLoad = 100;
+          call_funlist(lastItemIndex,maxItems,itemsPerLoad);
+        });*/
+      }   
+    }
+  });
+  
+  $$('.infinite-scroll-content').on('infinite', function () {
+    
+    //alert("called");
+    // Max items to load
+//    var list_length = $("#list_length").val();
+    //call_funlist(lastItemIndex,maxItems,itemsPerLoad,allowInfinite);
+    //call_funlist(lastItemIndex,list_length);
+//    call_funlist(list_length,allowInfinite);
+
+var list_length = $("#list_length").val();
+var lastItemIndex = $$('.exp_list li').length;
+var maxItems = list_length;
+var itemsPerLoad = 100;
+var limit_to = lastItemIndex + itemsPerLoad;
+    // Exit, if loading in progress
+  if (!allowInfinite) return;
+
+  // Set loading flag
+  allowInfinite = false;
+
+  // Emulate 1s loading
+  setTimeout(function () {
+    // Reset loading flag
+    allowInfinite = true;
+
+    if (lastItemIndex >= maxItems) {
+      // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+      app.infiniteScroll.destroy('.infinite-scroll-content');
+      // Remove preloader
+      $$('.infinite-scroll-preloader').remove();
+      return;
+    }
+
+    // Generate new items HTML
+    /*var html = '';
+    for (var i = lastItemIndex + 1; i <= lastItemIndex + itemsPerLoad; i++) {
+      html += '<li>Item ' + i + '</li>';
+    }*/
+    
+   // alert("lastItemIndex "+lastItemIndex+" limit_to "+limit_to);
+    $.ajax({
+        type:'POST', 
+        url:base_url+'liveappcontroller/expense_list_infinite',
+        data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid,'limit_from':lastItemIndex,'limit_to':limit_to},
+        success:function(expense_res){
+          var parse_exp = $.parseJSON(expense_res);
+          var expense_data = parse_exp.expense;
+          var expense_master = parse_exp.expense_master;
+          //console.log("---------"+expense_res);
+          //console.log("###### "+120 - lastItemIndex);
+          // console.log(limit_from+"-------"+limit_to);
+          var exp_data = '';
+
+         /*$.each( expense_data, function( a, value ) {            
+            var ex_id = expense_data[a].ex_id;           
+            var ex_status = expense_data[a].ex_status;
+            console.log( a + ": " + value+"===="+ex_id);
+          });*/
+
+//          for (var a = lastItemIndex; a <= limit_to; a++) {
+          $.each( expense_data, function( a, value ) { 
+            //console.log(a+"============");
+           // console.log("lastItemIndex + itemsPerLoad = "+limit_to);
+           if(expense_data[a]!=undefined){
+            //console.log(a+"======"+expense_data[a].ex_id);
+            var ex_id = expense_data[a].ex_id;           
+            var ex_status = expense_data[a].ex_status;
+            var exuser = expense_data[a].exuser;
+            var ex_travel_mode = expense_data[a].ex_travel_mode;
+            var ex_purpose = expense_data[a].ex_purpose;
+            var ex_other = expense_data[a].ex_other;
+            var ex_date_from = expense_data[a].ex_date_from;
+            var ex_km = expense_data[a].ex_km;
+
+            if(session_ulevel==1 && session_department=='All'){
+              if(ex_status!=''){    
+                var chk ='<div id="triangle-topleft-dev"><span class="impfont fw-700 r-3"><i class="material-icons done_chk_approve font-12" style="transform:rotate(315deg);position: absolute;right:-4px;">done_all</i></span></div>';               
+              }else{
+                var chk='';         
+              }     
+            }else{
+              var chk=''; 
+            } 
+            if(ex_purpose == 15){
+              var ex_oth = ex_other;
+            }else{
+              for(var j= 0 ;j<expense_master.length;j++){
+                var ep_id = expense_master[j].ep_id;
+                var ep_name = expense_master[j].ep_name;
+                if(ex_purpose == ep_id){
+                  var ex_oth = ep_name;
+                }  
+              }   
+            }  
+            if(ex_km!=''){                   
+              //var km='<br/><span class="">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';  // OLD //
+              var km='<span class="fw-600">KM:<span class="ml-5 badge font-10">'+ex_km+'</span>';  
+            }else{            
+              var km='';                 
+            }     
+
+            if(ex_travel_mode=='Two Wheeler'){     
+              var t_mode = '<img src="img/icons/motor-sports.svg" class="wh-22"/>';  
+            }else if(ex_travel_mode=='Auto'){
+              var t_mode = '<img src="img/icons/rickshaw.svg" class="wh-20" />'; 
+            }else if(ex_travel_mode=='Four Wheeler'){
+              var t_mode = '<img src="img/icons/car.svg" class="wh-22"/>'; 
+            }else if(ex_travel_mode=='Cab-Taxi'){
+              var t_mode = '<img src="img/icons/taxi.svg" class="wh-20"/>';    
+            }else if(ex_travel_mode=='Bus'){    
+              var t_mode = '<img src="img/icons/bus.svg" class="wh-22"/>';  
+            }else if(ex_travel_mode=='Train'){
+              var t_mode = '<img src="img/icons/train.svg" class="wh-20"/>';
+            }else if(ex_travel_mode=='Flight'){
+              var t_mode = '<img src="img/icons/air-freight (1).svg" class="wh-16"/>';    
+            }
+            //exp_data+='<li class="tr-border display-block" onclick="showExpense('+ex_id+')"><a href="#" class="item-link"><div class="item-inner"><div class=""><div class="lh-9p8 text-uppercase fw-600 font-12"><a href="#" class="">'+exuser+'</a></div>'+km+'<span class="ml-10">'+t_mode+'</span></div><div class="item-after display-block lh-13p8"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11 text-black fw-600">'+ex_date_from+'</span><br/><span class="font-11 text-black fw-600">'+ex_oth+'</span>'+chk+'</div></div></a></li>';
+            exp_data+='<li class="tr-border display-block" onclick="showExpense('+ex_id+')"><div class="item-inner"><div class=""><div class="lh-9p8 text-uppercase fw-600 font-12"><a href="#" class="">'+exuser+'</a></div>'+km+'<span class="ml-10">'+t_mode+'</span><div class="item-after display-block lh-13p8 pl-0"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11 text-black fw-600">'+ex_date_from+'</span><br/><span class="font-11 text-black fw-600">'+ex_oth+'</span>'+chk+'</div></div></div></li>';
+            //exp_data += '<li>Item ' + '('+ex_id+')' + '</li>';
+            
+          }
+        });
+  //alert(lastItemIndex);
+        //$$('#exp_list').append(exp_data);
+        $$('.simple-list ul').append(exp_data);
+
+      }
+      
+      
+    });
+
+    // Append new items
+    
+
+    // Update last loaded index
+    lastItemIndex = $$('.exp_list li').length;
+  }, 1000);
+  });
 });
+
+
+//function call_funlist(lastItemIndex,list_length){
+function call_funlist(list_length,allowInfinite){
+  var lastItemIndex = $$('.exp_list li').length;
+  alert("====="+lastItemIndex+"====="+list_length);
+  //alert("called");
+  var session_fname = window.localStorage.getItem("session_fname");
+  var session_department = window.localStorage.getItem("session_department");
+  var session_mobile = window.localStorage.getItem("session_mobile");
+  var session_ulevel = window.localStorage.getItem("session_ulevel"); 
+  var session_uid =  window.localStorage.getItem("session_uid");
+  //console.log("called"+lastItemIndex);
+  // Append items per load
+  var itemsPerLoad = 10;
+  var maxItems = list_length;
+  if (!allowInfinite) return;
+  // Set loading flag
+  allowInfinite = false;
+  setTimeout(function () {
+    // Reset loading flag
+    allowInfinite = true;
+    if (lastItemIndex >= maxItems) {
+      // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+      app.infiniteScroll.destroy('.infinite-scroll-content');
+      // Remove preloader
+      $$('.infinite-scroll-preloader').remove();
+      return;
+    }
+    var exp_data = '';
+    var limit_from = lastItemIndex;
+    //var limit_to_val = lastItemIndex + itemsPerLoad;
+    //var limit_to = limit_to_val - 2;
+    var limit_to = lastItemIndex + itemsPerLoad;
+    //for (var i = lastItemIndex + 1; i <= lastItemIndex + itemsPerLoad; i++) {
+    
+      //alert(i);
+      $.ajax({
+        type:'POST', 
+        url:base_url+'liveappcontroller/expense_list_infinite',
+        data:{'session_ulevel':session_ulevel,'session_department':session_department,'session_uid':session_uid,'limit_from':limit_from,'limit_to':limit_to},
+        success:function(expense_res){
+          var parse_exp = $.parseJSON(expense_res);
+          var expense_data = parse_exp.expense;
+          var expense_master = parse_exp.expense_master;
+          //console.log("###### "+120 - lastItemIndex);
+          console.log(limit_from+"-------"+limit_to);
+          for (var a = limit_from; a <= limit_to; a++) {
+            //console.log(a+"============");
+           // console.log("lastItemIndex + itemsPerLoad = "+limit_to);
+           if(expense_data[a]!=undefined){
+            //console.log(a+"======"+expense_data[a].ex_id);
+            var ex_id = expense_data[a].ex_id;           
+            var ex_status = expense_data[a].ex_status;
+            var exuser = expense_data[a].exuser;
+            var ex_travel_mode = expense_data[a].ex_travel_mode;
+            var ex_purpose = expense_data[a].ex_purpose;
+            var ex_other = expense_data[a].ex_other;
+            var ex_date_from = expense_data[a].ex_date_from;
+            var ex_km = expense_data[a].ex_km;
+
+            if(session_ulevel==1 && session_department=='All'){
+              if(ex_status!=''){    
+                var chk ='<div id="triangle-topleft-dev"><span class="impfont fw-700 r-3"><i class="material-icons done_chk_approve font-12" style="transform:rotate(315deg);position: absolute;right:-4px;">done_all</i></span></div>';               
+              }else{
+                var chk='';         
+              }     
+            }else{
+              var chk=''; 
+            } 
+            if(ex_purpose == 15){
+              var ex_oth = ex_other;
+            }else{
+              for(var j= 0 ;j<expense_master.length;j++){
+                var ep_id = expense_master[j].ep_id;
+                var ep_name = expense_master[j].ep_name;
+                if(ex_purpose == ep_id){
+                  var ex_oth = ep_name;
+                }  
+              }   
+            }  
+            if(ex_km!=''){                   
+              //var km='<br/><span class="">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';  // OLD //
+              var km='<span class="fw-600">KM:<span class="ml-5 badge font-10 mb-5">'+ex_km+'</span>';  
+            }else{            
+              var km='';                 
+            }     
+
+            if(ex_travel_mode=='Two Wheeler'){     
+              var t_mode = '<img src="img/icons/motor-sports.svg" class="wh-22"/>';  
+            }else if(ex_travel_mode=='Auto'){
+              var t_mode = '<img src="img/icons/rickshaw.svg" class="wh-20" />'; 
+            }else if(ex_travel_mode=='Four Wheeler'){
+              var t_mode = '<img src="img/icons/car.svg" class="wh-22"/>'; 
+            }else if(ex_travel_mode=='Cab-Taxi'){
+              var t_mode = '<img src="img/icons/taxi.svg" class="wh-20"/>';    
+            }else if(ex_travel_mode=='Bus'){    
+              var t_mode = '<img src="img/icons/bus.svg" class="wh-22"/>';  
+            }else if(ex_travel_mode=='Train'){
+              var t_mode = '<img src="img/icons/train.svg" class="wh-20"/>';
+            }else if(ex_travel_mode=='Flight'){
+              var t_mode = '<img src="img/icons/air-freight (1).svg" class="wh-16"/>';    
+            }
+            exp_data+='<li class="tr-border display-block" onclick="showExpense('+ex_id+')"><a href="#" class="item-link"><div class="item-inner"><div class=""><div class="lh-9p8 text-uppercase fw-600 font-12"><a href="#" class="">'+(a+1)+'.'+exuser+'('+ex_id+')</a></div>'+km+'<span class="ml-10">'+t_mode+'</span></div><div class="item-after display-block lh-13p8"><span class=""><i class="f7-icons font-14 text-parrot ">calendar_fill</i></span><span class="ml-5 font-11 text-black fw-600">'+ex_date_from+'</span><br/><span class="font-11 text-black fw-600">'+ex_oth+'</span>'+chk+'</div></div></a></li>';
+            //exp_data += '<li>Item ' + a + '</li>';
+          }
+        }
+        $$('#exp_list').append(exp_data);
+      }
+      
+      
+    });
+    // Append new items
+    //$$('#exp_list').append(exp_data);
+    // Update last loaded index
+    lastItemIndex = $$('.exp_list li').length;
+    $$('.infinite-scroll-preloader').remove();
+  },1000);
+}
+
+
 function showExpense(ex_id){
   //alert(ex_id);
   app.preloader.show();
@@ -6967,13 +7336,17 @@ function add_expense(){
     url:base_url+'liveappcontroller/addExpense',
     data:add_expns+"&session_uid="+session_uid,
     success:function(result){
-      if(result=='inserted'){
-        app.dialog.alert("Data Entered successfully");
-      }else if(result=='not'){
-        app.dialog.alert("Error Inserting Data");
+      var parsemsg = $.parseJSON(result);
+      var msg = parsemsg.msg;
+      if(msg=='inserted'){
+        app.dialog.alert("Expense Add Successfully");
+        mainView.router.navigate('/expense_mgmt/');     
+        app.preloader.hide();
+      }else if(msg=='not'){
+        app.preloader.hide();
+        app.dialog.alert("First add your daily activity and add your expense");
       } 
-      mainView.router.navigate('/expense_mgmt/');     
-      app.preloader.hide();
+      
     }
   });
 }

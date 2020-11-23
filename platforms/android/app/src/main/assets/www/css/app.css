@@ -642,7 +642,9 @@ code {
   border-radius: 3px;
   background: #666;
 }
-
+.display-block{
+  display: block!important;
+}
 .page-home,
 .page-about {
   --f7-list-border-color: transparent;

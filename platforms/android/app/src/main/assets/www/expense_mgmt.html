@@ -38,7 +38,7 @@
   
   <div class="searchDiv"><input type="text" name="search_exp" placeholder="&#xF002;&nbsp;&nbsp;&nbsp;Search" id="search_exp" class="form-txtbox p-4 mt-0 searchtxt empty" onkeyup="searchExpense()"></div>  
   
-  <div class="page-content pt-27p"> 
+  <div class="page-content pt-27p infinite-scroll-content"> 
     <div class="card data-table tbl_overflow">     
       <div class="list accordion-list mb-5 mb-10" style="position: inherit!important;">
         <ul>
@@ -81,7 +81,7 @@
         </ul>
       </div>  
 
-      <table>
+      <!--table>
         <thead class="light-orange">
           <tr>
             <th class="label-cell text-uppercase table-th"><strong>User</strong></th>
@@ -89,7 +89,12 @@
           </tr>
         </thead>
         <tbody id="exp_list"></tbody>
-      </table>
+      </table-->
+      <input type="hidden" name="list_length" id="list_length">
+      <div class="list simple-list media-list">
+        <ul class="exp_list" id="exp_list"></ul>
+      </div>
+      <div class="preloader infinite-scroll-preloader"></div>
     </div>
   </div> 
 </div><!-- .page-content -->  
